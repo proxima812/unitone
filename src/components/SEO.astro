@@ -1,0 +1,117 @@
+---
+import { config } from "@/config"
+const {
+	datePublished,
+	indexRobots,
+	name,
+	author,
+	title,
+	type,
+	keywords,
+	description,
+	ogImage,
+	locale,
+	canonicalURL = new URL(Astro.url.pathname, Astro.site),
+} = Astro.props
+
+function formatCanonicalURL(url: string | URL) {
+	const path = url.toString()
+	const hasQueryParams = path.includes("?")
+	if (hasQueryParams) {
+		path.replace(/\/?$/, "")
+	}
+	return path.replace(/\/?$/, hasQueryParams ? "" : "/")
+}
+
+const socialImageURL = new URL(
+	ogImage ? ogImage : `/${config.site.OG.defaultImage}`,
+	Astro.url,
+).href
+
+const mainTitle = title + " • " + "TITLE" || config.site.OG.title
+const mainDescription = description + " • " + "DESCRIPTION" || config.site.OG.description
+const mainAuthor = author || config.site.OG.author
+const mainOGImage = socialImageURL || config.site.OG.defaultImage
+
+function formatDateToYYYYMMDD(date: Date): string {
+	return date.toISOString().substring(0, 10)
+}
+
+const jsonLd = {
+	"@context": "https://schema.org",
+	"@type": type ? "BlogPosting" : "WebPage",
+	headline: mainTitle,
+	description: mainDescription,
+	keywords: keywords || config.site.OG.keywords,
+	author: {
+		"@type": "Person",
+		name: mainAuthor,
+		url: Astro.site,
+	},
+	// datePublished: formatDateToYYYYMMDD(datePublished || new Date()),
+	inLanguage: locale || config.site.OG.locale,
+	// TODO include cover image here
+}
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<meta name="generator" content={Astro.generator} />
+{canonicalURL && <link rel="canonical" href={formatCanonicalURL(canonicalURL)} />}
+<title>{mainTitle}</title>
+<meta name="title" content={mainTitle} />
+<meta name="description" content={mainDescription} />
+<meta name="author" content={mainAuthor} />
+<meta property="og:type" content={type ? "article" : "website"} />
+{canonicalURL && <meta property="og:url" content={formatCanonicalURL(canonicalURL)} />}
+<meta property="og:title" content={mainTitle} />
+<meta property="og:description" content={mainDescription} />
+<meta property="og:image" content={mainOGImage} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:locale" content={locale || config.site.OG.locale} />
+<meta property="og:site_name" content={name || config.site.OG.site_name} />
+<meta name="keywords" content={config.site.OG.keywords || keywords} />
+{
+	type && (
+		<>
+			<meta property="article:author" content={mainAuthor} />
+			<meta property="article:published_time" content={datePublished} />
+		</>
+	)
+}
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:url" content={formatCanonicalURL(canonicalURL)} />
+<meta property="twitter:title" content={mainTitle} />
+<meta property="twitter:description" content={mainDescription} />
+<meta property="twitter:image" content={mainOGImage} />
+{
+	indexRobots === false ? (
+		<meta name="robots" content="noindex, nofollow" />
+	) : (
+		<meta name="robots" content="index, follow" />
+	)
+}
+<link type="text/plain" rel="author" href={`${Astro.site}humans.txt`} />
+<link
+	rel="alternate"
+	type="application/rss+xml"
+	title="RSS центров"
+	href={new URL("centers/rss.xml", Astro.site)}
+/>
+
+<link rel="sitemap" href="/sitemap-index.xml" />
+
+{
+	config.site.verifications &&
+		config.site.verifications.some(
+			(verification: any) => verification.name_verification && verification.content,
+		) &&
+		config.site.verifications.map((verification: any) =>
+			verification.name_verification && verification.content ? (
+				<meta name={verification.name_verification} content={verification.content} />
+			) : null,
+		)
+}
+<script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />

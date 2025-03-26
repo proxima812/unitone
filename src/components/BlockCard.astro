@@ -1,0 +1,27 @@
+---
+import { cn } from "@/utils/cn"
+import { Icon } from "astro-icon/components"
+const { style, description, icon } = Astro.props
+---
+
+<article
+	class={cn(
+		"flex flex-col justify-between gap-3 rounded-xl p-4 bg-zinc-50 border-[0.6px] border-zinc-200",
+		style,
+	)}
+>
+	<div>
+		<h2 class="text-lg font-bold flex gap-1 items-center">
+			{icon && <Icon name={icon} />}
+			<span>Сообщества</span>
+		</h2>
+		<p class="text-zinc-600">
+			{description}
+		</p>
+	</div>
+	<a
+		href="#"
+		class="text-white px-3 ring-inset ring-2 ring-black s py-1.5 max-w-fit bg-zinc-800 rounded-md"
+		>Подробнее</a
+	>
+</article>

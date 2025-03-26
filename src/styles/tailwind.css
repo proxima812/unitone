@@ -1,0 +1,53 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@theme {
+  --font-display: font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply text-balance;
+  }
+
+  p {
+    @apply text-pretty;
+  }
+
+ 
+}
+
+@layer components {
+  .heading-h1 {
+    @apply text-5xl text-zinc-800 font-black tracking-tight;
+  }
+
+  .heading-h2 {
+    @apply text-2xl text-zinc-700 font-bold;
+  }
+
+  .heading-h3 {
+    @apply text-xl text-zinc-600 font-medium;
+  }
+
+
+  .rose{
+    background: radial-gradient(at left top, rgb(255, 255, 255), rgb(255, 255, 255), rgb(190, 24, 93))
+  }
+  .indigo{
+    background: radial-gradient(at right top, rgb(255, 255, 255), rgb(255, 255, 255), rgb(129, 140, 248))
+  }
+  .green{
+    background: radial-gradient(at left bottom, rgb(255, 255, 255), rgb(255, 255, 255), rgba(34, 197, 94, 0.682));
+  }
+  .violet{
+    background: radial-gradient(at right bottom, rgb(255, 255, 255), rgb(255, 255, 255), rgba(77, 29, 149, 0.678));
+  }
+
+}
+

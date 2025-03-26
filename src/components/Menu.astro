@@ -1,0 +1,90 @@
+---
+import { cn } from "@/utils/cn"
+import { Icon } from "astro-icon/components"
+
+const links = [
+	{
+		label: "Ссылка",
+		href: "#",
+		target: "_blank",
+		icon: "mdi:abjad-arabic",
+		style: "",
+	},
+	// {
+	// 	label: "",
+	// 	href: "#",
+	// 	target: "",
+	// 	icon: "",
+	// 	style: "",
+	// },
+]
+---
+
+<nav class="hidden md:flex gap-5 items-center">
+	{
+		links &&
+			links.map(link => (
+				<a
+					href={link.href}
+					title={link.label}
+					target={link.target}
+					class={cn(
+						"text-zinc-700 flex items-center gap-1 transition-colors hover:text-zinc-600",
+						link.style,
+					)}
+				>
+					<Icon name={link.icon} />
+					<span>{link.label}</span>
+				</a>
+			))
+	}
+</nav>
+
+<button
+	title="Мобильное меню"
+	id="open"
+	class="text-white md:hidden flex items-center gap-1 bg-black px-3.5 py-1.5 rounded-lg"
+	><Icon name="mdi:menu-swap" /><span class="font-medium">меню</span></button
+>
+
+<div
+	id="menu"
+	class="hidden absolute w-full p-12 justify-center flex items-start h-full bg-black/60 backdrop-blur-2xl top-[75px] left-0"
+>
+	<nav class="flex gap-5 items-center">
+		{
+			links &&
+				links.map(link => (
+					<a
+						href={link.href}
+						title={link.label}
+						target={link.target}
+						class={cn("text-white text-2xl flex items-center gap-1", link.style)}
+					>
+						<Icon name={link.icon} />
+						<span>{link.label}</span>
+					</a>
+				))
+		}
+	</nav>
+</div>
+
+<script>
+	const menu = document.querySelector("#menu")
+	const menuBtn = document.querySelector("#open")
+	const body = document.querySelector("body")
+
+	const menuLinks = document.querySelectorAll("#menu a")
+
+	menuLinks.forEach(link => {
+		link.addEventListener("click", () => {
+			menu?.classList.add("hidden")
+			body?.classList.remove("overflow-hidden")
+		})
+	})
+
+	menuBtn?.addEventListener("click", () => {
+		menu?.classList.toggle("hidden")
+		body?.classList.toggle("overflow-hidden")
+	})
+</script>

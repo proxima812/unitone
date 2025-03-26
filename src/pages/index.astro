@@ -1,0 +1,94 @@
+---
+import BlockCard from "@/components/BlockCard.astro"
+import Layout from "@/layouts/Layout.astro"
+
+const text = [
+	{
+		title: "Сообщества",
+		style_ping: "bg-indigo-400",
+	},
+	{
+		title: "Методы",
+		style_ping: "bg-blue-400",
+	},
+	{
+		title: "Прочее",
+		style_ping: "bg-red-400",
+	},
+]
+
+const text1 = [
+	{
+		title: "Сообщества",
+		style: "rose",
+	},
+	{
+		title: "Методы",
+		style: "indigo",
+	},
+	{
+		title: "Прочее",
+		style: "green",
+	},
+	{
+		title: "Методы",
+		style: "violet",
+	},
+]
+---
+
+<Layout title="" description="">
+	<section class="text-center">
+		<!-- <AnimateCurcleCommunity /> -->
+		<h1 class="z-10 relative mb-3 font-black tracking-tight text-6xl xl:text-8xl">
+			12 шагов
+		</h1>
+		<p class="text-lg lg:text-xl max-w-xl mx-auto text-zinc-600">
+			Интересная информация, материалы, методы прохождения двенадцати шагов, 55 видов
+			сообществ и многое другое.
+		</p>
+		<!-- <span class="inline-flex text-zinc-300 tracking-tight text-7xl">все сообщества</span>
+		<span class="inline-flex text-zinc-300 tracking-tight text-7xl"
+			>полная информация</span
+		> -->
+	</section>
+
+	<section
+		class="flex bg-white rounded-full max-w-fit mx-auto px-6 py-3 gap-4 justify-center items-center"
+	>
+		{
+			text &&
+				text.map(item => (
+					<div class="inline-flex items-center gap-2">
+						<div class="relative">
+							<div class={`w-2 h-2 rounded-full ${item.style_ping} animate-ping`} />
+							<div class={`w-2 h-2 rounded-full ${item.style_ping} absolute inset-0`} />
+						</div>
+						<span class="font-medium text-zinc-700">{item.title}</span>
+					</div>
+				))
+		}
+	</section>
+
+	<section
+		class="bg-white grid sm:grid-cols-2 gap-4 grid-cols-1 p-8 rounded-xl w-full max-w-4xl mx-auto"
+	>
+		<BlockCard
+			description="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Consectetu aspernatur eos deleniti dolor. Error impedit illum ex dolorem, labore accusantium sapiente."
+		/>
+		<BlockCard icon="mdi:abugida-thai" description="lore" />
+		<BlockCard description="lore" />
+		<BlockCard description="lore" />
+	</section>
+
+	<!-- <section class="max-w-4xl w-full gap-1.5 mx-auto grid md:grid-cols-2 grid-cols-1">
+		{
+			text1 &&
+				text1.map(item => (
+					<div class={`h-[310px] w-full p-8 rounded-xl ${item.style}`}>
+						<h2 class="text-xl font-bold tracking-tight">{item.title}</h2>
+					</div>
+				))
+		}
+	</section> -->
+</Layout>

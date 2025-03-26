@@ -1,0 +1,23 @@
+---
+import Layout from "@/layouts/Layout.astro"
+import { getCollection, render } from "astro:content"
+
+export async function getStaticPaths() {
+	const pages = await getCollection("pages")
+	return pages.map(page => ({
+		params: { page: page.id },
+		props: page,
+	}))
+}
+const page = Astro.props
+const { Content } = await render(page)
+---
+
+<Layout {...page.data} ogImage={page.data.ogImage?.src}>
+	<h1 class="">
+		{page.data.title}
+	</h1>
+	<main class="">
+		<Content />
+	</main>
+</Layout>

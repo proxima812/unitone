@@ -1,0 +1,56 @@
+---
+import Container from "@/components/Container.astro"
+import Footer from "@/components/Footer.astro"
+import Header from "@/components/Header.astro"
+import SEO from "@/components/SEO.astro"
+import "@/styles/tailwind.css"
+
+interface Props {
+	title: string
+	description: string
+	datePublished?: string
+	bodyStyle?: string
+	dateModified?: string
+	indexRobots?: string
+	type?: any
+	ogImage?: any
+	mainTitlePresent?: string
+}
+
+const {
+	datePublished,
+	bodyStyle,
+	dateModified,
+	indexRobots,
+	title,
+	type,
+	description,
+	ogImage,
+	mainTitlePresent,
+} = Astro.props
+---
+
+<html lang="ru" class="scroll-smooth subpixel-antialiased">
+	<head>
+		<SEO
+			title={title}
+			description={description}
+			indexRobots={indexRobots}
+			ogImage={ogImage}
+			type={type}
+			datePublished={datePublished}
+			dateModified={dateModified}
+		/>
+	</head>
+	<body
+		class={`${bodyStyle || ""} flex min-h-screen flex-col text-zinc-900 bg-[#F2F2F2]`}
+	>
+		<Header />
+		<Container class="py-20">
+			<div class="flex flex-col gap-12">
+				<slot />
+			</div>
+		</Container>
+		<Footer />
+	</body>
+</html>
