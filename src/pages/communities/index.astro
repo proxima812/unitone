@@ -7,6 +7,11 @@ import Layout from "@/layouts/Layout.astro"
 	title="Список сообществ"
 	description="Список из 57 анонимных двенадцати шаговых сообществ."
 >
+	<a
+		href="https://t.me/all12_contacts"
+		class="bg-black text-white mx-auto max-w-fit px-3 py-1.5 rounded-md"
+		target="_blank">Всю ссылки в группе <b>telegram</b></a
+	>
 	<section class="grid grid-cols-1 md:grid-cols-2 items-start gap-2">
 		{
 			communities &&
@@ -15,7 +20,8 @@ import Layout from "@/layouts/Layout.astro"
 					.sort((a, b) => a.title.localeCompare(b.title))
 					.sort((a, b) => a.title.length - b.title.length)
 					.map(item => (
-						<a href={`/communities/${item.id}`} aria-label={item.title} key={item.id}>
+						// {`/communities/${item.id}`}
+						<a href="#" aria-label={item.title} key={item.id}>
 							<article class="w-full flex flex-col text-center bg-white rounded-xl">
 								<div class="p-6">
 									<h2 class="text-xl font-bold">{item.title}</h2>
