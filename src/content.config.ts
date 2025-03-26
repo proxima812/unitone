@@ -11,6 +11,8 @@ const posts = defineCollection({
 	}),
 })
 
+
+
 const pages = defineCollection({
 	loader: glob({ pattern: "**/*.(md|mdx)", base: "./src/data/pages/" }),
 	schema: z.object({

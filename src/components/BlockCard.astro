@@ -1,7 +1,7 @@
 ---
 import { cn } from "@/utils/cn"
 import { Icon } from "astro-icon/components"
-const { style, description, icon } = Astro.props
+const { style, title, description, icon, link } = Astro.props
 ---
 
 <article
@@ -11,17 +11,17 @@ const { style, description, icon } = Astro.props
 	)}
 >
 	<div>
-		<h2 class="text-lg font-bold flex gap-1 items-center">
+		<h2 class="text-lg mb-3 font-bold flex gap-1 items-center">
 			{icon && <Icon name={icon} />}
-			<span>Сообщества</span>
+			<span>{title}</span>
 		</h2>
 		<p class="text-zinc-600">
 			{description}
 		</p>
 	</div>
 	<a
-		href="#"
-		class="text-white px-3 ring-inset ring-2 ring-black s py-1.5 max-w-fit bg-zinc-800 rounded-md"
+		href={link}
+		class="text-white mt-1.5 px-3 ring-inset ring-2 ring-black s py-1.5 max-w-fit bg-zinc-800 rounded-md"
 		>Подробнее</a
 	>
 </article>

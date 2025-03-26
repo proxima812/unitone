@@ -9,18 +9,18 @@ import { defineConfig } from "astro/config"
 import vercel from "@astrojs/vercel";
 
 export default defineConfig({
-  site: "https://example.com",
+	site: "https://unitone.vercel.app",
 
-  vite: {
-      plugins: [tailwindcss()],
+	vite: {
+		plugins: [tailwindcss()],
 	},
 
-  prefetch: {
-      defaultStrategy: "viewport",
-      prefetchAll: true,
+	prefetch: {
+		defaultStrategy: "viewport",
+		prefetchAll: true,
 	},
 
-  integrations: [mdx(), sitemap(), icon(), metaTags(), react()],
-  output: "static",
-  adapter: vercel(),
+	integrations: [mdx(), sitemap(), icon(), metaTags(), react()],
+	output: "static",
+	adapter: vercel(),
 })

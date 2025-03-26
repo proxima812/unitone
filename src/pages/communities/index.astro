@@ -1,0 +1,51 @@
+---
+import { communities } from "@/data/communities"
+import Layout from "@/layouts/Layout.astro"
+---
+
+<Layout
+	title="Список сообществ"
+	description="Список из 57 анонимных двенадцати шаговых сообществ."
+>
+	<section class="grid grid-cols-1 md:grid-cols-2 items-start gap-2">
+		{
+			communities &&
+				[...communities]
+					.sort((a, b) => b.find - a.find)
+					.sort((a, b) => a.title.localeCompare(b.title))
+					.sort((a, b) => a.title.length - b.title.length)
+					.map(item => (
+						<a href={`/communities/${item.id}`} aria-label={item.title} key={item.id}>
+							<article class="w-full flex flex-col text-center bg-white rounded-xl">
+								<div class="p-6">
+									<h2 class="text-xl font-bold">{item.title}</h2>
+									<p class="line-clamp-1 text-zinc-600">{item.description}</p>
+								</div>
+								<div class="flex gap-3 items-center border-[0.6px] border-blue-200 bg-blue-50 rounded-xl p-6 justify-between">
+									<span class="text-sm">
+										Есть ли информация:{" "}
+										<b>
+											{item.find === true ? (
+												<span class="text-green-500 text-sm">Да.</span>
+											) : (
+												<span class="text-red-500 text-sm">Нет.</span>
+											)}
+										</b>
+									</span>
+									<span class="text-sm">
+										Основан:{" "}
+										<b>
+											{item.since ? (
+												<span class="text-green-500 text-sm">{item.since}</span>
+											) : (
+												<span class="text-red-500 text-sm">Неизвествно.</span>
+											)}
+										</b>
+									</span>
+								</div>
+							</article>
+						</a>
+					))
+		}
+	</section>
+</Layout>

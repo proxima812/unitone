@@ -37,22 +37,10 @@ const text1 = [
 ]
 ---
 
-<Layout title="" description="">
-	<section class="text-center">
-		<!-- <AnimateCurcleCommunity /> -->
-		<h1 class="z-10 relative mb-3 font-black tracking-tight text-6xl xl:text-8xl">
-			12 шагов
-		</h1>
-		<p class="text-lg lg:text-xl max-w-xl mx-auto text-zinc-600">
-			Интересная информация, материалы, методы прохождения двенадцати шагов, 55 видов
-			сообществ и многое другое.
-		</p>
-		<!-- <span class="inline-flex text-zinc-300 tracking-tight text-7xl">все сообщества</span>
-		<span class="inline-flex text-zinc-300 tracking-tight text-7xl"
-			>полная информация</span
-		> -->
-	</section>
-
+<Layout
+	title="12 шагов"
+	description="Интересная информация, материалы, методы прохождения двенадцати шагов, 55 видов сообществ и многое другое."
+>
 	<section
 		class="flex bg-white rounded-full max-w-fit mx-auto px-6 py-3 gap-4 justify-center items-center"
 	>
@@ -74,11 +62,12 @@ const text1 = [
 		class="bg-white grid sm:grid-cols-2 gap-4 grid-cols-1 p-8 rounded-xl w-full max-w-4xl mx-auto"
 	>
 		<BlockCard
-			description="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Consectetu aspernatur eos deleniti dolor. Error impedit illum ex dolorem, labore accusantium sapiente."
+			link="/communities"
+			title="Список сообществ"
+			icon="mdi:account-group"
+			description="Список из 57 анонимных двенадцати шаговых сообществ."
 		/>
-		<BlockCard icon="mdi:abugida-thai" description="lore" />
-		<BlockCard description="lore" />
-		<BlockCard description="lore" />
+		<!-- <BlockCard description="" icon="" style="" title="" /> -->
 	</section>
 
 	<!-- <section class="max-w-4xl w-full gap-1.5 mx-auto grid md:grid-cols-2 grid-cols-1">
