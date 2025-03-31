@@ -1,0 +1,23 @@
+---
+import Layout from "@/layouts/Layout.astro"
+import { getCollection } from "astro:content"
+
+const archives = await getCollection("archive")
+---
+
+<Layout title="" description="">
+	<div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+		{
+			archives &&
+				archives.map(item => (
+					<a href={`/archive/${item.id}/`} class="block relative">
+						<article class="bg-white p-6 rounded-xl relative flex-col flex gap-3">
+							<h2 class="leading-tight text-lg font-bold">{item.data.title}</h2>
+							<p class="line-clamp-2">{item.data.description}</p>
+							<div class="absolute right-[5.5px] top-0 rounded-xl bg-gradient-to-b  from-green-300 to-blue-300 h-full w-[4px]" />
+						</article>
+					</a>
+				))
+		}
+	</div>
+</Layout>

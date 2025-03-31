@@ -1,4 +1,5 @@
 ---
+import Warning from "@/components/Warning.astro"
 import { communities } from "@/data/communities"
 import Layout from "@/layouts/Layout.astro"
 ---
@@ -12,27 +13,34 @@ import Layout from "@/layouts/Layout.astro"
 		class="bg-black text-white mx-auto max-w-fit px-3 py-1.5 rounded-md"
 		target="_blank">Все ссылки в группе <b>telegram</b></a
 	>
+	<Warning color="bg-green-50 border-green-200 text-green-700">
+		<b>Информация на 2025 год составляет 57 сообщества.</b> Некоторые сообщества образованы
+		из других, как некие группы, с фокусом на что-либо. Их намного больше, но их крайне сложно
+		найти из-за закрытой информации.
+		<b>Если у вас есть информация о каком-либо сообществе, будем рады обратной связи.</b>
+	</Warning>
 	<section class="grid grid-cols-1 md:grid-cols-2 items-start gap-2">
 		{
 			communities &&
 				[...communities]
-					.sort((a, b) => b.find - a.find)
 					.sort((a, b) => a.title.localeCompare(b.title))
 					.sort((a, b) => a.title.length - b.title.length)
 					.map(item => (
 						// {`/communities/${item.id}`}
-						<a href="#" aria-label={item.title} key={item.id}>
+						<a href="#" aria-label={item.title}>
 							<article class="w-full flex flex-col text-center bg-white rounded-xl">
 								<div class="p-6">
 									<h2 class="text-xl font-bold">{item.title}</h2>
 									<p class="line-clamp-1 text-zinc-600">{item.description}</p>
 								</div>
-								<div class="flex gap-3 items-center border-[0.6px] border-blue-200 bg-blue-50 rounded-xl p-6 justify-between">
+								<div
+									class={`flex gap-3 items-center border-[0.6px] ${!item.since && item.find === false ? "border-red-200 bg-red-50" : "border-blue-200 bg-blue-50"} rounded-xl p-6 justify-between`}
+								>
 									<span class="text-sm">
-										Есть ли информация:{" "}
+										Информация:{" "}
 										<b>
 											{item.find === true ? (
-												<span class="text-green-500 text-sm">Да.</span>
+												<span class="text-green-500 text-sm">Есть.</span>
 											) : (
 												<span class="text-red-500 text-sm">Нет.</span>
 											)}

@@ -1,17 +1,25 @@
 import { glob } from "astro/loaders"
 import { defineCollection, z } from "astro:content"
 
-const posts = defineCollection({
-	loader: glob({ pattern: "**/*.(md|mdx)", base: "./src/data/posts/" }),
+const archive = defineCollection({
+	loader: glob({ pattern: "**/*.(md|mdx)", base: "./src/data/archive/" }),
 	schema: z.object({
 		title: z.string(),
 		description: z.string().optional(),
-		pubDate: z.union([z.string(), z.date()]),
+		pubDate: z.union([z.string(), z.date()]).optional(),
 		ogImage: z.any().optional(),
 	}),
 })
 
-
+const methods = defineCollection({
+	loader: glob({ pattern: "**/*.(md|mdx)", base: "./src/data/methods/" }),
+	schema: z.object({
+		title: z.string(),
+		description: z.string().optional(),
+		ogImage: z.any().optional(),
+		community: z.array(z.string()).optional(),
+	}),
+})
 
 const pages = defineCollection({
 	loader: glob({ pattern: "**/*.(md|mdx)", base: "./src/data/pages/" }),
@@ -23,4 +31,4 @@ const pages = defineCollection({
 	}),
 })
 
-export const collections = { posts, pages }
+export const collections = { archive, pages, methods }

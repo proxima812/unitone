@@ -1,0 +1,21 @@
+---
+import { tg_link } from "@/data/links"
+
+const { color } = Astro.props
+---
+
+<p
+	class={`mx-auto max-w-6xl md:text-base text-sm ${color} border p-4 md:p-6 rounded-xl `}
+>
+	<Fragment>
+		<slot />
+	</Fragment>
+	<br />
+	<br />
+	<a
+		href={tg_link}
+		target="_blank"
+		class="underline text-blue-500 underline-offset-4 font-bold"
+		>👉 Написать в telegram.</a
+	>
+</p>

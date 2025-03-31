@@ -1,23 +1,7 @@
 ---
+import { links } from "@/data/links"
 import { cn } from "@/utils/cn"
 import { Icon } from "astro-icon/components"
-
-const links = [
-	{
-		label: "Сообщества",
-		href: "/communities",
-		target: "",
-		icon: "mdi:account-group",
-		style: "",
-	},
-	// {
-	// 	label: "",
-	// 	href: "#",
-	// 	target: "",
-	// 	icon: "",
-	// 	style: "",
-	// },
-]
 ---
 
 <nav class="hidden md:flex gap-5 items-center">
@@ -49,9 +33,9 @@ const links = [
 
 <div
 	id="menu"
-	class="hidden absolute w-full p-12 justify-center flex items-start h-full bg-black/60 backdrop-blur-2xl top-[75px] left-0"
+	class="hidden absolute z-50 w-full p-12 justify-center flex items-start h-full bg-black/60 backdrop-blur-2xl top-[75px] left-0"
 >
-	<nav class="flex gap-5 items-center">
+	<nav class="flex gap-5 flex-col items-center">
 		{
 			links &&
 				links.map(link => (

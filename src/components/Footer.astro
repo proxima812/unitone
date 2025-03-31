@@ -1,7 +1,54 @@
 ---
+import { links, telegrams } from "@/data/links"
+import { getCollection } from "astro:content"
 import Container from "./Container.astro"
+
+const methods = await getCollection("methods")
 ---
 
-<footer class="bg-zinc-100 py-5">
-	<Container />
+<footer class="bg-white">
+	<Container>
+		<div class="grid grid-cols-1 py-12 md:grid-cols-2 lg:grid-cols-3 gap-12">
+			<div class="flex flex-col gap-4 md:items-start items-center">
+				<span class="text-lg font-semibold text-zinc-900">Страницы </span>
+				{
+					links &&
+						links.map(item => (
+							<a class="text-zinc-600" href={item.href}>
+								{item.label}
+							</a>
+						))
+				}
+			</div>
+			<div class="flex flex-col gap-4 md:items-start items-center">
+				<span class="text-lg font-semibold text-zinc-900">Методы шагов</span>
+				{
+					methods &&
+						methods.map(item => (
+							<a class="text-zinc-600" href={item.id}>
+								{item.data.title}
+							</a>
+						))
+				}
+			</div>
+			<div class="flex flex-col gap-4 md:items-start items-center">
+				<span class="text-lg font-semibold text-zinc-900">Ресурсы</span>
+				{
+					telegrams &&
+						telegrams.map(item => (
+							<a class="text-zinc-600" target="_blank" href={item.href}>
+								{item.label}
+							</a>
+						))
+				}
+			</div>
+		</div>
+		<div class="bg-zinc-100 border-[0.5px] border-zinc-300 rounded-xl p-6 my-12">
+			<p class="text-center">
+				&copy;
+				<span class="text-zinc-600 font-medium">{new Date().getFullYear()}</span>
+				<span class="font-bold">Unit One</span>
+			</p>
+		</div>
+	</Container>
 </footer>

@@ -1,0 +1,23 @@
+---
+import Layout from "@/layouts/Layout.astro"
+import { getCollection, render } from "astro:content"
+
+export async function getStaticPaths() {
+	const posts = await getCollection("methods")
+	return posts.map(post => ({
+		params: { slug: post.id },
+		props: post,
+	}))
+}
+const post = Astro.props
+const { Content } = await render(post)
+---
+
+<Layout {...post.data} type ogImage={post.data.ogImage?.src}>
+	<a href="/methods" class="text-white mx-auto bg-black rounded-md py-1.5 px-3"
+		>Назад к методам</a
+	>
+	<main class="my-prose">
+		<Content />
+	</main>
+</Layout>

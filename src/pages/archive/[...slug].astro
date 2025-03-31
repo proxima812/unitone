@@ -3,7 +3,7 @@ import Layout from "@/layouts/Layout.astro"
 import { getCollection, render } from "astro:content"
 
 export async function getStaticPaths() {
-	const posts = await getCollection("posts")
+	const posts = await getCollection("archive")
 	return posts.map(post => ({
 		params: { slug: post.id },
 		props: post,
@@ -14,11 +14,10 @@ const { Content } = await render(post)
 ---
 
 <Layout {...post.data} type ogImage={post.data.ogImage?.src}>
-	<h1 class="">
-		{post.data.title}
-	</h1>
-
-	<main class="">
+	<a href="/archive" class="bg-black text-white mx-auto max-w-fit px-3 py-1.5 rounded-md"
+		>Назад к архиву</a
+	>
+	<main class="my-prose">
 		<Content />
 	</main>
 </Layout>

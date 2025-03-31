@@ -1,0 +1,52 @@
+---
+import Warning from "@/components/Warning.astro"
+import Layout from "@/layouts/Layout.astro"
+import { getCollection } from "astro:content"
+
+const methods = await getCollection("methods")
+---
+
+<Layout
+	title="Методы шагов"
+	description="Список разных методов прохождения двенадцати шагов. (12 шагов)"
+>
+	<Warning color="bg-red-50 border-red-200 text-red-700">
+		Методов много. Список был сформирован одним человеком в <b>2023 году.</b> Многая информация
+		может уже отличаться от написаного.
+		<b>Если у тебя есть коррекция или замечание, будем рады обратной связи. </b>
+	</Warning>
+	<div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+		{
+			methods &&
+				methods.map(item => (
+					<a href={`/methods/${item.id}/`} class="">
+						<article class="bg-white p-6 rounded-xl relative flex-col flex gap-3">
+							<div class="flex flex-col gap-3">
+								<h2 class="leading-tight text-lg font-bold">{item.data.title}</h2>
+								<p>{item.data.description}</p>
+							</div>
+
+							<div class="absolute right-0 top-0">
+								<div
+									class={
+										item.data.community.includes("АА") &&
+										item.data.community.includes("АН")
+											? "bg-gradient-to-bl text-xs tracking-tight from-blue-500 to-blue-700 py-1 px-2 rounded-md text-white self-start font-black"
+											: item.data.community.includes("АА")
+												? "bg-blue-500 py-1 text-xs tracking-tight px-2 rounded-md text-white self-start font-black"
+												: item.data.community.includes("АН")
+													? "bg-blue-700 py-1 text-xs tracking-tight px-2 rounded-md text-white self-start font-black"
+													: item.data.community.includes("АХ")
+														? "bg-gradient-to-tr text-xs tracking-tight from-blue-300 to-blue-800 py-1 px-2 rounded-md text-white self-start font-black"
+														: ""
+									}
+								>
+									{item.data.community.join(", ")}
+								</div>
+							</div>
+						</article>
+					</a>
+				))
+		}
+	</div>
+</Layout>

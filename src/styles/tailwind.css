@@ -18,8 +18,13 @@
   p {
     @apply text-pretty;
   }
-
- 
+  
+  
+  
+  
+  .my-prose{
+    @apply prose prose-headings:first:mt-0 prose-p:first:mt-0 prose-blue prose-a:underline prose-a:underline-offset-4 prose-lg xl:prose-xl prose-p:text-pretty prose-headings:text-balance md:max-w-4xl mx-auto bg-white p-6 md:p-12 rounded-xl;
+  }
 }
 
 @layer components {
