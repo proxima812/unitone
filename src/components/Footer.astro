@@ -2,6 +2,7 @@
 import { links, telegrams } from "@/data/links"
 import { getCollection } from "astro:content"
 import Container from "./Container.astro"
+import ProductionSvgIcon from "./ProductionSvgIcon.astro"
 
 const methods = await getCollection("methods")
 ---
@@ -44,11 +45,16 @@ const methods = await getCollection("methods")
 			</div>
 		</div>
 		<div class="bg-zinc-100 border-[0.5px] border-zinc-300 rounded-xl p-6 my-12">
-			<p class="text-center">
-				&copy;
-				<span class="text-zinc-600 font-medium">{new Date().getFullYear()}</span>
-				<span class="font-bold">Unit One</span>
-			</p>
+			<div
+				class="flex justify-center md:justify-between md:flex-nowrap flex-wrap items-center gap-3"
+			>
+				<p>
+					&copy;
+					<span class="text-zinc-600 font-medium">{new Date().getFullYear()}</span>
+					<span class="font-bold">Unit One</span>
+				</p>
+				<ProductionSvgIcon />
+			</div>
 		</div>
 	</Container>
 </footer>
