@@ -6,15 +6,27 @@ const archives = await getCollection("archive")
 ---
 
 <Layout title="" description="">
-	<div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+	<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
 		{
 			archives &&
 				archives.map(item => (
 					<a href={`/archive/${item.id}/`} class="block relative">
 						<article class="bg-white p-6 rounded-xl relative flex-col flex gap-3">
-							<h2 class="leading-tight text-lg font-bold">{item.data.title}</h2>
-							<p class="line-clamp-2">{item.data.description}</p>
+							<h2 class="leading-tight line-clamp-2 text-lg font-bold">
+								{item.data.title}
+							</h2>
+							<p class="line-clamp-3">{item.data.description}</p>
 							<div class="absolute right-[5.5px] top-0 rounded-xl bg-gradient-to-b  from-green-300 to-blue-300 h-full w-[4px]" />
+							{item.data.pubDate && (
+								<time datetime={item.data.pubDate} class="text-zinc-600">
+									🗓
+									{new Date(item.data.pubDate).toLocaleDateString("ru-RU", {
+										year: "numeric",
+										month: "numeric",
+										day: "numeric",
+									})}
+								</time>
+							)}
 						</article>
 					</a>
 				))
