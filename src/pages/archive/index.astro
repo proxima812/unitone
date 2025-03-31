@@ -5,7 +5,7 @@ import { getCollection } from "astro:content"
 const archives = await getCollection("archive")
 ---
 
-<Layout title="" description="">
+<Layout title="Архив 12 шагов." description="Посты, статьи, материалы и прочее.">
 	<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
 		{
 			archives &&
