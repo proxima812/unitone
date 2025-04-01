@@ -14,9 +14,35 @@ const { Content } = await render(post)
 ---
 
 <Layout {...post.data} type ogImage={post.data.ogImage?.src}>
-	<a href="/archive" class="bg-black text-white mx-auto max-w-fit px-3 py-1.5 rounded-md"
-		>Назад к архиву</a
+	<div
+		class="flex max-w-4xl md:flex-nowrap flex-wrap gap-4 mx-auto w-full justify-between items-center"
 	>
+		<a href="/archive" class="bg-black text-white px-3 py-1.5 rounded-md"
+			>Назад к архиву</a
+		>
+
+		<div class="flex gap-4 items-center p-2 py-1.5 bg-white rounded-md">
+			<div class="flex gap-2 items-center">
+				<div
+					class={`${post.data.author === "UnitOne" ? "w-6 h-6 rounded-full bg-gradient-to-br from-black to-zinc-500" : "w-6 h-6 rounded-full bg-gradient-to-br from-green-500 to-green-400"}`}
+				>
+				</div>
+				<span class="font-medium">{post.data.author}</span>
+			</div>
+			{
+				post.data.pubDate && (
+					<time datetime={post.data.pubDate} class="text-zinc-600">
+						🗓
+						{new Date(post.data.pubDate).toLocaleDateString("ru-RU", {
+							year: "numeric",
+							month: "numeric",
+							day: "numeric",
+						})}
+					</time>
+				)
+			}
+		</div>
+	</div>
 	<main class="my-prose">
 		<Content />
 	</main>

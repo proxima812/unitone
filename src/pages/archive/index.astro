@@ -16,17 +16,25 @@ const archives = await getCollection("archive")
 								{item.data.title}
 							</h2>
 							<p class="line-clamp-3">{item.data.description}</p>
-							<div class="absolute right-[5.5px] top-0 rounded-xl bg-gradient-to-b  from-green-300 to-blue-300 h-full w-[4px]" />
-							{item.data.pubDate && (
-								<time datetime={item.data.pubDate} class="text-zinc-600">
-									🗓
-									{new Date(item.data.pubDate).toLocaleDateString("ru-RU", {
-										year: "numeric",
-										month: "numeric",
-										day: "numeric",
-									})}
-								</time>
-							)}
+							<div class="absolute right-[5.5px] top-0 rounded-xl bg-gradient-to-b  from-amber-300 to-red-300 h-full w-[4px]" />
+							<div class="flex mt-2 justify-between items-center">
+								<div class="flex gap-2 items-center">
+									<div
+										class={`${item.data.author === "UnitOne" ? "w-6 h-6 rounded-full bg-gradient-to-br from-black to-zinc-500" : "w-6 h-6 rounded-full bg-gradient-to-br from-green-500 to-green-400"}`}
+									/>
+									<span class="font-medium">{item.data.author}</span>
+								</div>
+								{item.data.pubDate && (
+									<time datetime={item.data.pubDate} class="text-zinc-600">
+										🗓
+										{new Date(item.data.pubDate).toLocaleDateString("ru-RU", {
+											year: "numeric",
+											month: "numeric",
+											day: "numeric",
+										})}
+									</time>
+								)}
+							</div>
 						</article>
 					</a>
 				))

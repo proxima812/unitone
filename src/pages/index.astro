@@ -1,5 +1,4 @@
 ---
-import BlockCard from "@/components/BlockCard.astro"
 import Layout from "@/layouts/Layout.astro"
 
 const text = [
@@ -10,6 +9,10 @@ const text = [
 	{
 		title: "Методы",
 		style_ping: "bg-blue-400",
+	},
+	{
+		title: "Опыт разработки",
+		style_ping: "bg-green-400",
 	},
 	{
 		title: "Прочее",
@@ -35,6 +38,9 @@ const text1 = [
 		style: "violet",
 	},
 ]
+
+import BlockCard from "@/components/BlockCard.astro"
+import { Icon } from "astro-icon/components"
 ---
 
 <Layout
@@ -42,7 +48,7 @@ const text1 = [
 	description="Интересная информация, материалы, методы прохождения двенадцати шагов, 50 видов сообществ и многое другое."
 >
 	<section
-		class="flex bg-white rounded-full max-w-fit mx-auto px-6 py-3 gap-4 justify-center items-center"
+		class="flex flex-wrap bg-white rounded-lg sm:rounded-full max-w-fit mx-auto px-6 py-3 gap-4 justify-center items-center"
 	>
 		{
 			text &&
@@ -90,14 +96,29 @@ const text1 = [
 		<!-- <BlockCard description="" icon="" style="" title="" /> -->
 	</section>
 
-	<!-- <section class="max-w-4xl w-full gap-1.5 mx-auto grid md:grid-cols-2 grid-cols-1">
-		{
-			text1 &&
-				text1.map(item => (
-					<div class={`h-[310px] w-full p-8 rounded-xl ${item.style}`}>
-						<h2 class="text-xl font-bold tracking-tight">{item.title}</h2>
-					</div>
-				))
-		}
-	</section> -->
+	<section class="bg-white max-w-4xl mx-auto rounded-xl">
+		<div class="flex">
+			<div class="p-6 flex flex-col gap-3 items-start">
+				<h2 class="text-lg font-bold">Проект от НК "Действия"</h2>
+				<p class="leading-relaxed text-zinc-600">
+					Это независимый комитет, созданный для поддержки и развития различных 12-шаговых
+					сообществ. Мы ориентированы на обмен опытом, консультации и помощь в реализации
+					проектов, особенно в IT-сфере и связанных направлениях.
+				</p>
+				<a
+					class="px-3 py-1.5 mt-1.5 rounded-md font-medium flex gap-1 items-center bg-blue-50 text-blue-700 border border-blue-200"
+					target="_blank"
+					href="https://docs.google.com/document/d/16yZCl16vD8pVHhMqo_LltiOGF0M7FVYXscgoQP5vPbM/edit?usp=sharing"
+					><Icon name="mdi:file-pdf" /><span>НК "Действия" Документ</span></a
+				>
+			</div>
+			<!-- <Image
+				width={320}
+				height={320}
+				src={nk}
+				alt="Логотип независимого комитета Действия"
+				class="sm:w-64 object-contain sm:object-cover rounded-r-xl"
+			/> -->
+		</div>
+	</section>
 </Layout>

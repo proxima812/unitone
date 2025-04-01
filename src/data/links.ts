@@ -3,19 +3,21 @@ export const links = [
 		label: "Сообщества",
 		href: "/communities",
 		icon: "mdi:account-group",
-		style: "",
 	},
 	{
 		label: "Методы шагов",
 		href: "/methods",
 		icon: "mdi:lightbulb-group",
-		style: "",
 	},
 	{
 		label: "Архив",
 		href: "/archive",
 		icon: "mdi:math-integral-box",
-		style: "",
+	},
+	{
+		label: "Генератор Преамбул",
+		href: "#",
+		icon: "mdi:account-details",
 	},
 	// {
 	// 	label: "",

@@ -26,7 +26,7 @@ const methods = await getCollection("methods")
 				{
 					methods &&
 						methods.map(item => (
-							<a class="text-zinc-600" href={item.id}>
+							<a class="text-zinc-600" href={`/methods/${item.id}`}>
 								{item.data.title}
 							</a>
 						))
@@ -51,7 +51,7 @@ const methods = await getCollection("methods")
 				<p>
 					&copy;
 					<span class="text-zinc-600 font-medium">{new Date().getFullYear()}</span>
-					<span class="font-bold">Unit One</span>
+					<span class="font-bold">UnitOne</span>
 				</p>
 				<ProductionSvgIcon />
 			</div>

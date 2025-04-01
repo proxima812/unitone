@@ -1,7 +1,7 @@
 ---
 import { cn } from "@/utils/cn"
 import { Icon } from "astro-icon/components"
-const { style, title, description, icon, link } = Astro.props
+const { style, title, textBtn, styleBtn, description, icon, link } = Astro.props
 ---
 
 <article
@@ -21,7 +21,9 @@ const { style, title, description, icon, link } = Astro.props
 	</div>
 	<a
 		href={link}
-		class="text-white mt-1.5 px-3 ring-inset ring-2 ring-black s py-1.5 max-w-fit bg-zinc-800 rounded-md"
-		>Подробнее</a
+		class={cn(
+			"text-white mt-1.5 px-3  py-1.5 max-w-fit bg-zinc-800 rounded-md",
+			styleBtn,
+		)}>{textBtn || "Подробнее"}</a
 	>
 </article>

@@ -16,6 +16,14 @@ export const archive = collection({
 			description: "от 20 до 150 символов",
 			validation: { length: { min: 20, max: 150 } },
 		}),
+		author: fields.select({
+			label: "Автор",
+			options: [
+				{ label: "UnitOne", value: "UnitOne" },
+				{ label: "SamGold", value: "SamGold" },
+			],
+			defaultValue: "UnitOne",
+		}),
 		pubDate: fields.date({
 			label: "Время",
 			description: "Время публикации",
