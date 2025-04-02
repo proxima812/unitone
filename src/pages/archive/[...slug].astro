@@ -1,7 +1,8 @@
 ---
+import RelatedPosts from "@/components/RelatedPosts.astro"
 import Layout from "@/layouts/Layout.astro"
 import { getCollection, render } from "astro:content"
-
+const archive = await getCollection("archive")
 export async function getStaticPaths() {
 	const posts = await getCollection("archive")
 	return posts.map(post => ({
@@ -15,7 +16,7 @@ const { Content } = await render(post)
 
 <Layout {...post.data} type ogImage={post.data.ogImage?.src}>
 	<div
-		class="flex max-w-4xl md:flex-nowrap flex-wrap gap-4 mx-auto w-full justify-between items-center"
+		class="flex max-w-6xl md:flex-nowrap flex-wrap gap-4 mx-auto w-full justify-between items-center"
 	>
 		<a href="/archive" class="bg-black text-white px-3 py-1.5 rounded-md"
 			>Назад к архиву</a
@@ -46,4 +47,5 @@ const { Content } = await render(post)
 	<main class="my-prose">
 		<Content />
 	</main>
+	<RelatedPosts posts={archive} href="/archive" />
 </Layout>

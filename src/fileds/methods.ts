@@ -23,6 +23,7 @@ export const methods = collection({
 				{ label: "АН", value: "АН" },
 				{ label: "ВДА", value: "ВДА" },
 				{ label: "Художники", value: "АХ" },
+				{ label: "MAA", value: "MAA" },
 			],
 			defaultValue: ["АА"],
 		}),

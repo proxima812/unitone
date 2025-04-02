@@ -1,0 +1,25 @@
+---
+const { posts, href } = Astro.props
+---
+
+<h3 class="text-center text-xl font-medium">⚖ Последние</h3>
+
+<div class="grid md:grid-cols-2 grid-cols-1 gap-6">
+	{
+		posts && posts.length > 0
+			? [...new Set(posts.map(item => item.id))].slice(0, 2).map(id => {
+					const item = posts.find(post => post.id === id)
+					return (
+						<a href={`${href}/${item.id}`}>
+							<article class="bg-white p-6 rounded-xl relative flex-col flex gap-3">
+								<h2 class="leading-tight line-clamp-2 text-lg font-bold">
+									{item.data.title}
+								</h2>
+								<p class="line-clamp-3">{item.data.description}</p>
+							</article>
+						</a>
+					)
+				})
+			: ""
+	}
+</div>

@@ -1,7 +1,8 @@
 ---
+import RelatedPosts from "@/components/RelatedPosts.astro"
 import Layout from "@/layouts/Layout.astro"
 import { getCollection, render } from "astro:content"
-
+const methods = await getCollection("methods")
 export async function getStaticPaths() {
 	const posts = await getCollection("methods")
 	return posts.map(post => ({
@@ -20,4 +21,5 @@ const { Content } = await render(post)
 	<main class="my-prose">
 		<Content />
 	</main>
+	<RelatedPosts posts={methods} href="/methods" />
 </Layout>

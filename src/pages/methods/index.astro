@@ -13,6 +13,8 @@ const methods = await getCollection("methods")
 	<Warning color="bg-red-50 border-red-200 text-red-700">
 		Методов много. Список был сформирован одним человеком в <b>2023 году.</b> Многая информация
 		может уже отличаться от написаного.
+		<b>Информация дополняется в 2025 году.</b>
+		<br />
 		<b>Если у тебя есть коррекция или замечание, будем рады обратной связи. </b>
 	</Warning>
 	<div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -38,7 +40,7 @@ const methods = await getCollection("methods")
 													? "bg-blue-700 py-1 text-xs tracking-tight px-2 rounded-md text-white self-start font-black"
 													: item.data.community.includes("АХ")
 														? "bg-gradient-to-tr text-xs tracking-tight from-blue-300 to-blue-800 py-1 px-2 rounded-md text-white self-start font-black"
-														: ""
+														: "bg-gradient-to-tr text-xs tracking-tight from-zinc-300 to-zinc-800 py-1 px-2 rounded-md text-white self-start font-black"
 									}
 								>
 									{item.data.community.join(", ")}
