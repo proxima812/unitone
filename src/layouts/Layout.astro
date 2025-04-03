@@ -4,6 +4,7 @@ import Footer from "@/components/Footer.astro"
 import Header from "@/components/Header.astro"
 import SEO from "@/components/SEO.astro"
 import "@/styles/tailwind.css"
+import { getCollection } from "astro:content"
 
 interface Props {
 	title: string
@@ -28,6 +29,7 @@ const {
 	ogImage,
 	mainTitlePresent,
 } = Astro.props
+
 ---
 
 <html lang="ru" class="scroll-smooth subpixel-antialiased">
@@ -49,6 +51,7 @@ const {
 		<Container class="py-20">
 			<div class="flex flex-col gap-12">
 				<section class="text-center">
+					
 					{
 						title && (
 							<h1 class=" mb-3 font-black tracking-tight text-5xl md:text-6xl xl:text-7xl">

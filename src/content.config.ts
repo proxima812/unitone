@@ -6,9 +6,10 @@ const archive = defineCollection({
 	schema: z.object({
 		title: z.string(),
 		description: z.string().optional(),
-    pubDate: z.union([z.string(), z.date()]).optional(),
-    author: z.string().default('UnitOne').optional(),
+		pubDate: z.union([z.string(), z.date()]).optional(),
+		author: z.string().default("UnitOne").optional(),
 		ogImage: z.any().optional(),
+		viewMainPage: z.boolean().default(false).optional(),
 	}),
 })
 

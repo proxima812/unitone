@@ -16,6 +16,9 @@ export const archive = collection({
 			description: "от 20 до 150 символов",
 			validation: { length: { min: 20, max: 150 } },
 		}),
+		viewMainPage: fields.checkbox({
+			label: "Показать на главной странице",
+		}),
 		author: fields.select({
 			label: "Автор",
 			options: [
