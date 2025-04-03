@@ -21,6 +21,7 @@ export const archive = collection({
 			options: [
 				{ label: "UnitOne", value: "UnitOne" },
 				{ label: "SamGold", value: "SamGold" },
+				{ label: "Информатор", value: "Информатор" },
 			],
 			defaultValue: "UnitOne",
 		}),

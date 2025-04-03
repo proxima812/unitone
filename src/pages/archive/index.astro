@@ -2,7 +2,9 @@
 import Layout from "@/layouts/Layout.astro"
 import { getCollection } from "astro:content"
 
-const archives = await getCollection("archive")
+const archives = (await getCollection("archive")).sort(
+	(a, b) => new Date(b.data.pubDate) - new Date(a.data.pubDate),
+)
 ---
 
 <Layout title="Архив 12 шагов" description="Посты, статьи, материалы и прочее.">
@@ -22,7 +24,13 @@ const archives = await getCollection("archive")
 							<div class="flex mt-2 justify-between items-center">
 								<div class="flex gap-2 items-center">
 									<div
-										class={`${item.data.author === "UnitOne" ? "w-7 h-7 rounded-full bg-gradient-to-br from-black to-zinc-500" : "w-7 h-7 rounded-full bg-gradient-to-bl from-green-300 to-emerald-500"}`}
+										class={`${
+											item.data.author === "UnitOne"
+												? "w-7 h-7 rounded-full bg-gradient-to-br from-black to-zinc-500"
+												: item.data.author === "Информатор"
+													? "w-7 h-7 rounded-full bg-gradient-to-br from-zinc-500 to-zinc-400"
+													: "w-7 h-7 rounded-full bg-gradient-to-bl from-green-300 to-emerald-500"
+										}`}
 									/>
 									<span class="font-medium">{item.data.author}</span>
 								</div>
