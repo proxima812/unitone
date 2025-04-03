@@ -2,6 +2,7 @@
 import RelatedPosts from "@/components/RelatedPosts.astro"
 import Layout from "@/layouts/Layout.astro"
 import { getCollection, render } from "astro:content"
+
 const archive = await getCollection("archive")
 export async function getStaticPaths() {
 	const posts = await getCollection("archive")

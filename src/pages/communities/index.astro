@@ -2,23 +2,28 @@
 import Warning from "@/components/Warning.astro"
 import { communities } from "@/data/communities"
 import Layout from "@/layouts/Layout.astro"
+import { Icon } from "astro-icon/components"
 ---
 
 <Layout
 	title="Список сообществ"
 	description="Список из 57 анонимных двенадцати шаговых сообществ."
 >
-	<a
-		href="https://t.me/all12_contacts"
-		class="bg-black text-white mx-auto max-w-fit px-3 py-1.5 rounded-md"
-		target="_blank">Все ссылки в группе <b>telegram</b></a
-	>
 	<Warning color="bg-green-50 border-green-200 text-green-700">
 		<b>Информация на 2025 год составляет 57 сообщества.</b> Некоторые сообщества образованы
 		из других, как некие группы, с фокусом на что-либо. Их намного больше, но их крайне сложно
 		найти из-за закрытой информации.
 		<b>Если у вас есть информация о каком-либо сообществе, будем рады обратной связи.</b>
 	</Warning>
+	<div class="flex gap-3 justify-center items-center flex-wrap">
+		<p class="text-zinc-600 text-sm font-medium">Группа обновляется. Все ссылка там.</p>
+		<a
+			href="https://t.me/all12_contacts"
+			class="bg-sky-500 flex items-center gap-1 text-white px-3 py-1.5 rounded-md"
+			target="_blank"
+			><Icon name="mdi:telegram" /><span class="font-medium">Telegram</span></a
+		>
+	</div>
 	<section class="grid grid-cols-1 md:grid-cols-2 items-start gap-2">
 		{
 			communities &&
