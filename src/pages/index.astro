@@ -1,4 +1,5 @@
 ---
+import Time from "@/components/Time"
 import Layout from "@/layouts/Layout.astro"
 
 const text = [
@@ -64,29 +65,33 @@ import { Icon } from "astro-icon/components"
 		}
 	</section>
 
-	<section
-		class="bg-white grid sm:grid-cols-2 gap-6 grid-cols-1 p-6 rounded-xl w-full max-w-4xl mx-auto"
-	>
-		<BlockCard
-			link="/communities"
-			title="Список сообществ"
-			icon="mdi:account-group"
-			description="Список из 57 анонимных двенадцати шаговых сообществ."
-		/>
-		<BlockCard
-			link="/methods"
-			title="Методы шагов"
-			icon="mdi:lightbulb-group"
-			w
-			description="Список разных методов прохождения двенадцати шагов."
-		/>
-		<BlockCard
-			link="/archive"
-			title="Архив"
-			icon="mdi:math-integral-box"
-			description="Посты, статьи, материалы и прочее."
-		/>
-		<BlockCard
+	<section class="w-full max-w-4xl mx-auto">
+		<Time client:load />
+		<div class="grid bg-white rounded-xl sm:grid-cols-2 p-4 gap-3 grid-cols-1">
+			<BlockCard
+				link="/communities"
+				title="Список сообществ"
+				icon="mdi:account-group"
+				textBtn="Смотреть"
+				description="Список из 57 анонимных двенадцати шаговых сообществ."
+			/>
+			<BlockCard
+				link="/methods"
+				title="Методы шагов"
+				textBtn="Изучить"
+				icon="mdi:lightbulb-group"
+				w
+				description="Список разных методов прохождения двенадцати шагов."
+			/>
+			<BlockCard
+				link="/archive"
+				title="Архив"
+				icon="mdi:math-integral-box"
+				textBtn="Подробнее"
+				description="Посты, статьи, материалы и прочее."
+			/>
+		</div>
+		<!-- <BlockCard
 			description="Скоро..."
 			icon="mdi:account-details"
 			styleBtn="bg-green-500"
@@ -94,7 +99,7 @@ import { Icon } from "astro-icon/components"
 			style="border-green-200 bg-green-50 text-green-700"
 			title="Генератор Преамбул"
 			link="#"
-		/>
+		/> -->
 		<!-- <BlockCard description="" icon="" style="" title="" /> -->
 	</section>
 

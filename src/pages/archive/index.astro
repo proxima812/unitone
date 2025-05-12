@@ -8,31 +8,25 @@ const archives = (await getCollection("archive")).sort(
 ---
 
 <Layout title="Архив 12 шагов" description="Посты, статьи, материалы и прочее.">
-	<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+	<div
+		class="grid grid-cols-1 gap-1 md:grid-cols-2 lg:grid-cols-3"
+	>
 		{
 			archives &&
 				archives.map(item => (
 					<a href={`/archive/${item.id}/`} class="block relative">
-						<article class="bg-white p-6 rounded-xl relative flex-col flex gap-3">
-							<h2 class="leading-tight line-clamp-2 text-lg font-bold">
+						<article class="bg-white p-6 relative flex-col flex gap-3">
+							<h2 class="h-[50px] leading-tight line-clamp-2 text-xl font-bold">
 								{item.data.title}
 							</h2>
-							<p class="line-clamp-3">{item.data.description}</p>
-							<div
+							<p class="h-[72px] line-clamp-3 text-zinc-600">{item.data.description}</p>
+							{/* <div
 								class={`${item.data.title.includes("Традиция") ? "bg-gradient-to-b from-zinc-100 to-zinc-300" : "bg-gradient-to-b from-amber-300 to-red-300"} absolute right-[5.5px] top-0 rounded-xl  h-full w-[4px]`}
-							/>
+							/> */}
 							<div class="flex mt-2 justify-between items-center">
 								<div class="flex gap-2 items-center">
-									<div
-										class={`${
-											item.data.author === "UnitOne"
-												? "w-7 h-7 rounded-full bg-gradient-to-br from-black to-zinc-500"
-												: item.data.author === "Информатор"
-													? "w-7 h-7 rounded-full bg-gradient-to-br from-zinc-500 to-zinc-400"
-													: "w-7 h-7 rounded-full bg-gradient-to-bl from-green-300 to-emerald-500"
-										}`}
-									/>
-									<span class="font-medium">{item.data.author}</span>
+									<div class="w-7 h-7 rounded-full bg-gradient-to-bl from-green-300 to-emerald-500" />
+									<span class="">{item.data.author}</span>
 								</div>
 								{item.data.pubDate && (
 									<time datetime={item.data.pubDate} class="text-zinc-600 text-sm">

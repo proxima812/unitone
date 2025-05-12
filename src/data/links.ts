@@ -14,11 +14,11 @@ export const links = [
 		href: "/archive",
 		icon: "mdi:math-integral-box",
 	},
-	{
-		label: "Генератор Преамбул",
-		href: "#",
-		icon: "mdi:account-details",
-	},
+	// {
+	// 	label: "Генератор Преамбул",
+	// 	href: "#",
+	// 	icon: "mdi:account-details",
+	// },
 	// {
 	// 	label: "",
 	// 	href: "#",
