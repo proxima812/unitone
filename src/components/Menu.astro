@@ -33,9 +33,9 @@ import { Icon } from "astro-icon/components"
 
 <div
 	id="menu"
-	class="hidden absolute z-50 w-full p-12 justify-center flex items-start h-full bg-black/60 backdrop-blur-2xl top-[75px] left-0"
+	class="hidden absolute rounded-xl z-50 w-full p-5 flex items-start min-h-full shadow-md bg-white top-[85px] left-0"
 >
-	<nav class="flex gap-5 flex-col items-center">
+	<nav class="flex gap-5 flex-col">
 		{
 			links &&
 				links.map(link => (
@@ -43,13 +43,24 @@ import { Icon } from "astro-icon/components"
 						href={link.href}
 						title={link.label}
 						target={link.target}
-						class={cn("text-white text-2xl flex items-center gap-1", link.style)}
+						class={cn("text-zinc-700 text-xl flex items-center gap-1", link.style)}
 					>
 						<Icon name={link.icon} />
 						<span>{link.label}</span>
 					</a>
 				))
 		}
+		<a
+			target="_blank"
+			href="https://t.me/legion_free"
+			class="bg-black tracking-tight text-white rounded-md px-3 py-1.5 flex gap-1.5 items-center"
+		>
+			<div
+				class="w-4 h-4 rounded-full bg-gradient-to-br from-cyan-500 via-purple-400 to-blue-500"
+			>
+			</div>
+			<span>Обратная связь</span></a
+		>
 	</nav>
 </div>
 

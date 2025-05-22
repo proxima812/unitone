@@ -4,9 +4,25 @@ import Logo from "./Logo.astro"
 import Menu from "./Menu.astro"
 ---
 
-<header class="py-5 bg-white">
+<header
+	id="header"
+	class="top-5 sticky shadow-md py-5 mx-5 max-w-full md:w-[1120px] rounded-xl bg-white/60 backdrop-blur-lg mt-5 md:mx-auto"
+>
 	<Container class="flex justify-between gap-x-3">
 		<Logo />
 		<Menu />
+		<a
+			target="_blank"
+			href="https://t.me/legion_free"
+			class="hidden bg-black tracking-tight text-white rounded-md px-3 py-1.5 md:flex gap-1.5 items-center"
+		>
+			<div
+				class="w-4 h-4 rounded-full bg-gradient-to-br from-cyan-500 via-purple-400 to-blue-500"
+			>
+			</div>
+			<span>Обратная связь</span></a
+		>
 	</Container>
 </header>
+
+<script></script>

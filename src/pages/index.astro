@@ -47,9 +47,23 @@ import { communities } from "@/data/communities"
 ---
 
 <Layout
-	title="12 шагов"
+	title="12 шагов: информация и прочее"
 	description={`Интересная информация, материалы, методы прохождения двенадцати шагов, ${communities.length} видов сообществ и многое другое.`}
 >
+	<div
+		class="max-w-2xl mx-auto leading-tight flex flex-col justify-center text-center tracking-tight"
+	>
+		<h1 class="mb-6 flex flex-col">
+			<span class="md:text-7xl text-6xl font-black">12 шагов:</span>
+			<span class="text-2xl md:text-3xl text-zinc-700">информация и прочее</span>
+		</h1>
+		<p class="text-xl text-zinc-600">
+			{
+				`Интересная информация, материалы, методы прохождения двенадцати шагов, ${communities.length} видов сообществ и многое другое.`
+			}
+		</p>
+	</div>
+
 	<section
 		class="flex flex-wrap bg-white rounded-lg sm:rounded-full max-w-fit mx-auto px-6 py-3 gap-4 justify-center items-center"
 	>
