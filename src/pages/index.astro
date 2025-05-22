@@ -42,11 +42,13 @@ const text1 = [
 
 import BlockCard from "@/components/BlockCard.astro"
 import { Icon } from "astro-icon/components"
+
+import { communities } from "@/data/communities"
 ---
 
 <Layout
 	title="12 шагов"
-	description="Интересная информация, материалы, методы прохождения двенадцати шагов, 50 видов сообществ и многое другое."
+	description={`Интересная информация, материалы, методы прохождения двенадцати шагов, ${communities.length} видов сообществ и многое другое.`}
 >
 	<section
 		class="flex flex-wrap bg-white rounded-lg sm:rounded-full max-w-fit mx-auto px-6 py-3 gap-4 justify-center items-center"
@@ -73,7 +75,7 @@ import { Icon } from "astro-icon/components"
 				title="Список сообществ"
 				icon="mdi:account-group"
 				textBtn="Смотреть"
-				description="Список из 57 анонимных двенадцати шаговых сообществ."
+				description={`Список из ${communities.length} анонимных двенадцати шаговых сообществ.`}
 			/>
 			<BlockCard
 				link="/methods"

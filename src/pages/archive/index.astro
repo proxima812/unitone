@@ -8,9 +8,7 @@ const archives = (await getCollection("archive")).sort(
 ---
 
 <Layout title="Архив 12 шагов" description="Посты, статьи, материалы и прочее.">
-	<div
-		class="grid grid-cols-1 gap-1 md:grid-cols-2 lg:grid-cols-3"
-	>
+	<div class="grid grid-cols-1 gap-1 md:grid-cols-2 lg:grid-cols-3">
 		{
 			archives &&
 				archives.map(item => (
