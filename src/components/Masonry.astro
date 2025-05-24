@@ -1,0 +1,101 @@
+---
+interface Props {
+	breakpointCols?: number | Record<number | "default", number>
+	class?: string
+	columnClass?: string
+	sortByHeight?: boolean
+	debug?: boolean
+}
+
+const {
+	breakpointCols = 2,
+	class: className = "astro-masonry-grid",
+	columnClass = "astro-masonry-grid_column",
+	sortByHeight = false,
+	debug = false,
+} = Astro.props
+
+const breakpointColsString =
+	typeof breakpointCols === "object"
+		? JSON.stringify(breakpointCols)
+		: breakpointCols.toString()
+---
+
+<style is:global>
+	[data-masonry-container] {
+		display: flex;
+		align-items: flex-start;
+	}
+
+	[data-masonry-container] > * {
+		visibility: hidden;
+	}
+
+	[data-masonry-container].initialized > * {
+		visibility: visible;
+	}
+
+	[data-masonry-container]:not(.initialized) {
+		flex-wrap: wrap;
+	}
+
+	[data-masonry-container]:not(.initialized) > * {
+		width: 25%;
+	}
+
+	.astro-masonry-grid {
+		display: flex;
+		width: auto;
+	}
+</style>
+
+<div
+	class={className}
+	data-breakpoint-cols={breakpointColsString}
+	data-masonry-container
+	data-column-class={columnClass}
+	data-sort-by-height={sortByHeight.toString()}
+	data-debug={debug.toString()}
+>
+	<slot />
+</div>
+
+<script>
+	import { initializeMasonry, throttle } from "@/utils/masonry"
+
+	let initialized = false
+
+	const initMasonry = () => {
+		console.log("Initializing masonry.")
+
+		const masonryContainer = document.querySelector("[data-masonry-container]")
+		if (!masonryContainer) {
+			console.warn("Masonry container not found.")
+			return
+		}
+
+		if (!initialized) {
+			initializeMasonry()
+			initialized = true
+		} else {
+			const throttledInitialize = throttle(initializeMasonry, 200)
+			throttledInitialize()
+		}
+	}
+
+	const hasAstroViewTransitions = () => {
+		if (typeof document === "undefined") return false // Server side render check.
+		const metaTag = document.querySelector('meta[name="astro-view-transitions-enabled"]')
+		return metaTag && metaTag.getAttribute("content") === "true"
+	}
+
+	if (hasAstroViewTransitions()) {
+		document.addEventListener("astro:page-load", initMasonry)
+	} else {
+		if (document.readyState === "loading") {
+			document.addEventListener("DOMContentLoaded", initMasonry)
+		} else {
+			initMasonry()
+		}
+	}
+</script>

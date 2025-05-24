@@ -1,53 +1,30 @@
 ---
-import Warning from "@/components/Warning.astro"
 import Layout from "@/layouts/Layout.astro"
 import { getCollection } from "astro:content"
+import { marked } from "marked"
 
 const methods = await getCollection("methods")
 ---
 
 <Layout
 	title="Методы шагов"
-	description="Список разных методов прохождения двенадцати шагов. (12 шагов)"
+	description={`Список разных методов прохождения двенадцати шагов. (12 шагов) | 📚 ${methods.length} методов`}
 >
-	<Warning color="bg-red-50 border-red-200 text-red-700">
-		Методов много. Список был сформирован одним человеком в <b>2023 году.</b> Многая информация
-		может уже отличаться от написаного. <br />
-		<b>✅ Информация дополняется в 2025 году.</b>
-		<br />
-		<b>Если у тебя есть коррекция или замечание, будем рады обратной связи. </b>
-	</Warning>
-	<div class="grid grid-cols-1 gap-1">
+	<div class="grid grid-cols-1 gap-6">
 		{
 			methods &&
 				methods.map(item => (
-					<a href={`/methods/${item.id}/`} class="">
-						<article class="bg-white p-6  relative flex-col flex gap-3">
-							<div class="flex flex-col gap-3">
-								<h2 class="leading-tight text-xl font-bold">{item.data.title}</h2>
-								<p class="text-zinc-600 line-clamp-3 ">{item.data.description}</p>
-							</div>
-
-							<div class="absolute right-0 top-0">
-								<div
-									class={
-										item.data.community.includes("АА") &&
-										item.data.community.includes("АН")
-											? "bg-gradient-to-bl text-xs tracking-tight from-blue-500 to-blue-700 py-1 px-2  text-white self-start font-black"
-											: item.data.community.includes("АА")
-												? "bg-blue-500 py-1 text-xs tracking-tight px-2  text-white self-start font-black"
-												: item.data.community.includes("АН")
-													? "bg-blue-700 py-1 text-xs tracking-tight px-2  text-white self-start font-black"
-													: item.data.community.includes("АХ")
-														? "bg-gradient-to-tr text-xs tracking-tight from-blue-300 to-blue-800 py-1 px-2  text-white self-start font-black"
-														: "bg-gradient-to-tr text-xs tracking-tight from-zinc-300 to-zinc-800 py-1 px-2  text-white self-start font-black"
-									}
-								>
-									{item.data.community.join(", ")}
-								</div>
-							</div>
-						</article>
-					</a>
+					<article class="bg-white relative flex rounded-xl flex-col gap-3">
+						<div class="flex flex-col rounded-xl shadow-2xs gap-2 p-6 bg-white-50">
+							<h2 class="leading-tight text-2xl md:text-3xl font-bold">
+								{item.data.title}
+							</h2>
+							<p class="text-sm text-zinc-600 line-clamp-3">{item.data.description}</p>
+						</div>
+						<div class="bg-zinc-50 p-6 border border-zinc-200 rounded-xl prose max-w-none prose-blue">
+							<Fragment set:html={marked(item?.body)} />
+						</div>
+					</article>
 				))
 		}
 	</div>
