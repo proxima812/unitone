@@ -8,6 +8,7 @@ export const communities = [
 		wikipedia: "",
 		find: true,
 		tg_group_link_topic: "https://t.me/all12_contacts/251",
+		category: "♻ Общие зависимости",
 	},
 	{
 		id: "anonimnye-trihotillomany",
@@ -17,6 +18,7 @@ export const communities = [
 		wikipedia: "",
 		find: false,
 		tg_group_link_topic: "https://t.me/all12_contacts/353",
+		category: "🧠 Психические расстройства",
 	},
 	{
 		id: "the-phoenix",
@@ -27,6 +29,7 @@ export const communities = [
 		wikipedia: "",
 		find: true,
 		tg_group_link_topic: "https://t.me/all12_contacts/583",
+		category: "♻ Общие зависимости",
 	},
 	{
 		id: "smart-recovery",
@@ -37,6 +40,7 @@ export const communities = [
 		wikipedia: "https://en.wikipedia.org/wiki/SMART_Recovery",
 		find: true,
 		tg_group_link_topic: "https://t.me/all12_contacts/585",
+		category: "♻ Общие зависимости",
 	},
 	{
 		id: "anonimnye-prokrastinatory",
@@ -46,16 +50,18 @@ export const communities = [
 		wikipedia: "",
 		find: true,
 		tg_group_link_topic: "https://t.me/all12_contacts/17",
+		category: "🧠 Психические расстройства",
 	},
 	{
 		id: "zavisimye-v-dvojnom-vyzdorovlenii",
 		title: "Зависимые в Двойном Выздоровлении",
 		description:
-			"Поддержка для тех, кто одновременно преодолевает зависимость и психические расстройства.",
+			"Поддержка для тех, кто одновременно преодолевает зависимость и 🧠 психические расстройства.",
 		since: "",
 		wikipedia: "",
 		find: true,
 		tg_group_link_topic: "https://t.me/all12_contacts/254",
+		category: "♻ Общие зависимости",
 	},
 	{
 		id: "anonimnye-biznes-dolzhniki",
@@ -65,6 +71,7 @@ export const communities = [
 		wikipedia: "",
 		find: true,
 		tg_group_link_topic: "https://t.me/all12_contacts/37",
+		category: "💰 Финансовые трудности",
 	},
 	{
 		id: "anonimnye-zamykayushchie",
@@ -75,6 +82,7 @@ export const communities = [
 		wikipedia: "",
 		find: true,
 		tg_group_link_topic: "https://t.me/all12_contacts/483",
+		category: "🧠 Психические расстройства",
 	},
 	{
 		id: "anonimnye-pereedayushchie",
@@ -84,6 +92,7 @@ export const communities = [
 		wikipedia: "https://ru.wikipedia.org/wiki/Overeaters_Anonymous",
 		find: true,
 		tg_group_link_topic: "https://t.me/all12_contacts/19",
+		category: "🍽️ Проблемы с пищей",
 	},
 	{
 		id: "anonimnye-ongoliki",
@@ -94,6 +103,7 @@ export const communities = [
 		wikipedia: "",
 		find: true,
 		tg_group_link_topic: "https://t.me/all12_contacts/54",
+		category: "♻ Общие зависимости",
 	},
 	{
 		id: "anonimnye-agnostiki-i-ateisty",
@@ -104,6 +114,7 @@ export const communities = [
 		wikipedia: "https://en.wikipedia.org/wiki/Agnostics_Anonymous",
 		find: true,
 		tg_group_link_topic: "https://t.me/all12_contacts/179",
+		category: "♻ Общие зависимости",
 	},
 	{
 		id: "azot-anonimnye-zavisimye-ot-telesnyh-zazhimov",
@@ -114,6 +125,7 @@ export const communities = [
 		wikipedia: "",
 		find: true,
 		tg_group_link_topic: "https://t.me/all12_contacts/177",
+		category: "🧠 Психические расстройства",
 	},
 	{
 		id: "anonimnye-semi-himicheski-zavisimyh",
@@ -123,6 +135,7 @@ export const communities = [
 		wikipedia: "",
 		find: true,
 		tg_group_link_topic: "https://t.me/all12_contacts/166",
+		category: "👪 Поддержка для близких",
 	},
 	{
 		id: "anonimnye-emocionaly",
@@ -133,6 +146,7 @@ export const communities = [
 		wikipedia: "",
 		find: true,
 		tg_group_link_topic: "https://t.me/all12_contacts/49",
+		category: "🧠 Психические расстройства",
 	},
 	{
 		id: "anonimnyh-dejdremerov",
@@ -143,6 +157,7 @@ export const communities = [
 		wikipedia: "",
 		find: true,
 		tg_group_link_topic: "https://t.me/all12_contacts/149",
+		category: "🧠 Психические расстройства",
 	},
 	{
 		id: "anonimnye-igroki",
@@ -152,6 +167,7 @@ export const communities = [
 		wikipedia: "https://ru.wikipedia.org/wiki/Gamblers_Anonymous",
 		find: true,
 		tg_group_link_topic: "https://t.me/all12_contacts/40",
+		category: "💊 Наркотические зависимости",
 	},
 	{
 		id: "anonimnye-mediya-zavisimye",
@@ -162,6 +178,7 @@ export const communities = [
 		wikipedia: "",
 		find: true,
 		tg_group_link_topic: "https://t.me/all12_contacts/36",
+		category: "♻ Общие зависимости",
 	},
 	{
 		id: "anonimnye-adrenalinovye-narkomany",
@@ -171,6 +188,7 @@ export const communities = [
 		wikipedia: "",
 		find: false,
 		tg_group_link_topic: "https://t.me/all12_contacts/48",
+		category: "💊 Наркотические зависимости",
 	},
 	{
 		id: "anonimnye-bezrabotnye",
@@ -180,6 +198,7 @@ export const communities = [
 		wikipedia: "",
 		find: false,
 		tg_group_link_topic: "https://t.me/all12_contacts/50",
+		category: "💰 Финансовые трудности",
 	},
 	{
 		id: "anonimnye-vyzdoravlivayushchie",
@@ -189,6 +208,7 @@ export const communities = [
 		wikipedia: "",
 		find: true,
 		tg_group_link_topic: "https://t.me/all12_contacts/55",
+		category: "♻ Общие зависимости",
 	},
 	{
 		id: "anonimnye-nekotinozavisimye",
@@ -199,6 +219,7 @@ export const communities = [
 		wikipedia: "https://en.wikipedia.org/wiki/Nicotine_Anonymous",
 		find: true,
 		tg_group_link_topic: "https://t.me/all12_contacts/8",
+		category: "💊 Наркотические зависимости",
 	},
 	{
 		id: "anonimnye-internet-zavisimye",
@@ -208,6 +229,7 @@ export const communities = [
 		wikipedia: "",
 		find: true,
 		tg_group_link_topic: "https://t.me/all12_contacts/35",
+		category: "♻ Общие зависимости",
 	},
 	{
 		id: "anonimnye-hudozhniki",
@@ -218,6 +240,7 @@ export const communities = [
 		wikipedia: "",
 		find: true,
 		tg_group_link_topic: "https://t.me/all12_contacts/16",
+		category: "🎨 Творческие зависимости",
 	},
 	{
 		id: "abused-anonymous",
@@ -227,6 +250,7 @@ export const communities = [
 		wikipedia: "",
 		find: true,
 		tg_group_link_topic: "https://t.me/all12_contacts/74",
+		category: "👪 Поддержка для близких",
 	},
 	{
 		id: "anonimnye-vseh-zavisimostej",
@@ -236,6 +260,7 @@ export const communities = [
 		wikipedia: "",
 		find: false,
 		tg_group_link_topic: "https://t.me/all12_contacts/27",
+		category: "♻ Общие зависимости",
 	},
 	{
 		id: "anonimnye-domosedy",
@@ -246,6 +271,7 @@ export const communities = [
 		wikipedia: "",
 		find: false,
 		tg_group_link_topic: "https://t.me/all12_contacts/56",
+		category: "🌍 Социальные проблемы",
 	},
 	{
 		id: "anonimnye-nevrotiki",
@@ -255,6 +281,7 @@ export const communities = [
 		wikipedia: "",
 		find: false,
 		tg_group_link_topic: "https://t.me/all12_contacts/53",
+		category: "🧠 Психические расстройства",
 	},
 	{
 		id: "anonimnye-alkogoliki",
@@ -264,6 +291,7 @@ export const communities = [
 		wikipedia: "https://ru.wikipedia.org/wiki/Анонимные_алкоголики",
 		find: true,
 		tg_group_link_topic: "https://t.me/all12_contacts/5",
+		category: "🍷 Алкогольные зависимости",
 	},
 	{
 		id: "anonimnye-narkomany",
@@ -273,6 +301,7 @@ export const communities = [
 		wikipedia: "https://ru.wikipedia.org/wiki/Анонимные_наркоманы",
 		find: true,
 		tg_group_link_topic: "https://t.me/all12_contacts/6",
+		category: "💊 Наркотические зависимости",
 	},
 	{
 		id: "anonimnye-sozavisimye",
@@ -282,6 +311,7 @@ export const communities = [
 		wikipedia: "https://ru.wikipedia.org/wiki/Co-Dependents_Anonymous",
 		find: true,
 		tg_group_link_topic: "https://t.me/all12_contacts/11",
+		category: "🧠 Психические расстройства",
 	},
 	{
 		id: "vda-dfs",
@@ -292,6 +322,7 @@ export const communities = [
 		wikipedia: "https://ru.wikipedia.org/wiki/Взрослые_дети_алкоголиков",
 		find: true,
 		tg_group_link_topic: "https://t.me/all12_contacts/10",
+		category: "👪 Поддержка для близких",
 	},
 	{
 		id: "anonimnye-geroinchiki",
@@ -301,6 +332,7 @@ export const communities = [
 		wikipedia: "",
 		find: true,
 		tg_group_link_topic: "https://t.me/all12_contacts/85",
+		category: "💊 Наркотические зависимости",
 	},
 	{
 		id: "anonimnye-tabletochniki",
@@ -310,6 +342,7 @@ export const communities = [
 		wikipedia: "",
 		find: false,
 		tg_group_link_topic: "https://t.me/all12_contacts/52",
+		category: "💊 Наркотические зависимости",
 	},
 	{
 		id: "anonimnye-rasisty",
@@ -320,6 +353,7 @@ export const communities = [
 		wikipedia: "",
 		find: false,
 		tg_group_link_topic: "https://t.me/all12_contacts/88",
+		category: "🧠 Психические расстройства",
 	},
 	{
 		id: "anonimnye-seksualnonnye-kompulsivnye-lichnosti",
@@ -329,6 +363,7 @@ export const communities = [
 		wikipedia: "",
 		find: false,
 		tg_group_link_topic: "https://t.me/all12_contacts/51",
+		category: "🧠 Психические расстройства",
 	},
 	{
 		id: "anonimnye-perezhivshie-incest",
@@ -338,6 +373,7 @@ export const communities = [
 		wikipedia: "",
 		find: false,
 		tg_group_link_topic: "https://t.me/all12_contacts/93",
+		category: "👪 Поддержка для близких",
 	},
 	{
 		id: "anonimnye-seksualno-vyzdoravlivayushchie",
@@ -347,6 +383,7 @@ export const communities = [
 		wikipedia: "",
 		find: false,
 		tg_group_link_topic: "https://t.me/all12_contacts/511",
+		category: "🧠 Психические расстройства",
 	},
 	{
 		id: "anonimnye-nedouchki",
@@ -356,6 +393,7 @@ export const communities = [
 		wikipedia: "",
 		find: false,
 		tg_group_link_topic: "https://t.me/all12_contacts/99",
+		category: "🧠 Психические расстройства",
 	},
 	{
 		id: "oksfordskie-gruppy",
@@ -365,6 +403,7 @@ export const communities = [
 		wikipedia: "https://ru.wikipedia.org/wiki/Оксфордская_группа",
 		find: true,
 		tg_group_link_topic: "https://t.me/all12_contacts/101",
+		category: "♻ Общие зависимости",
 	},
 	{
 		id: "aa-dlya-beremennyh-mam",
@@ -374,6 +413,7 @@ export const communities = [
 		wikipedia: "",
 		find: true,
 		tg_group_link_topic: "https://t.me/all12_contacts/105",
+		category: "🍷 Алкогольные зависимости",
 	},
 	{
 		id: "anonimnye-kokainisty",
@@ -383,6 +423,7 @@ export const communities = [
 		wikipedia: "https://en.wikipedia.org/wiki/Cocaine_Anonymous",
 		find: true,
 		tg_group_link_topic: "https://t.me/all12_contacts/47",
+		category: "💊 Наркотические зависимости",
 	},
 	{
 		id: "i-anon",
@@ -392,15 +433,17 @@ export const communities = [
 		wikipedia: "",
 		find: true,
 		tg_group_link_topic: "https://t.me/all12_contacts/14",
+		category: "👪 Поддержка для близких",
 	},
 	{
 		id: "nar-anon",
 		title: "Нар-Анон",
-		description: "Поддержка для близких людей с наркотической зависимостью.",
+		description: "👪 Поддержка для близких людей с наркотической зависимостью.",
 		since: "1968",
 		wikipedia: "https://en.wikipedia.org/wiki/Nar-Anon",
 		find: true,
 		tg_group_link_topic: "https://t.me/all12_contacts/13",
+		category: "👪 Поддержка для близких",
 	},
 	{
 		id: "alatin",
@@ -410,6 +453,7 @@ export const communities = [
 		wikipedia: "https://en.wikipedia.org/wiki/Alateen",
 		find: true,
 		tg_group_link_topic: "https://t.me/all12_contacts/46",
+		category: "👪 Поддержка для близких",
 	},
 	{
 		id: "anonimnye-hlamogoliki",
@@ -419,6 +463,7 @@ export const communities = [
 		wikipedia: "",
 		find: true,
 		tg_group_link_topic: "https://t.me/all12_contacts/45",
+		category: "🌍 Социальные проблемы",
 	},
 	{
 		id: "bbss-aa",
@@ -428,6 +473,7 @@ export const communities = [
 		wikipedia: "",
 		find: true,
 		tg_group_link_topic: "https://t.me/all12_contacts/44",
+		category: "🍷 Алкогольные зависимости",
 	},
 	{
 		id: "b2b-back-to-basic-aa",
@@ -437,6 +483,7 @@ export const communities = [
 		wikipedia: "",
 		find: true,
 		tg_group_link_topic: "https://t.me/all12_contacts/43",
+		category: "🍷 Алкогольные зависимости",
 	},
 	{
 		id: "anonimnye-himicheskie-zavisimye",
@@ -446,6 +493,7 @@ export const communities = [
 		wikipedia: "",
 		find: true,
 		tg_group_link_topic: "https://t.me/all12_contacts/42",
+		category: "♻ Общие зависимости",
 	},
 	{
 		id: "anonimnye-kompyuternye-igroki",
@@ -455,6 +503,7 @@ export const communities = [
 		wikipedia: "",
 		find: true,
 		tg_group_link_topic: "https://t.me/all12_contacts/41",
+		category: "🎨 Творческие зависимости",
 	},
 	{
 		id: "anonimnye-trudogoliki",
@@ -464,6 +513,7 @@ export const communities = [
 		wikipedia: "https://en.wikipedia.org/wiki/Workaholics_Anonymous",
 		find: true,
 		tg_group_link_topic: "https://t.me/all12_contacts/9",
+		category: "🧠 Психические расстройства",
 	},
 	{
 		id: "anonimnye-nedozarabatyvayushchie",
@@ -473,6 +523,7 @@ export const communities = [
 		wikipedia: "",
 		find: true,
 		tg_group_link_topic: "https://t.me/all12_contacts/39",
+		category: "💰 Финансовые трудности",
 	},
 	{
 		id: "anonimnye-dolzhniki",
@@ -482,6 +533,7 @@ export const communities = [
 		wikipedia: "https://en.wikipedia.org/wiki/Debtors_Anonymous",
 		find: true,
 		tg_group_link_topic: "https://t.me/all12_contacts/38",
+		category: "💰 Финансовые трудности",
 	},
 	{
 		id: "anonimnye-s-rasstrojstvom-pishchevogo-povedeniya",
@@ -491,6 +543,7 @@ export const communities = [
 		wikipedia: "",
 		find: true,
 		tg_group_link_topic: "https://t.me/all12_contacts/34",
+		category: "🍽️ Проблемы с пищей",
 	},
 	{
 		id: "anonimnye-kompulsivno-pereedayushchie",
@@ -500,6 +553,7 @@ export const communities = [
 		wikipedia: "https://ru.wikipedia.org/wiki/Overeaters_Anonymous",
 		find: true,
 		tg_group_link_topic: "https://t.me/all12_contacts/33",
+		category: "🍽️ Проблемы с пищей",
 	},
 	{
 		id: "anonimnye-depressivnye",
@@ -509,6 +563,7 @@ export const communities = [
 		wikipedia: "",
 		find: true,
 		tg_group_link_topic: "https://t.me/all12_contacts/32",
+		category: "🧠 Психические расстройства",
 	},
 	{
 		id: "anonimnye-kontrzavisimye-anoreksiki",
@@ -518,6 +573,7 @@ export const communities = [
 		wikipedia: "",
 		find: true,
 		tg_group_link_topic: "https://t.me/all12_contacts/28",
+		category: "🍽️ Проблемы с пищей",
 	},
 	{
 		id: "anonimnye-lyubovno-zavisimye",
@@ -527,6 +583,7 @@ export const communities = [
 		wikipedia: "https://en.wikipedia.org/wiki/Sex_and_Love_Addicts_Anonymous",
 		find: true,
 		tg_group_link_topic: "https://t.me/all12_contacts/18",
+		category: "🧠 Психические расстройства",
 	},
 	{
 		id: "anonimnye-seksogoliki",
@@ -536,6 +593,7 @@ export const communities = [
 		wikipedia: "https://en.wikipedia.org/wiki/Sexaholics_Anonymous",
 		find: true,
 		tg_group_link_topic: "https://t.me/all12_contacts/7",
+		category: "🧠 Психические расстройства",
 	},
 	{
 		id: "al-anon",
@@ -545,5 +603,6 @@ export const communities = [
 		wikipedia: "https://ru.wikipedia.org/wiki/Ал-Анон",
 		find: true,
 		tg_group_link_topic: "https://t.me/all12_contacts/12",
+		category: "👪 Поддержка для близких",
 	},
 ]

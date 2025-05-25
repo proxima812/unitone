@@ -1,0 +1,83 @@
+---
+import { communities } from "@/data/communities"
+import Layout from "@/layouts/Layout.astro"
+import { Icon } from "astro-icon/components"
+
+const categories = [
+	"🍷 Алкогольные зависимости",
+	"💊 Наркотические зависимости",
+	"👪 Поддержка для близких",
+	"🍽️ Проблемы с пищей",
+	"💰 Финансовые трудности",
+	"🌍 Социальные проблемы",
+	"🎨 Творческие зависимости",
+	"♻ Общие зависимости",
+	"🧠 Психические расстройства",
+]
+---
+
+<Layout
+	title="Поиск анонимного сообщества по категориям"
+	description="12 шаговые сообщества по категориям."
+>
+	<section
+		class="grid grid-cols-1 items-start gap-6 md:gap-3 md:grid-cols-2 lg:grid-cols-3"
+	>
+		{
+			categories.map(category => (
+				<div class="flex flex-col shadow-2xs bg-white rounded-xl">
+					<h3 class="text-xl p-6 font-medium">{category}</h3>
+					{communities &&
+						communities
+							.filter(item => item.category === category)
+							.map(item => (
+								<article class="border-[0.5px] border-zinc-200 p-3 rounded-md flex flex-col">
+									<h2 class="font-medium">{item.title}</h2>
+									<p class="mt-1 text-sm text-zinc-600">{item.description}</p>
+									<div class="flex gap-1 items-start mt-3">
+										<a
+											href={item.tg_group_link_topic}
+											aria-label={item.title}
+											target="_blank"
+											class={`px-2 p-1.5 text-sm text-sky-600 border-[0.6px] bg-sky-100 border-sky-500 flex items-center gap-1 justify-center hover:bg-sky-200 transition-colors duration-75 ease-in rounded-md`}
+										>
+											<Icon name="mdi:telegram" />
+											<span class="font-medium">Описание</span>
+										</a>
+										{item.wikipedia && (
+											<a
+												href={item.wikipedia}
+												aria-label={item.title}
+												target="_blank"
+												class="px-2 p-1.5 text-sm text-zinc-600 border-[0.6px] bg-zinc-100 border-zinc-500 rounded-md flex items-center gap-1 justify-center hover:bg-zinc-200 transition-colors duration-75 ease-in"
+											>
+												<Icon name="mdi:wikipedia" />
+												<span class="font-medium">Wikipedia</span>
+											</a>
+										)}
+									</div>
+									<div class="flex gap-1 mt-1 items-start">
+										<a
+											href={`https://yandex.ru/search/?text=${item.title}`}
+											target="_blank"
+											class={`px-2 p-1.5 text-sm text-pink-600 border-[0.6px] bg-pink-100 border-pink-500 flex items-center gap-1 justify-center hover:bg-pink-200 transition-colors duration-75 ease-in rounded-md`}
+										>
+											<Icon name="mdi:subdirectory-arrow-right" />
+											<span class="font-medium">Найти в Yandex</span>
+										</a>
+										<a
+											href={`https://www.google.com/search?q=${item.title}`}
+											target="_blank"
+											class={`px-2 p-1.5 text-sm text-amber-600 border-[0.6px] bg-amber-100 border-amber-500 flex items-center gap-1 justify-center hover:bg-amber-200 transition-colors duration-75 ease-in rounded-md`}
+										>
+											<Icon name="mdi:google" />
+											<span class="font-medium">Найти в Google</span>
+										</a>
+									</div>
+								</article>
+							))}
+				</div>
+			))
+		}
+	</section>
+</Layout>

@@ -1,3 +1,5 @@
+import { communities } from "./communities"
+
 export const links = [
 	{
 		label: "Сообщества",
@@ -12,13 +14,13 @@ export const links = [
 	{
 		label: "Архив",
 		href: "/archive",
-		icon: "mdi:math-integral-box",
+		icon: "mdi:archive-check-outline",
 	},
-	// {
-	// 	label: "Генератор Преамбул",
-	// 	href: "#",
-	// 	icon: "mdi:account-details",
-	// },
+	{
+		label: "Подобрать сообщество",
+		href: "/finder",
+		icon: "mdi:account-multiple-check",
+	},
 	// {
 	// 	label: "",
 	// 	href: "#",
@@ -26,6 +28,37 @@ export const links = [
 	// 	icon: "",
 	// 	style: "",
 	// },
+]
+
+export const blockData = [
+	{
+		link: links[0].href, // Ссылка на "Список сообществ"
+		title: links[0].label,
+		icon: links[0].icon,
+		textBtn: "Смотреть",
+		description: `Список из ${communities.length} анонимных двенадцати шаговых сообществ.`,
+	},
+	{
+		link: links[1].href, // Ссылка на "Методы шагов"
+		title: links[1].label,
+		icon: links[1].icon,
+		textBtn: "Изучить",
+		description: "Список разных методов прохождения двенадцати шагов.",
+	},
+	{
+		link: links[2].href, // Ссылка на "Архив"
+		title: links[2].label,
+		icon: links[2].icon,
+		textBtn: "Подробнее",
+		description: "Посты, статьи, материалы и прочее.",
+	},
+	{
+		link: links[3].href,
+		title: links[3].label,
+		icon: links[3].icon,
+		textBtn: "Искать",
+		description: "Анонимные сообщества по категориям.",
+	},
 ]
 
 export const telegrams = [
