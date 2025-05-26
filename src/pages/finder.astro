@@ -20,7 +20,30 @@ const categories = [
 	title="Поиск анонимного сообщества по категориям"
 	description="12 шаговые сообщества по категориям."
 >
+	<div id="category-filters" class="flex flex-wrap justify-center gap-2 mb-6">
+		{
+			categories.map(category => {
+				const count = communities.filter(item => item.category === category).length
+				return (
+					<button
+						class="category-button px-3 py-1 hover:bg-green-100 cursor-pointer rounded-full border border-zinc-200 text-sm  transition-all duration-75 ease-in bg-white"
+						data-category={category}
+					>
+						{category} ({count})
+					</button>
+				)
+			})
+		}
+		<button
+			class="category-button px-3 py-1 transition-all duration-75 ease-in hover:bg-green-100 cursor-pointer rounded-full bg-white text-sm"
+			data-category="all"
+		>
+			Показать все ({communities.length})
+		</button>
+	</div>
+
 	<section
+		id="community-list"
 		class="grid grid-cols-1 items-start gap-6 md:gap-3 md:grid-cols-2 lg:grid-cols-3"
 	>
 		{
@@ -31,7 +54,10 @@ const categories = [
 						communities
 							.filter(item => item.category === category)
 							.map(item => (
-								<article class="border-[0.5px] border-zinc-200 p-3 rounded-md flex flex-col">
+								<article
+									data-category={item.category}
+									class="border-[0.5px] border-zinc-200 p-3 rounded-md flex flex-col"
+								>
 									<h2 class="font-medium">{item.title}</h2>
 									<p class="mt-1 text-sm text-zinc-600">{item.description}</p>
 									<div class="flex gap-1 items-start mt-3">
@@ -80,4 +106,35 @@ const categories = [
 			))
 		}
 	</section>
+
+	<script>
+		document.addEventListener("DOMContentLoaded", () => {
+			const buttons = document.querySelectorAll(".category-button")
+			const articles = document.querySelectorAll("#community-list article")
+
+			buttons.forEach(button => {
+				button.addEventListener("click", () => {
+					const selectedCategory = button.dataset.category
+
+					// Удаляем активность со всех кнопок
+					buttons.forEach(btn => btn.classList.remove("bg-zinc-200", "font-medium"))
+
+					// Выделяем активную кнопку
+					button.classList.add("bg-zinc-200", "font-medium")
+
+					// Фильтруем карточки
+					articles.forEach(article => {
+						if (
+							selectedCategory === "all" ||
+							article.dataset.category === selectedCategory
+						) {
+							article.parentElement.style.display = "flex"
+						} else {
+							article.parentElement.style.display = "none"
+						}
+					})
+				})
+			})
+		})
+	</script>
 </Layout>
