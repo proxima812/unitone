@@ -1,5 +1,4 @@
 ---
-import Time from "@/components/Time"
 import Layout from "@/layouts/Layout.astro"
 
 const text = [
@@ -51,21 +50,7 @@ import { blockData } from "@/data/links"
 	title="12 шагов: информация и прочее"
 	description={`Интересная информация, материалы, методы прохождения двенадцати шагов, ${communities.length} видов сообществ и многое другое.`}
 >
-	<div
-		class="max-w-2xl mx-auto leading-tight flex flex-col justify-center text-center tracking-tight"
-	>
-		<h1 class="mb-6 flex flex-col">
-			<span class="md:text-7xl text-6xl font-black">12 шагов:</span>
-			<span class="text-2xl md:text-3xl text-zinc-700">информация и прочее</span>
-		</h1>
-		<p class="text-xl text-zinc-600">
-			{
-				`Интересная информация, материалы, методы прохождения двенадцати шагов, ${communities.length} видов сообществ и многое другое.`
-			}
-		</p>
-	</div>
-
-	<section
+	<!-- <section
 		class="flex flex-wrap bg-white rounded-lg sm:rounded-full max-w-fit mx-auto px-6 py-3 gap-4 justify-center items-center"
 	>
 		{
@@ -80,11 +65,25 @@ import { blockData } from "@/data/links"
 					</div>
 				))
 		}
-	</section>
+	</section> -->
 
-	<section class="w-full max-w-4xl mx-auto">
-		<Time client:load />
-		<div class="grid bg-white rounded-xl sm:grid-cols-2 p-4 gap-3 grid-cols-1">
+	<main class="max-w-4xl mx-auto flex flex-col gap-12">
+		<h1>
+			<span class="block md:text-8xl text-6xl font-black">12 шагов</span>
+			<span class="block text-2xl md:text-4xl text-zinc-700"
+				>Материалы, шаги и прочее.</span
+			>
+		</h1>
+		<p class="text-2xl md:text-5xl text-zinc-400">
+			<b class="text-zinc-700">Интересная</b> информация, материалы, <b
+				class="text-zinc-700">методы прохождения</b
+			> двенадцати шагов,
+			<b class="text-zinc-700">{`${communities.length}`}</b>
+			видов сообществ и <b class="text-zinc-700">многое другое</b>.
+			<span>👇</span>
+		</p>
+		<!-- <Time client:load /> -->
+		<div class="grid sm:grid-cols-2 gap-3 grid-cols-1">
 			{
 				blockData &&
 					blockData.map(block => (
@@ -109,31 +108,23 @@ import { blockData } from "@/data/links"
 			link="#"
 		/> -->
 		<!-- <BlockCard description="" icon="" style="" title="" /> -->
-	</section>
-
-	<section class="bg-white max-w-4xl mx-auto rounded-xl">
-		<div class="flex">
-			<div class="p-6 flex flex-col gap-3 items-start">
-				<h2 class="text-lg font-bold">Проект от НК "Действия"</h2>
-				<p class="leading-relaxed text-zinc-600">
-					Это независимый комитет, созданный для поддержки и развития различных 12-шаговых
-					сообществ. Мы ориентированы на обмен опытом, консультации и помощь в реализации
-					проектов, особенно в IT-сфере и связанных направлениях.
-				</p>
-				<a
-					class="px-3 py-1.5 mt-1.5 rounded-md font-medium flex gap-1 items-center bg-blue-50 text-blue-700 border border-blue-200"
-					target="_blank"
-					href="https://docs.google.com/document/d/16yZCl16vD8pVHhMqo_LltiOGF0M7FVYXscgoQP5vPbM/edit?usp=sharing"
-					><Icon name="mdi:file-pdf" /><span>НК "Действия" Документ</span></a
-				>
+		<section class="bg-white rounded-xl">
+			<div class="flex">
+				<div class="p-6 flex flex-col gap-3 items-start">
+					<h2 class="text-lg font-bold">Проект от НК "Действия"</h2>
+					<p class="leading-relaxed text-zinc-600">
+						Это независимый комитет, созданный для поддержки и развития различных
+						12-шаговых сообществ. Мы ориентированы на обмен опытом, консультации и помощь
+						в реализации проектов, особенно в IT-сфере и связанных направлениях.
+					</p>
+					<a
+						class="px-3 py-1.5 mt-1.5 rounded-md font-medium flex gap-1 items-center bg-blue-50 text-blue-700 border border-blue-200"
+						target="_blank"
+						href="https://docs.google.com/document/d/16yZCl16vD8pVHhMqo_LltiOGF0M7FVYXscgoQP5vPbM/edit?usp=sharing"
+						><Icon name="mdi:file-pdf" /><span>НК "Действия" Документ</span></a
+					>
+				</div>
 			</div>
-			<!-- <Image
-				width={320}
-				height={320}
-				src={nk}
-				alt="Логотип независимого комитета Действия"
-				class="sm:w-64 object-contain sm:object-cover rounded-r-xl"
-			/> -->
-		</div>
-	</section>
+		</section>
+	</main>
 </Layout>
