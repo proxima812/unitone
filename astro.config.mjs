@@ -13,6 +13,9 @@ export default defineConfig({
 	vite: {
 		plugins: [tailwindcss()],
 	},
+	devToolbar: {
+		enabled: false,
+	},
 	prefetch: {
 		defaultStrategy: "viewport",
 		prefetchAll: true,
