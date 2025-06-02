@@ -1,0 +1,39 @@
+---
+import { faq } from "@/data/links"
+import { Icon } from "astro-icon/components"
+---
+
+<section class="accordion p-6 bg-white rounded-xl space-y-4">
+	{
+		faq.map((item, index) => (
+			<div class="accordion-item border-b border-zinc-300 pb-4">
+				<button
+					class="accordion-trigger cursor-pointer text-zinc-600 w-full text-left font-semibold text-base md:text-2xl py-3 hover:text-blue-600 flex items-center gap-1 transition"
+					aria-expanded="false"
+				>
+					<Icon name="mdi:plus" />
+					<span>{item.question}</span>
+				</button>
+				<div class="accordion-panel hidden text-gray-700 text-base leading-relaxed">
+					<p>- {item.answer}</p>
+				</div>
+			</div>
+		))
+	}
+</section>
+
+<script>
+	document.addEventListener("DOMContentLoaded", () => {
+		const triggers = document.querySelectorAll(".accordion-trigger")
+
+		triggers.forEach(trigger => {
+			trigger.addEventListener("click", () => {
+				const panel = trigger.nextElementSibling
+				const isExpanded = trigger.getAttribute("aria-expanded") === "true"
+
+				trigger.setAttribute("aria-expanded", String(!isExpanded))
+				panel.classList.toggle("hidden")
+			})
+		})
+	})
+</script>

@@ -40,8 +40,8 @@ const text1 = [
 ]
 
 import BlockCard from "@/components/BlockCard.astro"
-import { Icon } from "astro-icon/components"
 
+import Accordion from "@/components/Accordion.astro"
 import { communities } from "@/data/communities"
 import { blockData } from "@/data/links"
 ---
@@ -108,7 +108,22 @@ import { blockData } from "@/data/links"
 			link="#"
 		/> -->
 		<!-- <BlockCard description="" icon="" style="" title="" /> -->
-		<section class="bg-white rounded-xl">
+
+		<section class="bg-white rounded-xl p-6">
+			<p class="italic text-2xl md:text-3xl text-zinc-400">
+				...Тянет меня собрать все <b class="text-zinc-700">в одном месте</b>, но <b
+					class="text-zinc-700">не вся информация есть в интернете</b
+				>. Порой <b class="text-zinc-700">сложно</b> найти что-либо по 12 шагам. Стараюсь <b
+					class="text-zinc-700">поддерживать актуальность</b
+				>
+				информации. <b class="text-zinc-700">Буду благодарен помощи</b>!
+			</p>
+			<span class="block mt-3 text-base text-purple-700">- K.M.</span>
+		</section>
+
+		<Accordion />
+
+		<!-- <section class="bg-white rounded-xl">
 			<div class="flex">
 				<div class="p-6 flex flex-col gap-3 items-start">
 					<h2 class="text-lg font-bold">Проект от НК "Действия"</h2>
@@ -125,6 +140,6 @@ import { blockData } from "@/data/links"
 					>
 				</div>
 			</div>
-		</section>
+		</section> -->
 	</main>
 </Layout>
