@@ -28,7 +28,7 @@ const { Content } = await render(post)
 			<Author data={post.data} />
 			{
 				post.data.pubDate && (
-					<time datetime={post.data.pubDate} class="text-zinc-600">
+					<time datetime={post.data.pubDate} class="self-end text-zinc-600">
 						🗓
 						{new Date(post.data.pubDate).toLocaleDateString("ru-RU", {
 							year: "numeric",

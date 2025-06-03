@@ -16,7 +16,7 @@ const archivesTags = archives
 ---
 
 <Layout title="Архив 12 шагов" description="Посты, статьи, материалы и прочее.">
-	<div class="flex justify-center gap-2 items-center" data-filter>
+	<div class="flex justify-center flex-wrap gap-2 items-center" data-filter>
 		{
 			archivesTags.map(tag => (
 				<button
@@ -53,7 +53,7 @@ const archivesTags = archives
 								<div class="flex mt-2 justify-between items-center">
 									<Author data={item.data} />
 									{item.data.pubDate && (
-										<time datetime={item.data.pubDate} class="text-zinc-600 text-sm">
+										<time datetime={item.data.pubDate} class="self-end text-zinc-600 text-sm">
 											🗓
 											{new Date(item.data.pubDate).toLocaleDateString("ru-RU", {
 												year: "numeric",

@@ -5,7 +5,7 @@ export const archive = collection({
 	slugField: "title",
 	path: "src/data/archive/*",
 	entryLayout: "content",
-	columns: ["title", "pubDate", 'tags'],
+	columns: ["title", "author", "tags"],
 	format: {
 		contentField: "content",
 	},
@@ -28,18 +28,17 @@ export const archive = collection({
 				// { label: "", value: "" },
 			],
 		}),
-		viewMainPage: fields.checkbox({
-			label: "Показать на главной странице",
-		}),
-		author: fields.select({
-			label: "Автор",
+		// viewMainPage: fields.checkbox({
+		// 	label: "Показать на главной странице",
+		// }),
+		author: fields.multiselect({
+			label: "Автор/Авторы",
 			options: [
 				{ label: "UnitOne", value: "UnitOne" },
 				{ label: "SamGold", value: "SamGold" },
 				{ label: "Stepper", value: "Stepper" },
 				{ label: "Pythagoras", value: "Pythagoras" },
 			],
-			defaultValue: "UnitOne",
 		}),
 		pubDate: fields.date({
 			label: "Время",

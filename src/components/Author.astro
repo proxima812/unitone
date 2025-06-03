@@ -2,24 +2,35 @@
 import { cn } from "@/utils/cn"
 
 const { data, class: className } = Astro.props
+
+function authorColor(author) {
+	switch (author) {
+		case "SamGold":
+			return "bg-gradient-to-bl from-green-300 to-emerald-500"
+		case "Pythagoras":
+			return "bg-gradient-to-bl from-blue-300 to-indigo-500"
+		case "Stepper":
+			return "bg-gradient-to-bl from-amber-300 to-purple-500"
+		case "UnitOne":
+			return "bg-gradient-to-bl from-pink-300 to-rose-500"
+		default:
+			return "bg-gradient-to-bl from-gray-300 to-gray-500"
+	}
+}
+
+const authors = Array.isArray(data.author) ? data.author : [data.author]
 ---
 
-<div class="flex gap-2 items-center">
-	<div
-		class={cn(
-			className,
-			"w-6 h-6 rounded-full",
-			data.author === "SamGold"
-				? "bg-gradient-to-bl from-green-300 to-emerald-500"
-				: data.author === "Pythagoras"
-					? "bg-gradient-to-bl from-blue-300 to-indigo-500"
-					: data.author === "Stepper"
-						? "bg-gradient-to-bl from-amber-300 to-purple-500"
-						: data.author === "UnitOne"
-							? "bg-gradient-to-bl from-pink-300 to-rose-500"
-							: "bg-gradient-to-bl from-gray-300 to-gray-500", // по умолчанию
-		)}
-	>
-	</div>
-	<span class="">{data.author}</span>
+<div class={cn("flex items-center", authors.length >= 1 ? "gap-1 flex-col" : "gap-2")}>
+	{
+		authors.map(author => (
+			<div class="flex items-center gap-2 self-start">
+				<div
+					class={cn(className, "w-6 h-6 rounded-full", authorColor(author))}
+					title={author}
+				/>
+				{authors.length >= 1 && <span class="text-zinc-700">{author}</span>}
+			</div>
+		))
+	}
 </div>

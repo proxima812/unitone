@@ -7,10 +7,10 @@ const archive = defineCollection({
 		title: z.string(),
 		description: z.string().optional(),
 		pubDate: z.union([z.string(), z.date()]).optional(),
-		author: z.string().default("UnitOne").optional(),
+		author: z.array(z.string()).optional(),
 		ogImage: z.any().optional(),
 		tags: z.array(z.string()).optional(),
-		viewMainPage: z.boolean().default(false).optional(),
+		// viewMainPage: z.boolean().default(false).optional(),
 	}),
 })
 
