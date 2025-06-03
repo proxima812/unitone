@@ -1,4 +1,5 @@
 ---
+import Author from "@/components/Author.astro"
 import RelatedPosts from "@/components/RelatedPosts.astro"
 import Layout from "@/layouts/Layout.astro"
 import { getCollection, render } from "astro:content"
@@ -24,13 +25,7 @@ const { Content } = await render(post)
 		>
 
 		<div class="flex gap-4 items-center p-2 py-1.5 bg-white rounded-md">
-			<div class="flex gap-2 items-center">
-				<div
-					class={`${post.data.author === "UnitOne" ? "w-6 h-6 rounded-full bg-gradient-to-br from-black to-zinc-500" : "w-6 h-6 rounded-full bg-gradient-to-br from-green-500 to-green-400"}`}
-				>
-				</div>
-				<span class="font-medium">{post.data.author}</span>
-			</div>
+			<Author data={post.data} />
 			{
 				post.data.pubDate && (
 					<time datetime={post.data.pubDate} class="text-zinc-600">

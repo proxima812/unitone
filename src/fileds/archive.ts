@@ -5,7 +5,7 @@ export const archive = collection({
 	slugField: "title",
 	path: "src/data/archive/*",
 	entryLayout: "content",
-	columns: ["title", "pubDate"],
+	columns: ["title", "pubDate", 'tags'],
 	format: {
 		contentField: "content",
 	},
@@ -16,6 +16,18 @@ export const archive = collection({
 			description: "от 20 до 150 символов",
 			validation: { length: { min: 20, max: 150 } },
 		}),
+		tags: fields.multiselect({
+			label: "Теги",
+			options: [
+				{ label: "12 Традиций", value: "12 Традиций" },
+				{ label: "Сообщество", value: "Сообщество" },
+				{ label: "12 шагов", value: "12 Шагов" },
+				{ label: "Материал", value: "Материал" },
+				{ label: "Адаптация", value: "Адаптация" },
+				{ label: "Руководство", value: "Руководство" },
+				// { label: "", value: "" },
+			],
+		}),
 		viewMainPage: fields.checkbox({
 			label: "Показать на главной странице",
 		}),
@@ -24,7 +36,8 @@ export const archive = collection({
 			options: [
 				{ label: "UnitOne", value: "UnitOne" },
 				{ label: "SamGold", value: "SamGold" },
-				{ label: "Информатор", value: "Информатор" },
+				{ label: "Stepper", value: "Stepper" },
+				{ label: "Pythagoras", value: "Pythagoras" },
 			],
 			defaultValue: "UnitOne",
 		}),

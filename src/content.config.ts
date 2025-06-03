@@ -9,6 +9,7 @@ const archive = defineCollection({
 		pubDate: z.union([z.string(), z.date()]).optional(),
 		author: z.string().default("UnitOne").optional(),
 		ogImage: z.any().optional(),
+		tags: z.array(z.string()).optional(),
 		viewMainPage: z.boolean().default(false).optional(),
 	}),
 })

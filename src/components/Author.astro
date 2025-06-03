@@ -1,0 +1,25 @@
+---
+import { cn } from "@/utils/cn"
+
+const { data, class: className } = Astro.props
+---
+
+<div class="flex gap-2 items-center">
+	<div
+		class={cn(
+			className,
+			"w-6 h-6 rounded-full",
+			data.author === "SamGold"
+				? "bg-gradient-to-bl from-green-300 to-emerald-500"
+				: data.author === "Pythagoras"
+					? "bg-gradient-to-bl from-blue-300 to-indigo-500"
+					: data.author === "Stepper"
+						? "bg-gradient-to-bl from-amber-300 to-purple-500"
+						: data.author === "UnitOne"
+							? "bg-gradient-to-bl from-pink-300 to-rose-500"
+							: "bg-gradient-to-bl from-gray-300 to-gray-500", // по умолчанию
+		)}
+	>
+	</div>
+	<span class="">{data.author}</span>
+</div>

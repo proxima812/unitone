@@ -1,45 +1,139 @@
 ---
+import Author from "@/components/Author.astro"
 import Layout from "@/layouts/Layout.astro"
 import { getCollection } from "astro:content"
 
 const archives = (await getCollection("archive")).sort(
 	(a, b) => new Date(b.data.pubDate) - new Date(a.data.pubDate),
 )
+
+const archivesTags = archives
+	.reduce((acc, curr) => {
+		const tags = curr.data?.tags || []
+		return [...new Set([...acc, ...tags])]
+	}, [])
+	.sort((a, b) => a.localeCompare(b))
 ---
 
 <Layout title="Архив 12 шагов" description="Посты, статьи, материалы и прочее.">
-	<div class="grid grid-cols-1 gap-1 md:grid-cols-2 lg:grid-cols-3">
+	<div class="flex justify-center gap-2 items-center" data-filter>
+		{
+			archivesTags.map(tag => (
+				<button
+					class="cursor-pointer px-3 py-1.5 rounded-lg shadow-2xs bg-white"
+					type="button"
+				>
+					{tag}
+				</button>
+			))
+		}
+		<button
+			type="button"
+			class="reset-button text-sm cursor-pointer px-3 py-1.5 rounded-lg shadow-2xs text-zinc-600 border border-zinc-400"
+		>
+			Сбросить фильтры
+		</button>
+	</div>
+	<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3" data-posts>
 		{
 			archives &&
 				archives.map(item => (
-					<a href={`/archive/${item.id}/`} class="block relative">
-						<article class="bg-white p-6 relative flex-col flex gap-3">
-							<h2 class="h-[50px] leading-tight line-clamp-2 text-xl font-bold">
-								{item.data.title}
-							</h2>
-							<p class="h-[72px] line-clamp-3 text-zinc-600">{item.data.description}</p>
-							{/* <div
-								class={`${item.data.title.includes("Традиция") ? "bg-gradient-to-b from-zinc-100 to-zinc-300" : "bg-gradient-to-b from-amber-300 to-red-300"} absolute right-[5.5px] top-0 rounded-xl  h-full w-[4px]`}
-							/> */}
-							<div class="flex mt-2 justify-between items-center">
-								<div class="flex gap-2 items-center">
-									<div class="w-6 h-6 rounded-full bg-gradient-to-bl from-green-300 to-emerald-500" />
-									<span class="">{item.data.author}</span>
+					<a
+						data-tag={item.data.tags?.join(",") ?? ""}
+						href={`/archive/${item.id}/`}
+						class="block relative "
+					>
+						<div class="rounded-2xl p-2 shadow-md shadow-black/5">
+							<article class="rounded-xl shadow-lg ring-1 ring-black/5 lg:shadow-2xl bg-white p-5 relative flex-col flex gap-3">
+								<h2 class="h-[50px] leading-tight line-clamp-2 text-xl font-bold">
+									{item.data.title}
+								</h2>
+								<p class="h-[72px] line-clamp-3 text-zinc-600">{item.data.description}</p>
+
+								<div class="flex mt-2 justify-between items-center">
+									<Author data={item.data} />
+									{item.data.pubDate && (
+										<time datetime={item.data.pubDate} class="text-zinc-600 text-sm">
+											🗓
+											{new Date(item.data.pubDate).toLocaleDateString("ru-RU", {
+												year: "numeric",
+												month: "short",
+												day: "numeric",
+											})}
+										</time>
+									)}
 								</div>
-								{item.data.pubDate && (
-									<time datetime={item.data.pubDate} class="text-zinc-600 text-sm">
-										🗓
-										{new Date(item.data.pubDate).toLocaleDateString("ru-RU", {
-											year: "numeric",
-											month: "short",
-											day: "numeric",
-										})}
-									</time>
-								)}
-							</div>
-						</article>
+							</article>
+						</div>
 					</a>
 				))
 		}
 	</div>
+
+	<script is:inline>
+		document.addEventListener("DOMContentLoaded", () => {
+			const activedTags = []
+			const filterElement = document.querySelector("[data-filter]")
+			const tagsElement = document.querySelector("[data-posts]")
+
+			function updateTagList() {
+				const activedTagsLower = activedTags.map(tag => tag.toLowerCase().trim())
+
+				// Обновить стили кнопок
+				filterElement?.querySelectorAll("button:not(.reset-button)").forEach(button => {
+					const tag = button.innerText.trim()
+					if (activedTags.includes(tag)) {
+						button.classList.add("active")
+					} else {
+						button.classList.remove("active")
+					}
+				})
+
+				// Обновить отображение постов
+				tagsElement?.querySelectorAll("[data-tag]").forEach(post => {
+					const postsTags = (post.dataset.tag || "")
+						.split(",")
+						.map(tag => tag.toLowerCase().trim())
+
+					if (
+						activedTagsLower.length === 0 ||
+						activedTagsLower.some(tag => postsTags.includes(tag))
+					) {
+						post.classList.remove("hidden")
+					} else {
+						post.classList.add("hidden")
+					}
+				})
+			}
+
+			filterElement?.addEventListener("click", e => {
+				const target = e.target
+				if (target.tagName !== "BUTTON") return
+
+				if (target.classList.contains("reset-button")) {
+					activedTags.length = 0 // Очистить фильтры
+					updateTagList()
+					return
+				}
+
+				const tag = target.innerText.trim()
+				const index = activedTags.indexOf(tag)
+
+				if (index > -1) {
+					activedTags.splice(index, 1)
+				} else {
+					activedTags.push(tag)
+				}
+
+				updateTagList()
+			})
+		})
+	</script>
+
+	<style>
+		.active {
+			background-color: #222;
+			color: #fff;
+		}
+	</style>
 </Layout>
