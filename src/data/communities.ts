@@ -29,7 +29,7 @@ export const communities = [
 		wikipedia: "",
 		find: true,
 		tg_group_link_topic: "https://t.me/all12_contacts/583",
-		category: "♻ Общие зависимости",
+		category: "🔖 Другое",
 	},
 	{
 		id: "smart-recovery",
@@ -40,7 +40,7 @@ export const communities = [
 		wikipedia: "https://en.wikipedia.org/wiki/SMART_Recovery",
 		find: true,
 		tg_group_link_topic: "https://t.me/all12_contacts/585",
-		category: "♻ Общие зависимости",
+		category: "🔖 Другое",
 	},
 	{
 		id: "anonimnye-prokrastinatory",
@@ -403,7 +403,7 @@ export const communities = [
 		wikipedia: "https://ru.wikipedia.org/wiki/Оксфордская_группа",
 		find: true,
 		tg_group_link_topic: "https://t.me/all12_contacts/101",
-		category: "♻ Общие зависимости",
+		category: "🔖 Другое",
 	},
 	{
 		id: "aa-dlya-beremennyh-mam",
@@ -691,6 +691,30 @@ export const communities = [
 		tg_group_link_topic: "https://t.me/all12_contacts/624",
 		category: "🧠 Психические расстройства",
 	},
+	{
+		id: "lifering",
+		title: "LifeRing Secular Recovery",
+		description:
+			"Светская некоммерческая организация, предоставляющая группы по выздоровлению от зависимости под руководством коллег. Программа восстановления, основанная на трезвости, светскости и самоутверждении. Поддерживает не только зависимых, но и их близких.",
+		since: "1997",
+		wikipedia: "https://en.wikipedia.org/wiki/LifeRing_Secular_Recovery",
+		find: true,
+		tg_group_link_topic: "https://t.me/all12_contacts/663",
+		category: "🔖 Другое",
+	},
+
+	{
+		id: "refuge-recovery",
+		title: "Refuge Recovery",
+		description:
+			"Буддийский путь к выздоровлению. Нетеистическая программа, не требующая религиозных убеждений. Основана на буддийских принципах и практиках осознанности. Подходит для любого типа зависимости. Предлагает системный подход к лечению и устойчивому выздоровлению.",
+		since: "2014",
+		wikipedia: "https://t.me/all12_contacts/666",
+		find: true,
+		tg_group_link_topic: "https://vk.com/refugerecoverymoscow",
+		category: "🔖 Другое",
+	},
+
 	// {
 	// 	id: "",
 	// 	title: "",
