@@ -1,0 +1,23 @@
+---
+import Layout from "@/layouts/Layout.astro"
+---
+
+<Layout title="Обратная связь" description="По любым темам.">
+	<script is:inline src="https://tally.so/widgets/embed.js"></script>
+
+	<div class="w-full max-w-5xl mx-auto">
+		<iframe
+			data-tally-src="https://tally.so/embed/mJjLRY?alignLeft=1&transparentBackground=1&dynamicHeight=1"
+			loading="lazy"
+			width="100%"
+			height="462"
+			frameborder="0"
+			marginheight="0"
+			marginwidth="0"
+			title="Написать нам"></iframe>
+	</div>
+
+	<script is:inline>
+		Tally.loadEmbeds()
+	</script>
+</Layout>

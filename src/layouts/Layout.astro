@@ -1,5 +1,4 @@
 ---
-import BottomMaskEffect from "@/components/BottomMaskEffect.astro"
 import Container from "@/components/Container.astro"
 import Footer from "@/components/Footer.astro"
 import Header from "@/components/Header.astro"
@@ -44,7 +43,7 @@ const {
 		/>
 	</head>
 	<body
-		class={`${bodyStyle || ""} flex min-h-screen flex-col text-zinc-900 bg-[#F2F2F2]`}
+		class={`${bodyStyle || ""} flex min-h-screen flex-col text-zinc-900 bg-[#eceef1]`}
 	>
 		<Header />
 		<Container class="py-20">
@@ -70,6 +69,6 @@ const {
 			</div>
 		</Container>
 		<Footer />
-		<BottomMaskEffect />
+		<!-- <BottomMaskEffect /> -->
 	</body>
 </html>
