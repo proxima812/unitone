@@ -1,6 +1,19 @@
 ---
 import { faq } from "@/data/links"
 import { Icon } from "astro-icon/components"
+
+const faqSchema = {
+	"@context": "https://schema.org",
+	"@type": "FAQPage",
+	mainEntity: faq.map((item) => ({
+		"@type": "Question",
+		name: item.question,
+		acceptedAnswer: {
+			"@type": "Answer",
+			text: item.answer,
+		},
+	})),
+}
 ---
 
 <section class="accordion p-6 bg-white rounded-xl space-y-4">
@@ -21,6 +34,8 @@ import { Icon } from "astro-icon/components"
 		))
 	}
 </section>
+
+<script is:inline type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 
 <script>
 	document.addEventListener("DOMContentLoaded", () => {

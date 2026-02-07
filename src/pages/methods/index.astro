@@ -1,31 +1,174 @@
 ---
-import Layout from "@/layouts/Layout.astro"
-import { getCollection } from "astro:content"
-import { marked } from "marked"
-
-const methods = await getCollection("methods")
+import Layout from "@/layouts/Layout.astro";
+import { Masonry } from "astro-masonry";
+import { getCollection } from "astro:content";
+import { marked } from "marked";
+const methods = await getCollection("methods");
+const methodsCommunities = methods
+	.reduce((acc, curr) => {
+		const communities = curr.data?.community || [];
+		return [...new Set([...acc, ...communities])];
+	}, [])
+	.sort((a, b) => a.localeCompare(b));
 ---
 
 <Layout
 	title="Методы шагов"
 	description={`Список разных методов прохождения двенадцати шагов. (12 шагов) | 📚 ${methods.length} методов`}
 >
-	<div class="grid grid-cols-1 gap-6">
-		{
-			methods &&
-				methods.map(item => (
-					<article class="bg-white relative flex rounded-xl flex-col gap-3">
-						<div class="flex flex-col rounded-xl shadow-2xs gap-2 p-6 bg-white-50">
-							<h2 class="leading-tight text-2xl md:text-3xl font-bold">
-								{item.data.title}
-							</h2>
-							<p class="text-sm text-zinc-600 line-clamp-3">{item.data.description}</p>
-						</div>
-						<div class="bg-zinc-50 p-6 border border-zinc-200 rounded-xl prose max-w-none prose-blue">
-							<Fragment set:html={marked(item?.body)} />
-						</div>
-					</article>
+	<section class="flex flex-col gap-4" data-filter>
+		<div class="flex flex-col gap-2 text-center">
+			<p class="text-sm text-zinc-600">
+				Выберите сообщество или введите слово — список обновится автоматически.
+			</p>
+		</div>
+		<div class="flex flex-wrap gap-2 justify-center items-center">
+			<input
+				type="search"
+				placeholder="Поиск по названию и описанию"
+				aria-label="Поиск по методам"
+				class="w-full md:w-96 px-4 py-2 rounded-lg border border-zinc-300 bg-white shadow-2xs focus:outline-none focus:ring-2 focus:ring-black/10"
+				data-search
+			/>
+			<button
+				type="button"
+				class="reset-button text-sm cursor-pointer px-3 py-2 rounded-lg shadow-2xs text-zinc-600 border border-zinc-400 bg-white"
+			>
+				Сбросить
+			</button>
+		</div>
+		<div class="flex justify-center flex-wrap gap-2 items-center">
+			{
+				methodsCommunities.map((item) => (
+					<button
+						class="filter-button cursor-pointer px-3 py-1.5 rounded-lg shadow-2xs bg-white"
+						type="button"
+					>
+						{item}
+					</button>
 				))
+			}
+		</div>
+		<div class="text-center text-sm text-zinc-600">
+			Найдено: <span data-count>0</span>
+		</div>
+	</section>
+	<section class="relative -m-3 w-screen left-1/2 right-1/2 -ml-[50vw] -mr-[50vw]">
+		<Masonry
+			breakpointCols={{
+				default: 4,
+				1100: 3,
+				700: 2,
+				500: 1,
+			}}
+		>
+			{
+				methods &&
+					methods.map((item) => (
+						<article
+							class="m-1 border border-zinc-400 bg-white relative flex rounded-xl flex-col gap-3"
+							data-method-card
+							data-community={item.data.community?.join(",") ?? ""}
+						>
+							<div class="flex flex-col rounded-xl shadow-2xs gap-2 p-6 bg-white-50">
+								<h2 class="leading-tight text-2xl md:text-3xl font-bold">{item.data.title}</h2>
+								<p class="text-sm text-zinc-600 line-clamp-3">{item.data.description}</p>
+							</div>
+							<div class="bg-zinc-50 p-6 border border-zinc-200 rounded-xl prose max-w-none prose-blue">
+								<Fragment set:html={marked(item?.body)} />
+							</div>
+						</article>
+					))
+			}
+		</Masonry>
+	</section>
+
+	<script is:inline>
+		document.addEventListener("DOMContentLoaded", () => {
+			const activedFilters = [];
+			const filterElement = document.querySelector("[data-filter]");
+			const searchInput = document.querySelector("[data-search]");
+			const countElement = document.querySelector("[data-count]");
+
+			function updateList() {
+				const activedFiltersLower = activedFilters.map((item) =>
+					item.toLowerCase().trim(),
+				);
+				const query = (searchInput?.value || "").toLowerCase().trim();
+				let visibleCount = 0;
+
+				filterElement
+					?.querySelectorAll("button:not(.reset-button)")
+					.forEach((button) => {
+						const label = button.innerText.trim();
+						if (activedFilters.includes(label)) {
+							button.classList.add("active");
+						} else {
+							button.classList.remove("active");
+						}
+					});
+
+				document.querySelectorAll("[data-method-card]").forEach((card) => {
+					const communities = (card.dataset.community || "")
+						.split(",")
+						.map((item) => item.toLowerCase().trim());
+					const text = (card.innerText || "").toLowerCase();
+
+					if (
+						(activedFiltersLower.length === 0 ||
+							activedFiltersLower.some((item) => communities.includes(item))) &&
+						(query.length === 0 || text.includes(query))
+					) {
+						card.classList.remove("hidden");
+						visibleCount += 1;
+					} else {
+						card.classList.add("hidden");
+					}
+				});
+
+				if (countElement) {
+					countElement.textContent = String(visibleCount);
+				}
+			}
+
+			filterElement?.addEventListener("click", (e) => {
+				const target = e.target;
+				if (target.tagName !== "BUTTON") return;
+
+				if (target.classList.contains("reset-button")) {
+					activedFilters.length = 0;
+					if (searchInput) searchInput.value = "";
+					updateList();
+					return;
+				}
+
+				const label = target.innerText.trim();
+				const index = activedFilters.indexOf(label);
+
+				if (index > -1) {
+					activedFilters.splice(index, 1);
+				} else {
+					activedFilters.push(label);
+				}
+
+				updateList();
+			});
+
+			searchInput?.addEventListener("input", () => {
+				updateList();
+			});
+
+			updateList();
+		});
+	</script>
+
+	<style>
+		.active {
+			background-color: #222;
+			color: #fff;
 		}
-	</div>
+		.filter-button:hover {
+			background-color: #f5f5f5;
+		}
+	</style>
 </Layout>

@@ -1,5 +1,5 @@
 ---
-import Layout from "@/layouts/Layout.astro"
+import Layout from "@/layouts/Layout.astro";
 
 const text = [
 	{
@@ -18,7 +18,7 @@ const text = [
 		title: "Прочее",
 		style_ping: "bg-red-400",
 	},
-]
+];
 
 const text1 = [
 	{
@@ -37,13 +37,25 @@ const text1 = [
 		title: "Методы",
 		style: "violet",
 	},
-]
+];
 
-import BlockCard from "@/components/BlockCard.astro"
+import BlockCard from "@/components/BlockCard.astro";
 
-import Accordion from "@/components/Accordion.astro"
-import { communities } from "@/data/communities"
-import { blockData } from "@/data/links"
+import Accordion from "@/components/Accordion.astro";
+import { communities } from "@/data/communities";
+import kb from "@/data/kb.json";
+import { blockData } from "@/data/links";
+
+const tgEmbeds = null;
+
+const _tgEmbeds = (kb || [])
+	.flatMap((item) => item?.files || [])
+	.map((file) => file?.link_to_file)
+	.filter(Boolean);
+
+function toEmbedUrl(url) {
+	return url.includes("?") ? `${url}&embed=1` : `${url}?embed=1`;
+}
 ---
 
 <Layout
@@ -70,13 +82,11 @@ import { blockData } from "@/data/links"
 	<main class="max-w-4xl mx-auto flex flex-col gap-12">
 		<h1>
 			<span class="block md:text-8xl text-6xl font-black">12 шагов</span>
-			<span class="block text-2xl md:text-4xl text-zinc-700"
-				>Материалы, шаги и прочее.</span
-			>
+			<span class="block text-2xl md:text-4xl text-zinc-700">Материалы, шаги и прочее.</span>
 		</h1>
 		<p class="text-2xl md:text-5xl text-zinc-400">
-			<b class="text-zinc-700">Интересная</b> информация, материалы, <b
-				class="text-zinc-700">методы прохождения</b
+			<b class="text-zinc-700">Интересная</b> информация, материалы, <b class="text-zinc-700"
+				>методы прохождения</b
 			> двенадцати шагов,
 			<b class="text-zinc-700">{`${communities.length}`}</b>
 			видов сообществ и <b class="text-zinc-700">многое другое</b>.
@@ -86,7 +96,7 @@ import { blockData } from "@/data/links"
 		<div class="grid sm:grid-cols-2 gap-3 grid-cols-1">
 			{
 				blockData &&
-					blockData.map(block => (
+					blockData.map((block) => (
 						<BlockCard
 							key={block.link}
 							link={block.link}
@@ -111,14 +121,11 @@ import { blockData } from "@/data/links"
 
 		<section class="bg-white rounded-xl p-6">
 			<p class="italic text-2xl md:text-3xl text-zinc-400">
-				...Тянет меня собрать все <b class="text-zinc-700">в одном месте</b>, но <b
-					class="text-zinc-700">не вся информация есть в интернете</b
-				>. Порой <b class="text-zinc-700">сложно</b> найти что-либо по 12 шагам. Стараюсь <b
-					class="text-zinc-700">поддерживать актуальность</b
-				>
-				информации. <b class="text-zinc-700">Буду благодарен помощи</b>!
+				Собираем знания о 12 шагах <b class="text-zinc-700">в одном месте</b>, чтобы каждый
+				нашёл путь к ясности и поддержке. Это карта для тех, кто выбирает перемены и
+				действия.
 			</p>
-			<span class="block mt-3 text-base text-purple-700">- K.M.</span>
+			<span class="block mt-3 text-base text-purple-700">— Редакция</span>
 		</section>
 
 		<Accordion />
@@ -141,5 +148,34 @@ import { blockData } from "@/data/links"
 				</div>
 			</div>
 		</section> -->
+
+		{
+			tgEmbeds && (
+				<section id="tgs" class="grid-cols-2 grid-cols-1 gap-6 grid">
+					{tgEmbeds.map((link) => (
+						<article class="bg-white rounded-2xl border border-zinc-200 shadow-sm overflow-hidden">
+							<div class="flex items-center justify-between px-4 py-3 border-b border-zinc-100">
+								<h3 class="text-sm font-semibold text-zinc-700">Пост из Telegram</h3>
+								<a
+									class="text-sm text-zinc-600 hover:text-zinc-900 underline underline-offset-4"
+									href={link}
+									target="_blank"
+									rel="noreferrer"
+								>
+									Открыть
+								</a>
+							</div>
+							<div class="p-2">
+								<iframe
+									class="w-full h-[420px] rounded-lg"
+									loading="lazy"
+									src={toEmbedUrl(link)}
+								/>
+							</div>
+						</article>
+					))}
+				</section>
+			)
+		}
 	</main>
 </Layout>

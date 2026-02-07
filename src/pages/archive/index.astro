@@ -1,107 +1,144 @@
 ---
-import Article from "@/components/Article.astro"
-import Author from "@/components/Author.astro"
-import Layout from "@/layouts/Layout.astro"
-import { getCollection } from "astro:content"
+import Article from "@/components/Article.astro";
+import Author from "@/components/Author.astro";
+import Layout from "@/layouts/Layout.astro";
+import { getCollection } from "astro:content";
 
 const archives = (await getCollection("archive")).sort(
 	(a, b) => new Date(b.data.pubDate) - new Date(a.data.pubDate),
-)
+);
 
 const archivesTags = archives
 	.reduce((acc, curr) => {
-		const tags = curr.data?.tags || []
-		return [...new Set([...acc, ...tags])]
+		const tags = curr.data?.tags || [];
+		return [...new Set([...acc, ...tags])];
 	}, [])
-	.sort((a, b) => a.localeCompare(b))
+	.sort((a, b) => a.localeCompare(b));
 ---
 
 <Layout title="Архив 12 шагов" description="Посты, статьи, материалы и прочее.">
-	<div class="flex justify-center flex-wrap gap-2 items-center" data-filter>
-		{
-			archivesTags.map(tag => (
-				<button
-					class="cursor-pointer px-3 py-1.5 rounded-lg shadow-2xs bg-white"
-					type="button"
-				>
-					{tag}
-				</button>
-			))
-		}
-		<button
-			type="button"
-			class="reset-button text-sm cursor-pointer px-3 py-1.5 rounded-lg shadow-2xs text-zinc-600 border border-zinc-400"
-		>
-			Сбросить фильтры
-		</button>
-	</div>
+	<section class="flex flex-col gap-4" data-filter>
+		<div class="flex flex-col gap-2 text-center">
+			<p class="text-sm text-zinc-600">
+				Выберите теги или введите слово — результат обновится автоматически.
+			</p>
+		</div>
+		<div class="flex flex-wrap gap-2 justify-center items-center">
+			<input
+				type="search"
+				placeholder="Поиск по заголовку и описанию"
+				aria-label="Поиск по архиву"
+				class="w-full md:w-96 px-4 py-2 rounded-lg border border-zinc-300 bg-white shadow-2xs focus:outline-none focus:ring-2 focus:ring-black/10"
+				data-search
+			/>
+			<button
+				type="button"
+				class="reset-button text-sm cursor-pointer px-3 py-2 rounded-lg shadow-2xs text-zinc-600 border border-zinc-400 bg-white"
+			>
+				Сбросить
+			</button>
+		</div>
+		<div class="flex justify-center flex-wrap gap-2 items-center">
+			{
+				archivesTags.map((tag) => (
+					<button
+						class="tag-button cursor-pointer px-3 py-1.5 rounded-lg shadow-2xs bg-white"
+						type="button"
+					>
+						{tag}
+					</button>
+				))
+			}
+		</div>
+		<div class="text-center text-sm text-zinc-600">
+			Найдено: <span data-count>0</span>
+		</div>
+	</section>
 	<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3" data-posts>
-		{archives && archives.map(item => <Article data={item.data} id={item.id} />)}
+		{archives && archives.map((item) => <Article data={item.data} id={item.id} />)}
 	</div>
 
 	<script is:inline>
 		document.addEventListener("DOMContentLoaded", () => {
-			const activedTags = []
-			const filterElement = document.querySelector("[data-filter]")
-			const tagsElement = document.querySelector("[data-posts]")
+			const activedTags = [];
+			const filterElement = document.querySelector("[data-filter]");
+			const tagsElement = document.querySelector("[data-posts]");
+			const searchInput = document.querySelector("[data-search]");
+			const countElement = document.querySelector("[data-count]");
 
 			function updateTagList() {
-				const activedTagsLower = activedTags.map(tag => tag.toLowerCase().trim())
+				const activedTagsLower = activedTags.map((tag) => tag.toLowerCase().trim());
+				const query = (searchInput?.value || "").toLowerCase().trim();
+				let visibleCount = 0;
 
 				// Обновить стили кнопок
-				filterElement?.querySelectorAll("button:not(.reset-button)").forEach(button => {
-					const tag = button.innerText.trim()
+				filterElement?.querySelectorAll("button:not(.reset-button)").forEach((button) => {
+					const tag = button.innerText.trim();
 					if (activedTags.includes(tag)) {
-						button.classList.add("active")
+						button.classList.add("active");
 					} else {
-						button.classList.remove("active")
+						button.classList.remove("active");
 					}
-				})
+				});
 
 				// Обновить отображение постов
-				tagsElement?.querySelectorAll("[data-tag]").forEach(post => {
+				tagsElement?.querySelectorAll("[data-tag]").forEach((post) => {
 					const postsTags = (post.dataset.tag || "")
 						.split(",")
-						.map(tag => tag.toLowerCase().trim())
+						.map((tag) => tag.toLowerCase().trim());
+					const text = (post.innerText || "").toLowerCase();
 
 					if (
-						activedTagsLower.length === 0 ||
-						activedTagsLower.some(tag => postsTags.includes(tag))
+						(activedTagsLower.length === 0 ||
+							activedTagsLower.some((tag) => postsTags.includes(tag))) &&
+						(query.length === 0 || text.includes(query))
 					) {
-						post.classList.remove("hidden")
+						post.classList.remove("hidden");
+						visibleCount += 1;
 					} else {
-						post.classList.add("hidden")
+						post.classList.add("hidden");
 					}
-				})
+				});
+
+				if (countElement) {
+					countElement.textContent = String(visibleCount);
+				}
 			}
 
-			filterElement?.addEventListener("click", e => {
-				const target = e.target
-				if (target.tagName !== "BUTTON") return
+			filterElement?.addEventListener("click", (e) => {
+				const target = e.target;
+				if (target.tagName !== "BUTTON") return;
 
 				if (target.classList.contains("reset-button")) {
-					activedTags.length = 0 // Очистить фильтры
-					updateTagList()
-					return
+					activedTags.length = 0; // Очистить фильтры
+					if (searchInput) searchInput.value = "";
+					updateTagList();
+					return;
 				}
 
-				const tag = target.innerText.trim()
-				const index = activedTags.indexOf(tag)
+				const tag = target.innerText.trim();
+				const index = activedTags.indexOf(tag);
 
 				if (index > -1) {
-					activedTags.splice(index, 1)
+					activedTags.splice(index, 1);
 				} else {
-					activedTags.push(tag)
+					activedTags.push(tag);
 				}
 
-				updateTagList()
-			})
-		})
+				updateTagList();
+			});
+
+			searchInput?.addEventListener("input", () => {
+				updateTagList();
+			});
+
+			updateTagList();
+		});
 	</script>
 
 	<style>
 		.active {
-			background-color: #222;
+			background-color: #111;
 			color: #fff;
 		}
 	</style>
