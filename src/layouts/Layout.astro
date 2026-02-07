@@ -15,6 +15,7 @@ interface Props {
 	type?: any
 	ogImage?: any
 	mainTitlePresent?: string
+	hidePageHeader?: boolean
 }
 
 const {
@@ -27,6 +28,7 @@ const {
 	description,
 	ogImage,
 	mainTitlePresent,
+	hidePageHeader,
 } = Astro.props
 ---
 
@@ -50,7 +52,8 @@ const {
 			<div class="flex flex-col gap-12">
 				{
 					Astro.url.pathname === "/" ||
-					new URL(Astro.url, Astro.site).pathname === "/" ? null : (
+					new URL(Astro.url, Astro.site).pathname === "/" ||
+					hidePageHeader ? null : (
 						<section class="text-center">
 							{title && (
 								<h1 class=" mb-3 font-black tracking-tight text-5xl md:text-6xl xl:text-7xl">

@@ -1,5 +1,4 @@
 ---
-import Author from "@/components/Author.astro"
 import RelatedPosts from "@/components/RelatedPosts.astro"
 import Layout from "@/layouts/Layout.astro"
 import { getCollection, render } from "astro:content"
@@ -16,32 +15,34 @@ const post = Astro.props
 const { Content } = await render(post)
 ---
 
-<Layout {...post.data} type ogImage={post.data.ogImage?.src}>
-	<div
-		class="flex max-w-6xl md:flex-nowrap flex-wrap gap-4 mx-auto w-full justify-between items-center"
-	>
-		<a href="/archive" class="bg-black text-white px-3 py-1.5 rounded-md"
-			>Назад к архиву</a
-		>
-
-		<div class="flex gap-4 items-center p-2 py-1.5 bg-white rounded-md">
-			<Author data={post.data} />
-			{
-				post.data.pubDate && (
-					<time datetime={post.data.pubDate} class="self-end text-zinc-600">
-						🗓
-						{new Date(post.data.pubDate).toLocaleDateString("ru-RU", {
-							year: "numeric",
-							month: "numeric",
-							day: "numeric",
-						})}
-					</time>
-				)
-			}
-		</div>
-	</div>
+<Layout {...post.data} type ogImage={post.data.ogImage?.src} hidePageHeader>
 	<main class="my-prose">
-		<Content />
+		<article data-iv-article>
+			<header class="mb-8">
+				<h1
+					data-iv-title
+					class="mb-3 font-black tracking-tight text-4xl md:text-5xl"
+				>
+					{post.data.title}
+				</h1>
+				{
+					post.data.pubDate && (
+						<time
+							data-iv-date
+							datetime={post.data.pubDate}
+							class="text-zinc-600 text-sm"
+						>
+							{new Date(post.data.pubDate).toLocaleDateString("ru-RU", {
+								year: "numeric",
+								month: "numeric",
+								day: "numeric",
+							})}
+						</time>
+					)
+				}
+			</header>
+			<Content />
+		</article>
 	</main>
 	<RelatedPosts posts={archive} href="/archive" />
 </Layout>

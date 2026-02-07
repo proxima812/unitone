@@ -1,4 +1,5 @@
 ---
+import Article from "@/components/Article.astro"
 import Author from "@/components/Author.astro"
 import Layout from "@/layouts/Layout.astro"
 import { getCollection } from "astro:content"
@@ -35,39 +36,7 @@ const archivesTags = archives
 		</button>
 	</div>
 	<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3" data-posts>
-		{
-			archives &&
-				archives.map(item => (
-					<a
-						data-tag={item.data.tags?.join(",") ?? ""}
-						href={`/archive/${item.id}/`}
-						class="block relative "
-					>
-						<div class="rounded-2xl p-2 shadow-md shadow-black/5">
-							<article class="rounded-xl shadow-lg ring-1 ring-black/5 lg:shadow-2xl bg-white p-5 relative flex-col flex gap-3">
-								<h2 class="h-[50px] leading-tight line-clamp-2 text-xl font-bold">
-									{item.data.title}
-								</h2>
-								<p class="h-[72px] line-clamp-3 text-zinc-600">{item.data.description}</p>
-
-								<div class="flex mt-2 justify-between items-center">
-									<Author data={item.data} />
-									{item.data.pubDate && (
-										<time datetime={item.data.pubDate} class="self-end text-zinc-600 text-sm">
-											🗓
-											{new Date(item.data.pubDate).toLocaleDateString("ru-RU", {
-												year: "numeric",
-												month: "short",
-												day: "numeric",
-											})}
-										</time>
-									)}
-								</div>
-							</article>
-						</div>
-					</a>
-				))
-		}
+		{archives && archives.map(item => <Article data={item.data} id={item.id} />)}
 	</div>
 
 	<script is:inline>
