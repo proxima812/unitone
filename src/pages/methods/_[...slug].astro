@@ -15,7 +15,10 @@ const { Content } = await render(post)
 ---
 
 <Layout {...post.data} type ogImage={post.data.ogImage?.src}>
-	<a href="/methods" class="text-white mx-auto bg-black rounded-md py-1.5 px-3"
+	<a
+		href="/methods"
+		class="text-[color:var(--bg)] mx-auto bg-[color:var(--text)] rounded-md py-1.5 px-3"
+	>
 		>Назад к методам</a
 	>
 	<main class="my-prose">

@@ -6,7 +6,7 @@ import { Icon } from "astro-icon/components"
 
 <Layout
 	title="Список сообществ"
-	description={`Список из ${communities.length} анонимных двенадцати шаговых сообществ.`}
+	description={`Каталог ${communities.length} 12‑шаговых сообществ: темы, контакты и ссылки.`}
 >
 	<!-- <Warning color="bg-green-50 border-green-200 text-green-700">
 		<b>Информация на 2025 год составляет 57 сообщества.</b> Некоторые сообщества образованы
@@ -16,12 +16,12 @@ import { Icon } from "astro-icon/components"
 	</Warning> -->
 
 	<div class="flex gap-3 justify-center items-center flex-wrap">
-		<p class="text-zinc-600 text-sm font-medium">
+		<p class="text-[color:var(--muted)] text-sm font-medium">
 			Группа обновляется. <b><u>(30.06.2025)</u></b>
 		</p>
 		<a
 			href="https://t.me/all12_contacts"
-			class="bg-sky-50 border border-sky-500 hover:bg-sky-100 transition-colors duration-75 ease-in flex items-center gap-1 text-sky-600 px-2 py-1 rounded-md"
+			class="bg-[color:var(--surface)] border border-[color:var(--border)] hover:bg-[color:var(--bg)] transition-colors duration-75 ease-in flex items-center gap-1 text-[color:var(--text)] px-2 py-1 rounded-md"
 			target="_blank"
 			><Icon name="mdi:telegram" /><span class="font-medium">Telegram</span></a
 		>
@@ -32,32 +32,26 @@ import { Icon } from "astro-icon/components"
 				[...communities]
 					.sort((a, b) => (b.wikipedia ? 1 : 0) - (a.wikipedia ? 1 : 0))
 					.map(item => (
-						<article class="w-full flex flex-col text-center bg-white rounded-xl">
+						<article class="w-full flex flex-col text-center bg-[color:var(--surface)] border border-[color:var(--border)] rounded-xl">
 							<div class="p-6">
 								<h2 class="text-xl font-bold leading-tight mb-1">{item.title}</h2>
-								<p class="line-clamp-1 text-zinc-600">{item.description}</p>
+								<p class="line-clamp-1 text-[color:var(--muted)]">
+									{item.description}
+								</p>
 							</div>
 							<div
-								class={`flex gap-3 items-center border-[0.6px] ${!item.since && item.find === false ? "border-red-200 bg-red-50" : "border-blue-200 bg-blue-50"} rounded-t-xl p-3 justify-between`}
+								class="flex gap-3 items-center border-t border-[color:var(--border)] rounded-t-xl p-3 justify-between"
 							>
 								<span class="text-sm">
 									Информация:{" "}
 									<b>
-										{item.find === true ? (
-											<span class="text-green-500 text-sm">Есть.</span>
-										) : (
-											<span class="text-red-500 text-sm">Нет.</span>
-										)}
+										<span class="text-sm">{item.find === true ? "Есть." : "Нет."}</span>
 									</b>
 								</span>
 								<span class="text-sm">
 									Основан:{" "}
 									<b>
-										{item.since ? (
-											<span class="text-green-500 text-sm">{item.since}</span>
-										) : (
-											<span class="text-red-500 text-sm">Неизвествно.</span>
-										)}
+										<span class="text-sm">{item.since || "Неизвестно."}</span>
 									</b>
 								</span>
 							</div>
@@ -66,7 +60,7 @@ import { Icon } from "astro-icon/components"
 								href={item.tg_group_link_topic}
 								aria-label={item.title}
 								target="_blank"
-								class={`p-3 text-sm text-sky-600 border-[0.6px] bg-sky-100 border-sky-500 flex items-center gap-1 justify-center hover:bg-sky-200 transition-colors duration-75 ease-in ${item.wikipedia ? "rounded-b-none" : "rounded-b-xl"}`}
+								class={`p-3 text-sm text-[color:var(--text)] border-t border-[color:var(--border)] flex items-center gap-1 justify-center hover:bg-[color:var(--bg)] transition-colors duration-75 ease-in ${item.wikipedia ? "rounded-b-none" : "rounded-b-xl"}`}
 							>
 								<Icon name="mdi:telegram" />
 								<span class="font-medium">Перейти к подтеме сообщества</span>
@@ -76,7 +70,7 @@ import { Icon } from "astro-icon/components"
 									href={item.wikipedia}
 									aria-label={item.title}
 									target="_blank"
-									class="p-3 text-sm text-zinc-600 border-[0.6px] bg-zinc-100 border-zinc-500 rounded-b-xl flex items-center gap-1 justify-center hover:bg-zinc-200 transition-colors duration-75 ease-in"
+									class="p-3 text-sm text-[color:var(--muted)] border-t border-[color:var(--border)] rounded-b-xl flex items-center gap-1 justify-center hover:bg-[color:var(--bg)] transition-colors duration-75 ease-in"
 								>
 									<Icon name="mdi:wikipedia" />
 									<span class="font-medium">Wikipedia страница</span>

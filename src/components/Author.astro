@@ -3,19 +3,8 @@ import { cn } from "@/utils/cn"
 
 const { data, class: className } = Astro.props
 
-function authorColor(author) {
-	switch (author) {
-		case "SamGold":
-			return "bg-gradient-to-bl from-green-300 to-emerald-500"
-		case "Pythagoras":
-			return "bg-gradient-to-bl from-blue-300 to-indigo-500"
-		case "Stepper":
-			return "bg-gradient-to-bl from-amber-300 to-purple-500"
-		case "UnitOne":
-			return "bg-gradient-to-bl from-pink-300 to-rose-500"
-		default:
-			return "bg-gradient-to-bl from-gray-300 to-gray-500"
-	}
+function authorColor() {
+	return "bg-[color:var(--text)]"
 }
 
 const authors = Array.isArray(data.author) ? data.author : [data.author]
@@ -29,7 +18,9 @@ const authors = Array.isArray(data.author) ? data.author : [data.author]
 					class={cn(className, "w-6 h-6 rounded-full", authorColor(author))}
 					title={author}
 				/>
-				{authors.length >= 1 && <span class="text-zinc-700">{author}</span>}
+				{authors.length >= 1 && (
+					<span class="text-[color:var(--muted)]">{author}</span>
+				)}
 			</div>
 		))
 	}

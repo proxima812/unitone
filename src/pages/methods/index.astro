@@ -14,11 +14,11 @@ const methodsCommunities = methods
 
 <Layout
 	title="Методы шагов"
-	description={`Список разных методов прохождения двенадцати шагов. (12 шагов) | 📚 ${methods.length} методов`}
+	description={`Методы 12 шагов: воркбуки, группы и практики для прохождения программы. ${methods.length} методов.`}
 >
 	<section class="flex flex-col gap-4" data-filter>
 		<div class="flex flex-col gap-2 text-center">
-			<p class="text-sm text-zinc-600">
+			<p class="text-sm text-[color:var(--muted)]">
 				Выберите сообщество или введите слово — список обновится автоматически.
 			</p>
 		</div>
@@ -27,12 +27,12 @@ const methodsCommunities = methods
 				type="search"
 				placeholder="Поиск по названию и описанию"
 				aria-label="Поиск по методам"
-				class="w-full md:w-96 px-4 py-2 rounded-lg border border-zinc-300 bg-white shadow-2xs focus:outline-none focus:ring-2 focus:ring-black/10"
+				class="w-full md:w-96 px-4 py-2 rounded-lg border border-[color:var(--border)] bg-[color:var(--surface)] shadow-2xs focus:outline-none focus:ring-2 focus:ring-black/10"
 				data-search
 			/>
 			<button
 				type="button"
-				class="reset-button text-sm cursor-pointer px-3 py-2 rounded-lg shadow-2xs text-zinc-600 border border-zinc-400 bg-white"
+				class="reset-button text-sm cursor-pointer px-3 py-2 rounded-lg shadow-2xs text-[color:var(--muted)] border border-[color:var(--border)] bg-[color:var(--surface)]"
 			>
 				Сбросить
 			</button>
@@ -41,7 +41,7 @@ const methodsCommunities = methods
 			{
 				methodsCommunities.map((item) => (
 					<button
-						class="filter-button cursor-pointer px-3 py-1.5 rounded-lg shadow-2xs bg-white"
+						class="filter-button cursor-pointer px-3 py-1.5 rounded-lg shadow-2xs bg-[color:var(--surface)] border border-[color:var(--border)]"
 						type="button"
 					>
 						{item}
@@ -49,7 +49,7 @@ const methodsCommunities = methods
 				))
 			}
 		</div>
-		<div class="text-center text-sm text-zinc-600">
+		<div class="text-center text-sm text-[color:var(--muted)]">
 			Найдено: <span data-count>0</span>
 		</div>
 	</section>
@@ -66,15 +66,17 @@ const methodsCommunities = methods
 				methods &&
 					methods.map((item) => (
 						<article
-							class="m-1 border border-zinc-400 bg-white relative flex rounded-xl flex-col gap-3"
+							class="m-1 border border-[color:var(--border)] bg-[color:var(--surface)] relative flex rounded-xl flex-col gap-3"
 							data-method-card
 							data-community={item.data.community?.join(",") ?? ""}
 						>
-							<div class="flex flex-col rounded-xl shadow-2xs gap-2 p-6 bg-white-50">
+							<div class="flex flex-col rounded-xl shadow-2xs gap-2 p-6">
 								<h2 class="leading-tight text-2xl md:text-3xl font-bold">{item.data.title}</h2>
-								<p class="text-sm text-zinc-600 line-clamp-3">{item.data.description}</p>
+								<p class="text-sm text-[color:var(--muted)] line-clamp-3">
+									{item.data.description}
+								</p>
 							</div>
-							<div class="bg-zinc-50 p-6 border border-zinc-200 rounded-xl prose max-w-none prose-blue">
+							<div class="p-6 border border-[color:var(--border)] rounded-xl prose max-w-none">
 								<Fragment set:html={marked(item?.body)} />
 							</div>
 						</article>
@@ -164,11 +166,11 @@ const methodsCommunities = methods
 
 	<style>
 		.active {
-			background-color: #222;
-			color: #fff;
+			background-color: var(--text);
+			color: var(--bg);
 		}
 		.filter-button:hover {
-			background-color: #f5f5f5;
+			background-color: var(--surface);
 		}
 	</style>
 </Layout>

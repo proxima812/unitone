@@ -79,6 +79,11 @@ export const links = [
 		href: "/finder",
 		icon: "mdi:account-multiple-check",
 	},
+	{
+		label: "Закладки",
+		href: "/bookmarks",
+		icon: "mdi:bookmark-outline",
+	},
 	// {
 	// 	label: "",
 	// 	href: "#",

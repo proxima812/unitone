@@ -13,7 +13,7 @@ import { Icon } from "astro-icon/components"
 					title={link.label}
 					target={link.target}
 					class={cn(
-						"text-zinc-700 flex items-center gap-1 transition-colors hover:text-zinc-600",
+						"text-[color:var(--text)] flex items-center gap-1 transition-colors hover:text-[color:var(--muted)]",
 						link.style,
 					)}
 				>
@@ -27,13 +27,13 @@ import { Icon } from "astro-icon/components"
 <button
 	title="Мобильное меню"
 	id="open"
-	class="text-white md:hidden flex items-center gap-1 bg-black px-3.5 py-1.5 rounded-lg"
+	class="text-[color:var(--bg)] md:hidden flex items-center gap-1 bg-[color:var(--text)] px-3.5 py-1.5 rounded-lg"
 	><Icon name="mdi:menu-swap" /><span class="font-medium">меню</span></button
 >
 
 <div
 	id="menu"
-	class="hidden absolute rounded-xl z-50 w-full p-5 flex items-start min-h-full shadow-md bg-white top-[85px] left-0"
+	class="hidden absolute rounded-xl z-50 w-full p-5 flex items-start min-h-full shadow-md bg-[color:var(--surface)] border border-[color:var(--border)] top-[85px] left-0"
 >
 	<nav class="flex gap-5 flex-col">
 		{
@@ -43,7 +43,10 @@ import { Icon } from "astro-icon/components"
 						href={link.href}
 						title={link.label}
 						target={link.target}
-						class={cn("text-zinc-700 text-xl flex items-center gap-1", link.style)}
+						class={cn(
+							"text-[color:var(--text)] text-xl flex items-center gap-1",
+							link.style,
+						)}
 					>
 						<Icon name={link.icon} />
 						<span>{link.label}</span>
@@ -53,12 +56,9 @@ import { Icon } from "astro-icon/components"
 		<a
 			target="_blank"
 			href="https://t.me/legion_free"
-			class="bg-black tracking-tight text-white rounded-md px-3 py-1.5 flex gap-1.5 items-center"
+			class="bg-[color:var(--text)] tracking-tight text-[color:var(--bg)] rounded-md px-3 py-1.5 flex gap-1.5 items-center"
 		>
-			<div
-				class="w-4 h-4 rounded-full bg-gradient-to-br from-cyan-500 via-purple-400 to-blue-500"
-			>
-			</div>
+			<div class="w-2 h-2 rounded-full bg-[color:var(--bg)]" />
 			<span>Обратная связь</span></a
 		>
 	</nav>

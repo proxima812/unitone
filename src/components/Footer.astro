@@ -7,54 +7,66 @@ import ProductionSvgIcon from "./ProductionSvgIcon.astro"
 const methods = await getCollection("methods")
 ---
 
-<footer class="bg-white">
+<footer class="bg-[color:var(--surface)] border-t border-[color:var(--border)]">
 	<Container>
-		<div class="grid grid-cols-1 py-12 md:grid-cols-2 lg:grid-cols-3 gap-12">
+		<div class="grid grid-cols-1 py-12 md:grid-cols-2 lg:grid-cols-4 gap-12">
 			<div class="flex flex-col gap-4 md:items-start items-center">
-				<span class="text-lg font-semibold text-zinc-900">Страницы </span>
+				<span class="text-lg font-semibold text-[color:var(--text)]">Страницы </span>
 				{
 					links &&
 						links.map(item => (
-							<a class="text-zinc-600" href={item.href}>
+							<a class="text-[color:var(--muted)]" href={item.href}>
 								{item.label}
 							</a>
 						))
 				}
 			</div>
 			<div class="flex flex-col gap-4 md:items-start items-center">
-				<span class="text-lg font-semibold text-zinc-900">Методы шагов</span>
+				<span class="text-lg font-semibold text-[color:var(--text)]">Методы шагов</span>
 				{
 					methods &&
 						methods.map(item => (
-							<a class="text-zinc-600" href={`/methods/${item.id}`}>
+							<a class="text-[color:var(--muted)]" href={`/methods/${item.id}`}>
 								{item.data.title}
 							</a>
 						))
 				}
 			</div>
 			<div class="flex flex-col gap-4 md:items-start items-center">
-				<span class="text-lg font-semibold text-zinc-900">Ресурсы</span>
+				<span class="text-lg font-semibold text-[color:var(--text)]">Ресурсы</span>
 				{
 					telegrams &&
 						telegrams.map(item => (
-							<a class="text-zinc-600" target="_blank" href={item.href}>
+							<a class="text-[color:var(--muted)]" target="_blank" href={item.href}>
 								{item.label}
 							</a>
 						))
 				}
 			</div>
+			<div class="flex flex-col gap-4 md:items-start items-center">
+				<span class="text-lg font-semibold text-[color:var(--text)]">Информация</span>
+				<a class="text-[color:var(--muted)]" href="/about">О проекте</a>
+				<a class="text-[color:var(--muted)]" href="/privacy"
+					>Политика конфиденциальности</a
+				>
+				<a class="text-[color:var(--muted)]" href="/terms">Условия использования</a>
+				<a class="text-[color:var(--muted)]" href="/disclaimer">Дисклеймер</a>
+			</div>
 		</div>
-		<div class="bg-zinc-100 border-[0.5px] border-zinc-300 rounded-xl p-6 my-12">
+		<div class="bg-[color:var(--surface)] border-[0.5px] border-[color:var(--border)] rounded-xl p-6 my-12">
 			<div
 				class="flex justify-center md:justify-between md:flex-nowrap flex-wrap items-center gap-3"
 			>
 				<p>
 					&copy;
-					<span class="text-zinc-600 font-medium">{new Date().getFullYear()}</span>
+					<span class="text-[color:var(--muted)] font-medium">{new Date().getFullYear()}</span>
 					<span class="font-bold">UnitOne</span>
 				</p>
 				<ProductionSvgIcon />
 			</div>
+			<p class="mt-3 text-sm text-[color:var(--muted)]">
+				Все тексты собраны из открытых источников и предназначены для справочного ознакомления.
+			</p>
 		</div>
 	</Container>
 </footer>

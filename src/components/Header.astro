@@ -6,21 +6,27 @@ import Menu from "./Menu.astro"
 
 <header
 	id="header"
-	class="top-0 md:top-5 z-50 sticky shadow-2xs py-5 mx-0 max-w-full md:w-[1010px] rounded-xl bg-white/60 backdrop-blur-lg mt-0 md:mt-5 md:mx-auto"
+	class="top-0 md:top-5 z-50 sticky shadow-2xs py-5 mx-0 max-w-full md:w-[1010px] rounded-xl bg-[color:var(--surface)]/70 backdrop-blur-lg mt-0 md:mt-5 md:mx-auto border border-[color:var(--border)]"
 >
 	<Container class="flex justify-between gap-x-3">
 		<Logo />
 		<Menu />
-		<a
-
-			href="/feedback"
-			class="hidden bg-black tracking-tight text-white rounded-md px-3 py-1.5 md:flex gap-1.5 items-center"
+		<button
+			id="theme-toggle"
+			type="button"
+			class="rounded-md border border-[color:var(--border)] px-3 py-1.5 text-sm"
+			aria-label="Переключить тему"
 		>
-			<div
-				class="w-4 h-4 rounded-full bg-gradient-to-br from-cyan-400 via-purple-200 to-red-500"
-			>
-			</div>
-			<span>Написать</span></a
-		>
+			Тема
+		</button>
 	</Container>
 </header>
+
+<script is:inline>
+	const button = document.getElementById("theme-toggle")
+	button?.addEventListener("click", () => {
+		const root = document.documentElement
+		const isDark = root.classList.toggle("dark")
+		localStorage.setItem("theme", isDark ? "dark" : "light")
+	})
+</script>

@@ -6,7 +6,7 @@ const { style, title, textBtn, styleBtn, description, icon, link } = Astro.props
 
 <article
 	class={cn(
-		"flex flex-col justify-between gap-3 rounded-xl p-4 bg-white border-[0.6px] border-zinc-200",
+		"flex flex-col justify-between gap-3 rounded-xl p-4 bg-[color:var(--surface)] border-[0.6px] border-[color:var(--border)]",
 		style,
 	)}
 >
@@ -15,14 +15,14 @@ const { style, title, textBtn, styleBtn, description, icon, link } = Astro.props
 			{icon && <Icon name={icon} />}
 			<span>{title}</span>
 		</h2>
-		<p class="text-zinc-600">
+		<p class="text-[color:var(--muted)]">
 			{description}
 		</p>
 	</div>
 	<a
 		href={link}
 		class={cn(
-			"text-white mt-1.5 px-3  py-1.5 max-w-fit bg-zinc-800 rounded-md",
+			"text-[color:var(--bg)] mt-1.5 px-3  py-1.5 max-w-fit bg-[color:var(--text)] rounded-md",
 			styleBtn,
 		)}>{textBtn || "Подробнее"}</a
 	>

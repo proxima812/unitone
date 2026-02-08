@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+Disallow: /admin
+Disallow: /api
+
+Sitemap: https://unitone.vercel.app/sitemap-index.xml
+
+Contact: mailto:info@unitone.vercel.app
+Policy: https://unitone.vercel.app/disclaimer
+About: https://unitone.vercel.app/about

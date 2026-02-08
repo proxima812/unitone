@@ -16,10 +16,13 @@ const archivesTags = archives
 	.sort((a, b) => a.localeCompare(b));
 ---
 
-<Layout title="Архив 12 шагов" description="Посты, статьи, материалы и прочее.">
+<Layout
+	title="Архив 12 шагов"
+	description="Архив статей о 12 шагах: шаги выздоровления, практики, темы и опыт."
+>
 	<section class="flex flex-col gap-4" data-filter>
 		<div class="flex flex-col gap-2 text-center">
-			<p class="text-sm text-zinc-600">
+			<p class="text-sm text-[color:var(--muted)]">
 				Выберите теги или введите слово — результат обновится автоматически.
 			</p>
 		</div>
@@ -28,12 +31,12 @@ const archivesTags = archives
 				type="search"
 				placeholder="Поиск по заголовку и описанию"
 				aria-label="Поиск по архиву"
-				class="w-full md:w-96 px-4 py-2 rounded-lg border border-zinc-300 bg-white shadow-2xs focus:outline-none focus:ring-2 focus:ring-black/10"
+				class="w-full md:w-96 px-4 py-2 rounded-lg border border-[color:var(--border)] bg-[color:var(--surface)] shadow-2xs focus:outline-none focus:ring-2 focus:ring-black/10"
 				data-search
 			/>
 			<button
 				type="button"
-				class="reset-button text-sm cursor-pointer px-3 py-2 rounded-lg shadow-2xs text-zinc-600 border border-zinc-400 bg-white"
+				class="reset-button text-sm cursor-pointer px-3 py-2 rounded-lg shadow-2xs text-[color:var(--muted)] border border-[color:var(--border)] bg-[color:var(--surface)]"
 			>
 				Сбросить
 			</button>
@@ -42,7 +45,7 @@ const archivesTags = archives
 			{
 				archivesTags.map((tag) => (
 					<button
-						class="tag-button cursor-pointer px-3 py-1.5 rounded-lg shadow-2xs bg-white"
+						class="tag-button cursor-pointer px-3 py-1.5 rounded-lg shadow-2xs bg-[color:var(--surface)] border border-[color:var(--border)]"
 						type="button"
 					>
 						{tag}
@@ -50,7 +53,7 @@ const archivesTags = archives
 				))
 			}
 		</div>
-		<div class="text-center text-sm text-zinc-600">
+		<div class="text-center text-sm text-[color:var(--muted)]">
 			Найдено: <span data-count>0</span>
 		</div>
 	</section>
@@ -138,8 +141,8 @@ const archivesTags = archives
 
 	<style>
 		.active {
-			background-color: #111;
-			color: #fff;
+			background-color: var(--text);
+			color: var(--bg);
 		}
 	</style>
 </Layout>

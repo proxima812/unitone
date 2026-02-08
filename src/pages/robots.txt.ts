@@ -4,6 +4,7 @@ const getRobotsTxt = (sitemapURL: URL) => `
 
 User-agent: *
 Allow: /
+Allow: /ai.txt
 
 Sitemap: ${sitemapURL.href}
 Host: ${sitemapURL.origin.replace(/^https?:\/\//, "")}

@@ -11,18 +11,20 @@ const {data, id} = Astro.props
 >
 	<div class="rounded-2xl p-2 shadow-md shadow-black/5">
 		<article
-			class="rounded-xl shadow-lg ring-1 ring-black/5 lg:shadow-2xl bg-white p-5 relative flex-col flex gap-3"
+			class="rounded-xl shadow-lg ring-1 ring-black/5 lg:shadow-2xl bg-[color:var(--surface)] p-5 relative flex-col flex gap-3 border border-[color:var(--border)]"
 		>
 			<h2 class="h-[50px] leading-tight line-clamp-2 text-xl font-bold">
 				{data.title}
 			</h2>
-			<p class="h-[72px] line-clamp-3 text-zinc-600">{data.description}</p>
+			<p class="h-[72px] line-clamp-3 text-[color:var(--muted)]">
+				{data.description}
+			</p>
 
 			<div class="flex mt-2 justify-between -center">
 				<Author data={data} />
 				{
 					data.pubDate && (
-						<time datetime={data.pubDate} class="self-end text-zinc-600 text-sm">
+						<time datetime={data.pubDate} class="self-end text-[color:var(--muted)] text-sm">
 							🗓
 							{new Date(data.pubDate).toLocaleDateString("ru-RU", {
 								year: "numeric",

@@ -6,6 +6,24 @@
 }
 
 @layer base {
+  :root {
+    --bg: #f4f4f5;
+    --surface: #ffffff;
+    --text: #0a0a0a;
+    --muted: #5f6368;
+    --border: #d4d4d8;
+    --accent: #111111;
+  }
+
+  .dark {
+    --bg: #0a0a0a;
+    --surface: #121212;
+    --text: #f5f5f5;
+    --muted: #a1a1aa;
+    --border: #2a2a2a;
+    --accent: #ffffff;
+  }
+
   h1,
   h2,
   h3,
@@ -23,21 +41,26 @@
   
   
   .my-prose{
-    @apply prose prose-headings:first:mt-0 prose-p:first:mt-0 prose-blue prose-a:underline prose-a:underline-offset-4 prose-lg xl:prose-xl prose-p:text-pretty prose-headings:text-balance -mx-[20px] max-w-6xl sm:mx-auto bg-white p-6 md:p-12 rounded-xl;
+    @apply prose prose-headings:first:mt-0 prose-p:first:mt-0 prose-a:underline prose-a:underline-offset-4 prose-lg xl:prose-xl prose-p:text-pretty prose-headings:text-balance -mx-[20px] max-w-6xl sm:mx-auto p-6 md:p-12 rounded-xl;
+    background-color: var(--surface);
+    color: var(--text);
   }
 }
 
 @layer components {
   .heading-h1 {
-    @apply text-5xl text-zinc-800 font-black tracking-tight;
+    @apply text-5xl font-black tracking-tight;
+    color: var(--text);
   }
 
   .heading-h2 {
-    @apply text-2xl text-zinc-700 font-bold;
+    @apply text-2xl font-bold;
+    color: var(--text);
   }
 
   .heading-h3 {
-    @apply text-xl text-zinc-600 font-medium;
+    @apply text-xl font-medium;
+    color: var(--muted);
   }
 
 
@@ -55,4 +78,3 @@
   }
 
 }
-

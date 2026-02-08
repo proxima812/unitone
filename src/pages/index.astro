@@ -1,66 +1,16 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 
-const text = [
-	{
-		title: "Сообщества",
-		style_ping: "bg-indigo-400",
-	},
-	{
-		title: "Методы",
-		style_ping: "bg-blue-400",
-	},
-	{
-		title: "Опыт разработки",
-		style_ping: "bg-green-400",
-	},
-	{
-		title: "Прочее",
-		style_ping: "bg-red-400",
-	},
-];
-
-const text1 = [
-	{
-		title: "Сообщества",
-		style: "rose",
-	},
-	{
-		title: "Методы",
-		style: "indigo",
-	},
-	{
-		title: "Прочее",
-		style: "green",
-	},
-	{
-		title: "Методы",
-		style: "violet",
-	},
-];
-
 import BlockCard from "@/components/BlockCard.astro";
 
 import Accordion from "@/components/Accordion.astro";
 import { communities } from "@/data/communities";
-import kb from "@/data/kb.json";
 import { blockData } from "@/data/links";
-
-const tgEmbeds = null;
-
-const _tgEmbeds = (kb || [])
-	.flatMap((item) => item?.files || [])
-	.map((file) => file?.link_to_file)
-	.filter(Boolean);
-
-function toEmbedUrl(url) {
-	return url.includes("?") ? `${url}&embed=1` : `${url}?embed=1`;
-}
 ---
 
 <Layout
-	title="12 шагов | Материалы, шаги и прочее."
-	description={`Интересная информация, материалы, методы прохождения двенадцати шагов, ${communities.length} видов сообществ и многое другое.`}
+	title="12 шагов: материалы, методы и сообщества"
+	description={`Единая база о 12 шагах: статьи, практики, методы и ${communities.length} сообществ.`}
 >
 	<!-- <section
 		class="flex flex-wrap bg-white rounded-lg sm:rounded-full max-w-fit mx-auto px-6 py-3 gap-4 justify-center items-center"
@@ -82,14 +32,16 @@ function toEmbedUrl(url) {
 	<main class="max-w-4xl mx-auto flex flex-col gap-12">
 		<h1>
 			<span class="block md:text-8xl text-6xl font-black">12 шагов</span>
-			<span class="block text-2xl md:text-4xl text-zinc-700">Материалы, шаги и прочее.</span>
+			<span class="block text-2xl md:text-4xl text-[color:var(--muted)]">
+				Материалы, шаги и прочее.
+			</span>
 		</h1>
-		<p class="text-2xl md:text-5xl text-zinc-400">
-			<b class="text-zinc-700">Интересная</b> информация, материалы, <b class="text-zinc-700"
+		<p class="text-2xl md:text-5xl text-[color:var(--muted)]">
+			<b class="text-[color:var(--text)]">Полезная</b> информация, материалы, <b class="text-[color:var(--text)]"
 				>методы прохождения</b
 			> двенадцати шагов,
-			<b class="text-zinc-700">{`${communities.length}`}</b>
-			видов сообществ и <b class="text-zinc-700">многое другое</b>.
+			<b class="text-[color:var(--text)]">{`${communities.length}`}</b>
+			видов сообществ и <b class="text-[color:var(--text)]">многое другое</b>.
 			<span>👇</span>
 		</p>
 		<!-- <Time client:load /> -->
@@ -119,13 +71,13 @@ function toEmbedUrl(url) {
 		/> -->
 		<!-- <BlockCard description="" icon="" style="" title="" /> -->
 
-		<section class="bg-white rounded-xl p-6">
-			<p class="italic text-2xl md:text-3xl text-zinc-400">
-				Собираем знания о 12 шагах <b class="text-zinc-700">в одном месте</b>, чтобы каждый
-				нашёл путь к ясности и поддержке. Это карта для тех, кто выбирает перемены и
-				действия.
+		<section class="bg-[color:var(--surface)] rounded-xl p-6 border border-[color:var(--border)]">
+			<p class="italic text-2xl md:text-3xl text-[color:var(--muted)]">
+				Собираем знания о 12 шагах <b class="text-[color:var(--text)]">в одном месте</b>,
+				чтобы каждый нашёл путь к ясности и поддержке. Это карта для тех, кто выбирает
+				перемены и действия.
 			</p>
-			<span class="block mt-3 text-base text-purple-700">— Редакция</span>
+			<span class="block mt-3 text-base text-[color:var(--muted)]">— Редакция</span>
 		</section>
 
 		<Accordion />
@@ -149,33 +101,5 @@ function toEmbedUrl(url) {
 			</div>
 		</section> -->
 
-		{
-			tgEmbeds && (
-				<section id="tgs" class="grid-cols-2 grid-cols-1 gap-6 grid">
-					{tgEmbeds.map((link) => (
-						<article class="bg-white rounded-2xl border border-zinc-200 shadow-sm overflow-hidden">
-							<div class="flex items-center justify-between px-4 py-3 border-b border-zinc-100">
-								<h3 class="text-sm font-semibold text-zinc-700">Пост из Telegram</h3>
-								<a
-									class="text-sm text-zinc-600 hover:text-zinc-900 underline underline-offset-4"
-									href={link}
-									target="_blank"
-									rel="noreferrer"
-								>
-									Открыть
-								</a>
-							</div>
-							<div class="p-2">
-								<iframe
-									class="w-full h-[420px] rounded-lg"
-									loading="lazy"
-									src={toEmbedUrl(link)}
-								/>
-							</div>
-						</article>
-					))}
-				</section>
-			)
-		}
 	</main>
 </Layout>

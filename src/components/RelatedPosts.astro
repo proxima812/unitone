@@ -11,11 +11,13 @@ const { posts, href } = Astro.props
 					const item = posts.find(post => post.id === id)
 					return (
 						<a href={`${href}/${item.id}`}>
-							<article class="bg-white p-6 rounded-xl relative flex-col flex gap-3">
+							<article class="bg-[color:var(--surface)] border border-[color:var(--border)] p-6 rounded-xl relative flex-col flex gap-3">
 								<h2 class="leading-tight line-clamp-2 text-lg font-bold">
 									{item.data.title}
 								</h2>
-								<p class="line-clamp-3">{item.data.description}</p>
+								<p class="line-clamp-3 text-[color:var(--muted)]">
+									{item.data.description}
+								</p>
 							</article>
 						</a>
 					)

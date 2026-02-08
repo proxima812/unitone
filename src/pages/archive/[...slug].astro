@@ -12,6 +12,19 @@ export async function getStaticPaths() {
 	}))
 }
 const post = Astro.props
+const canonicalURL = new URL(`/archive/${post.id}/`, Astro.site)
+const articleSchema = {
+	"@context": "https://schema.org",
+	"@type": "Article",
+	headline: post.data.title,
+	description: post.data.description,
+	datePublished: post.data.pubDate,
+	author: (post.data.author || ["UnitOne"]).map((name) => ({
+		"@type": "Person",
+		name,
+	})),
+	mainEntityOfPage: canonicalURL.href,
+}
 const { Content } = await render(post)
 ---
 
@@ -30,7 +43,7 @@ const { Content } = await render(post)
 						<time
 							data-iv-date
 							datetime={post.data.pubDate}
-							class="text-zinc-600 text-sm"
+							class="text-[color:var(--muted)] text-sm"
 						>
 							{new Date(post.data.pubDate).toLocaleDateString("ru-RU", {
 								year: "numeric",
@@ -40,9 +53,255 @@ const { Content } = await render(post)
 						</time>
 					)
 				}
+				<div class="mt-4 flex flex-wrap gap-2 items-center">
+					<button
+						id="bookmark-toggle"
+						type="button"
+						class="rounded-md border border-[color:var(--border)] px-3 py-1.5 text-sm"
+					>
+						В закладки
+					</button>
+					<button
+						id="speech-play"
+						type="button"
+						class="rounded-md bg-[color:var(--text)] px-3 py-1.5 text-sm text-[color:var(--bg)]"
+					>
+						Прослушать
+					</button>
+					<button
+						id="speech-pause"
+						type="button"
+						class="rounded-md border border-[color:var(--border)] px-3 py-1.5 text-sm"
+					>
+						Пауза
+					</button>
+					<button
+						id="speech-stop"
+						type="button"
+						class="rounded-md border border-[color:var(--border)] px-3 py-1.5 text-sm"
+					>
+						Стоп
+					</button>
+					<select
+						id="speech-voice"
+						class="rounded-md border border-[color:var(--border)] px-2 py-1 text-sm bg-[color:var(--surface)]"
+						aria-label="Голос"
+					>
+						<option value="">Авто</option>
+					</select>
+					<label class="flex items-center gap-2 text-xs text-[color:var(--muted)]">
+						Скорость
+						<input
+							id="speech-rate"
+							type="range"
+							min="0.8"
+							max="1.3"
+							step="0.1"
+							value="1"
+						/>
+					</label>
+					<span
+						id="speech-rate-value"
+						class="text-xs text-[color:var(--muted)]"
+					>
+						1.0x
+					</span>
+					<span id="speech-status" class="text-xs text-[color:var(--muted)]"></span>
+				</div>
 			</header>
 			<Content />
 		</article>
 	</main>
 	<RelatedPosts posts={archive} href="/archive" />
+
+	<script
+		is:inline
+		type="application/ld+json"
+		set:html={JSON.stringify(articleSchema)}
+	/>
+
+	<script is:inline>
+		(() => {
+			const status = document.getElementById("speech-status")
+			const playBtn = document.getElementById("speech-play")
+			const pauseBtn = document.getElementById("speech-pause")
+			const stopBtn = document.getElementById("speech-stop")
+			const voiceSelect = document.getElementById("speech-voice")
+			const rateInput = document.getElementById("speech-rate")
+			const rateValue = document.getElementById("speech-rate-value")
+			const bookmarkBtn = document.getElementById("bookmark-toggle")
+			const article = document.querySelector("[data-iv-article]")
+
+			if (!("speechSynthesis" in window)) {
+				if (status) status.textContent = "Браузер не поддерживает озвучивание"
+				return
+			}
+
+			let queue = []
+			let currentIndex = 0
+			let isPaused = false
+
+			const loadVoices = () => {
+				const voices = window.speechSynthesis.getVoices()
+				if (!voiceSelect) return
+				voiceSelect.innerHTML = '<option value="">Авто</option>'
+				voices.forEach((v) => {
+					const option = document.createElement("option")
+					option.value = v.name
+					option.textContent = `${v.name} (${v.lang})`
+					voiceSelect.appendChild(option)
+				})
+
+				const saved = localStorage.getItem("speechVoice")
+				const hasRu = voices.find((v) => v.lang?.toLowerCase().startsWith("ru"))
+				if (saved) {
+					voiceSelect.value = saved
+				} else if (hasRu) {
+					voiceSelect.value = hasRu.name
+				}
+			}
+
+			loadVoices()
+			window.speechSynthesis.onvoiceschanged = loadVoices
+
+			const buildText = () => {
+				const text = article?.innerText || ""
+				return text.replace(/\s+\n/g, "\n").replace(/\n+/g, "\n").trim()
+			}
+
+			const BOOKMARKS_KEY = "unitone_bookmarks"
+			const postData = {
+				id: ${JSON.stringify(post.id)},
+				title: ${JSON.stringify(post.data.title)},
+				description: ${JSON.stringify(post.data.description || "")},
+				date: ${JSON.stringify(post.data.pubDate || "")},
+				href: ${JSON.stringify(`/archive/${post.id}/`)},
+			}
+
+			const getBookmarks = () => {
+				try {
+					return JSON.parse(localStorage.getItem(BOOKMARKS_KEY) || "[]")
+				} catch {
+					return []
+				}
+			}
+
+			const setBookmarks = (list) => {
+				localStorage.setItem(BOOKMARKS_KEY, JSON.stringify(list))
+			}
+
+			const updateBookmarkButton = () => {
+				const list = getBookmarks()
+				const exists = list.some((item) => item.id === postData.id)
+				if (!bookmarkBtn) return
+				bookmarkBtn.textContent = exists ? "В закладках" : "В закладки"
+				bookmarkBtn.classList.toggle("bg-[color:var(--text)]", exists)
+				bookmarkBtn.classList.toggle("text-[color:var(--bg)]", exists)
+				bookmarkBtn.classList.toggle("border-[color:var(--text)]", exists)
+			}
+
+			bookmarkBtn?.addEventListener("click", () => {
+				const list = getBookmarks()
+				const index = list.findIndex((item) => item.id === postData.id)
+				if (index > -1) {
+					list.splice(index, 1)
+				} else {
+					list.push(postData)
+				}
+				setBookmarks(list)
+				updateBookmarkButton()
+			})
+
+			updateBookmarkButton()
+
+			const applyRateLabel = () => {
+				const value = Number(rateInput?.value || 1).toFixed(1)
+				if (rateValue) rateValue.textContent = `${value}x`
+				localStorage.setItem("speechRate", value)
+			}
+
+			const savedRate = localStorage.getItem("speechRate")
+			if (savedRate && rateInput) {
+				rateInput.value = savedRate
+				applyRateLabel()
+			}
+
+			rateInput?.addEventListener("input", () => {
+				applyRateLabel()
+			})
+
+			voiceSelect?.addEventListener("change", () => {
+				localStorage.setItem("speechVoice", voiceSelect.value)
+			})
+
+			const stop = () => {
+				window.speechSynthesis.cancel()
+				queue = []
+				currentIndex = 0
+				isPaused = false
+				if (status) status.textContent = "Остановлено"
+			}
+
+			const speakNext = () => {
+				if (currentIndex >= queue.length) {
+					if (status) status.textContent = "Готово"
+					return
+				}
+
+				const chunk = queue[currentIndex]
+				const utterance = new SpeechSynthesisUtterance(chunk)
+				const voices = window.speechSynthesis.getVoices()
+				const selected = voiceSelect?.value
+				if (selected) {
+					const match = voices.find((v) => v.name === selected)
+					if (match) utterance.voice = match
+				}
+				utterance.lang = "ru-RU"
+				utterance.rate = Number(rateInput?.value || 1)
+				utterance.onend = () => {
+					if (isPaused) return
+					currentIndex += 1
+					setTimeout(speakNext, 300)
+				}
+				utterance.onerror = () => {
+					if (status) status.textContent = "Ошибка озвучивания"
+				}
+				window.speechSynthesis.speak(utterance)
+				if (status) status.textContent = "Воспроизведение"
+			}
+
+			playBtn?.addEventListener("click", () => {
+				if (window.speechSynthesis.speaking && window.speechSynthesis.paused) {
+					window.speechSynthesis.resume()
+					isPaused = false
+					if (status) status.textContent = "Продолжение"
+					return
+				}
+
+				if (window.speechSynthesis.speaking) {
+					window.speechSynthesis.cancel()
+				}
+
+				const text = buildText()
+				if (!text) return
+
+				queue = text.split("\n").map((t) => t.trim()).filter(Boolean)
+				currentIndex = 0
+				isPaused = false
+				speakNext()
+			})
+
+			pauseBtn?.addEventListener("click", () => {
+				if (window.speechSynthesis.speaking) {
+					window.speechSynthesis.pause()
+					isPaused = true
+					if (status) status.textContent = "Пауза"
+				}
+			})
+
+			stopBtn?.addEventListener("click", () => {
+				stop()
+			})
+		})()
+	</script>
 </Layout>

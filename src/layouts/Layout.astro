@@ -43,10 +43,29 @@ const {
 			datePublished={datePublished}
 			dateModified={dateModified}
 		/>
+		<link rel="manifest" href="/manifest.webmanifest" />
+		<meta name="theme-color" content="#111111" />
+		<meta name="color-scheme" content="light dark" />
+		<script is:inline>
+			(() => {
+				const stored = localStorage.getItem("theme")
+				const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches
+				const shouldDark = stored ? stored === "dark" : prefersDark
+				if (shouldDark) {
+					document.documentElement.classList.add("dark")
+				}
+			})()
+		</script>
 	</head>
 	<body
-		class={`${bodyStyle || ""} flex min-h-screen flex-col text-zinc-900 bg-[#eceef1]`}
+		class={`${bodyStyle || ""} flex min-h-screen flex-col text-[color:var(--text)] bg-[color:var(--bg)]`}
 	>
+		<div
+			id="app-loader"
+			class="fixed inset-0 z-[60] flex items-center justify-center bg-[color:var(--bg)]"
+		>
+			<div class="h-8 w-8 animate-spin rounded-full border-2 border-[color:var(--border)] border-t-[color:var(--text)]" />
+		</div>
 		<Header />
 		<Container class="py-20">
 			<div class="flex flex-col gap-12">
@@ -61,7 +80,7 @@ const {
 								</h1>
 							)}
 							{description && (
-								<p class="text-base md:text-lg lg:text-xl max-w-xl mx-auto text-zinc-600">
+								<p class="text-base md:text-lg lg:text-xl max-w-xl mx-auto text-[color:var(--muted)]">
 									{description}
 								</p>
 							)}
@@ -72,6 +91,64 @@ const {
 			</div>
 		</Container>
 		<Footer />
-		<!-- <BottomMaskEffect /> -->
+		<div
+			id="pwa-install"
+			class="hidden fixed bottom-4 left-1/2 z-[60] -translate-x-1/2 rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] px-4 py-3 shadow-lg"
+		>
+			<div class="flex flex-col gap-2 md:flex-row md:items-center md:gap-3">
+				<span class="text-sm text-[color:var(--muted)]"
+					>Установить приложение для быстрого доступа</span
+				>
+				<div class="flex gap-2">
+					<button
+						id="pwa-install-btn"
+						class="rounded-md bg-[color:var(--text)] px-3 py-1.5 text-sm text-[color:var(--bg)]"
+					>
+						Установить
+					</button>
+					<button
+						id="pwa-install-close"
+						class="rounded-md border border-[color:var(--border)] px-3 py-1.5 text-sm"
+					>
+						Закрыть
+					</button>
+				</div>
+			</div>
+		</div>
+		<script is:inline>
+			window.addEventListener("load", () => {
+				const loader = document.getElementById("app-loader")
+				if (loader) loader.style.display = "none"
+			})
+
+			if ("serviceWorker" in navigator) {
+				window.addEventListener("load", () => {
+					navigator.serviceWorker.register("/sw.js")
+				})
+			}
+
+			let deferredPrompt = null
+			const installBanner = document.getElementById("pwa-install")
+			const installBtn = document.getElementById("pwa-install-btn")
+			const closeBtn = document.getElementById("pwa-install-close")
+
+			window.addEventListener("beforeinstallprompt", (e) => {
+				e.preventDefault()
+				deferredPrompt = e
+				if (installBanner) installBanner.classList.remove("hidden")
+			})
+
+			installBtn?.addEventListener("click", async () => {
+				if (!deferredPrompt) return
+				deferredPrompt.prompt()
+				await deferredPrompt.userChoice
+				deferredPrompt = null
+				if (installBanner) installBanner.classList.add("hidden")
+			})
+
+			closeBtn?.addEventListener("click", () => {
+				if (installBanner) installBanner.classList.add("hidden")
+			})
+		</script>
 	</body>
 </html>
