@@ -1,7 +1,8 @@
 ---
-import Author from './Author.astro'
+import Author from "./Author.astro"
+import BookmarkToggle from "@/components/svelte/BookmarkToggle.svelte"
 
-const {data, id} = Astro.props
+const { data, id } = Astro.props
 ---
 
 <a
@@ -9,23 +10,22 @@ const {data, id} = Astro.props
 	href={`/archive/${id}/`}
 	class="block relative"
 >
-	<div class="rounded-2xl p-2 shadow-md shadow-black/5">
+	<div class="rounded-2xl p-2 shadow-sm shadow-black/5">
 		<article
-			class="rounded-xl shadow-lg ring-1 ring-black/5 lg:shadow-2xl bg-[color:var(--surface)] p-5 relative flex-col flex gap-3 border border-[color:var(--border)]"
+			class="flex h-full flex-col gap-3 rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] p-5"
 		>
-			<h2 class="h-[50px] leading-tight line-clamp-2 text-xl font-bold">
+			<h2 class="h-[56px] line-clamp-2 text-xl font-semibold leading-tight text-[color:var(--text)]">
 				{data.title}
 			</h2>
 			<p class="h-[72px] line-clamp-3 text-[color:var(--muted)]">
 				{data.description}
 			</p>
 
-			<div class="flex mt-2 justify-between -center">
+			<div class="mt-auto flex items-center justify-between gap-2">
 				<Author data={data} />
 				{
 					data.pubDate && (
-						<time datetime={data.pubDate} class="self-end text-[color:var(--muted)] text-sm">
-							🗓
+						<time datetime={data.pubDate} class="text-sm text-[color:var(--muted)]">
 							{new Date(data.pubDate).toLocaleDateString("ru-RU", {
 								year: "numeric",
 								month: "short",
@@ -34,6 +34,18 @@ const {data, id} = Astro.props
 						</time>
 					)
 				}
+			</div>
+
+			<div class="pt-2">
+				<BookmarkToggle
+					client:load
+					id={id}
+					title={data.title}
+					description={data.description || ""}
+					date={String(data.pubDate || "")}
+					href={`/archive/${id}/`}
+					variant="card"
+				/>
 			</div>
 		</article>
 	</div>

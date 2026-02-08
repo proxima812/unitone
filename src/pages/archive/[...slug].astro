@@ -1,5 +1,6 @@
 ---
 import RelatedPosts from "@/components/RelatedPosts.astro"
+import BookmarkToggle from "@/components/svelte/BookmarkToggle.svelte"
 import Layout from "@/layouts/Layout.astro"
 import { getCollection, render } from "astro:content"
 
@@ -32,19 +33,12 @@ const { Content } = await render(post)
 	<main class="my-prose">
 		<article data-iv-article>
 			<header class="mb-8">
-				<h1
-					data-iv-title
-					class="mb-3 font-black tracking-tight text-4xl md:text-5xl"
-				>
+				<h1 data-iv-title class="mb-3 text-4xl font-black tracking-tight md:text-5xl">
 					{post.data.title}
 				</h1>
 				{
 					post.data.pubDate && (
-						<time
-							data-iv-date
-							datetime={post.data.pubDate}
-							class="text-[color:var(--muted)] text-sm"
-						>
+						<time data-iv-date datetime={post.data.pubDate} class="text-sm text-[color:var(--muted)]">
 							{new Date(post.data.pubDate).toLocaleDateString("ru-RU", {
 								year: "numeric",
 								month: "numeric",
@@ -53,59 +47,49 @@ const { Content } = await render(post)
 						</time>
 					)
 				}
-				<div class="mt-4 flex flex-wrap gap-2 items-center">
-					<button
-						id="bookmark-toggle"
-						type="button"
-						class="rounded-md border border-[color:var(--border)] px-3 py-1.5 text-sm"
-					>
-						В закладки
-					</button>
+				<div class="mt-4 flex flex-wrap items-center gap-2">
+					<BookmarkToggle
+						client:load
+						id={post.id}
+						title={post.data.title}
+						description={post.data.description || ""}
+						date={String(post.data.pubDate || "")}
+						href={`/archive/${post.id}/`}
+						variant="article"
+					/>
 					<button
 						id="speech-play"
 						type="button"
-						class="rounded-md bg-[color:var(--text)] px-3 py-1.5 text-sm text-[color:var(--bg)]"
+						class="rounded-full bg-[color:var(--text)] px-3 py-1.5 text-sm text-[color:var(--surface)]"
 					>
 						Прослушать
 					</button>
 					<button
 						id="speech-pause"
 						type="button"
-						class="rounded-md border border-[color:var(--border)] px-3 py-1.5 text-sm"
+						class="rounded-full border border-[color:var(--border)] px-3 py-1.5 text-sm"
 					>
 						Пауза
 					</button>
 					<button
 						id="speech-stop"
 						type="button"
-						class="rounded-md border border-[color:var(--border)] px-3 py-1.5 text-sm"
+						class="rounded-full border border-[color:var(--border)] px-3 py-1.5 text-sm"
 					>
 						Стоп
 					</button>
 					<select
 						id="speech-voice"
-						class="rounded-md border border-[color:var(--border)] px-2 py-1 text-sm bg-[color:var(--surface)]"
+						class="rounded-full border border-[color:var(--border)] bg-[color:var(--surface)] px-2 py-1 text-sm"
 						aria-label="Голос"
 					>
 						<option value="">Авто</option>
 					</select>
 					<label class="flex items-center gap-2 text-xs text-[color:var(--muted)]">
 						Скорость
-						<input
-							id="speech-rate"
-							type="range"
-							min="0.8"
-							max="1.3"
-							step="0.1"
-							value="1"
-						/>
+						<input id="speech-rate" type="range" min="0.8" max="1.3" step="0.1" value="1" />
 					</label>
-					<span
-						id="speech-rate-value"
-						class="text-xs text-[color:var(--muted)]"
-					>
-						1.0x
-					</span>
+					<span id="speech-rate-value" class="text-xs text-[color:var(--muted)]">1.0x</span>
 					<span id="speech-status" class="text-xs text-[color:var(--muted)]"></span>
 				</div>
 			</header>
@@ -114,11 +98,7 @@ const { Content } = await render(post)
 	</main>
 	<RelatedPosts posts={archive} href="/archive" />
 
-	<script
-		is:inline
-		type="application/ld+json"
-		set:html={JSON.stringify(articleSchema)}
-	/>
+	<script is:inline type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
 
 	<script is:inline>
 		(() => {
@@ -129,7 +109,6 @@ const { Content } = await render(post)
 			const voiceSelect = document.getElementById("speech-voice")
 			const rateInput = document.getElementById("speech-rate")
 			const rateValue = document.getElementById("speech-rate-value")
-			const bookmarkBtn = document.getElementById("bookmark-toggle")
 			const article = document.querySelector("[data-iv-article]")
 
 			if (!("speechSynthesis" in window)) {
@@ -168,51 +147,6 @@ const { Content } = await render(post)
 				const text = article?.innerText || ""
 				return text.replace(/\s+\n/g, "\n").replace(/\n+/g, "\n").trim()
 			}
-
-			const BOOKMARKS_KEY = "unitone_bookmarks"
-			const postData = {
-				id: ${JSON.stringify(post.id)},
-				title: ${JSON.stringify(post.data.title)},
-				description: ${JSON.stringify(post.data.description || "")},
-				date: ${JSON.stringify(post.data.pubDate || "")},
-				href: ${JSON.stringify(`/archive/${post.id}/`)},
-			}
-
-			const getBookmarks = () => {
-				try {
-					return JSON.parse(localStorage.getItem(BOOKMARKS_KEY) || "[]")
-				} catch {
-					return []
-				}
-			}
-
-			const setBookmarks = (list) => {
-				localStorage.setItem(BOOKMARKS_KEY, JSON.stringify(list))
-			}
-
-			const updateBookmarkButton = () => {
-				const list = getBookmarks()
-				const exists = list.some((item) => item.id === postData.id)
-				if (!bookmarkBtn) return
-				bookmarkBtn.textContent = exists ? "В закладках" : "В закладки"
-				bookmarkBtn.classList.toggle("bg-[color:var(--text)]", exists)
-				bookmarkBtn.classList.toggle("text-[color:var(--bg)]", exists)
-				bookmarkBtn.classList.toggle("border-[color:var(--text)]", exists)
-			}
-
-			bookmarkBtn?.addEventListener("click", () => {
-				const list = getBookmarks()
-				const index = list.findIndex((item) => item.id === postData.id)
-				if (index > -1) {
-					list.splice(index, 1)
-				} else {
-					list.push(postData)
-				}
-				setBookmarks(list)
-				updateBookmarkButton()
-			})
-
-			updateBookmarkButton()
 
 			const applyRateLabel = () => {
 				const value = Number(rateInput?.value || 1).toFixed(1)

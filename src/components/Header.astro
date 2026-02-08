@@ -6,27 +6,10 @@ import Menu from "./Menu.astro"
 
 <header
 	id="header"
-	class="top-0 md:top-5 z-50 sticky shadow-2xs py-5 mx-0 max-w-full md:w-[1010px] rounded-xl bg-[color:var(--surface)]/70 backdrop-blur-lg mt-0 md:mt-5 md:mx-auto border border-[color:var(--border)]"
+	class="sticky top-0 z-50 mx-0 mt-0 max-w-full rounded-none border-b border-[color:var(--border)] bg-[color:var(--surface)]/92 py-4 backdrop-blur md:top-5 md:mx-auto md:mt-5 md:w-[1010px] md:rounded-2xl md:border"
 >
 	<Container class="flex justify-between gap-x-3">
 		<Logo />
 		<Menu />
-		<button
-			id="theme-toggle"
-			type="button"
-			class="rounded-md border border-[color:var(--border)] px-3 py-1.5 text-sm"
-			aria-label="Переключить тему"
-		>
-			Тема
-		</button>
 	</Container>
 </header>
-
-<script is:inline>
-	const button = document.getElementById("theme-toggle")
-	button?.addEventListener("click", () => {
-		const root = document.documentElement
-		const isDark = root.classList.toggle("dark")
-		localStorage.setItem("theme", isDark ? "dark" : "light")
-	})
-</script>

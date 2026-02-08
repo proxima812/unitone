@@ -1,68 +1,13 @@
 ---
+import BookmarksList from "@/components/svelte/BookmarksList.svelte"
 import Layout from "@/layouts/Layout.astro"
 ---
 
 <Layout title="Закладки" description="Сохраненные статьи из архива 12 шагов.">
-	<section class="bg-[color:var(--surface)] border border-[color:var(--border)] rounded-xl p-6 space-y-4">
+	<section class="space-y-4 rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] p-6">
 		<p class="text-[color:var(--muted)]">
 			Здесь отображаются статьи, которые вы сохранили. Закладки хранятся в вашем браузере.
 		</p>
-		<div id="bookmarks-list" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
-		<p id="bookmarks-empty" class="text-[color:var(--muted)]">
-			Пока нет закладок.
-		</p>
+		<BookmarksList client:load />
 	</section>
-
-	<script is:inline>
-		(() => {
-			const listEl = document.getElementById("bookmarks-list")
-			const emptyEl = document.getElementById("bookmarks-empty")
-			const BOOKMARKS_KEY = "unitone_bookmarks"
-
-			const getBookmarks = () => {
-				try {
-					return JSON.parse(localStorage.getItem(BOOKMARKS_KEY) || "[]")
-				} catch {
-					return []
-				}
-			}
-
-			const setBookmarks = (list) => {
-				localStorage.setItem(BOOKMARKS_KEY, JSON.stringify(list))
-			}
-
-			const render = () => {
-				const items = getBookmarks()
-				if (!listEl || !emptyEl) return
-				listEl.innerHTML = ""
-				emptyEl.classList.toggle("hidden", items.length > 0)
-
-				items.forEach((item) => {
-					const card = document.createElement("article")
-					card.className =
-						"bg-[color:var(--surface)] border border-[color:var(--border)] rounded-xl p-4 flex flex-col gap-2"
-					card.innerHTML = `
-						<h3 class="text-lg font-bold">${item.title || "Без названия"}</h3>
-						<p class="text-sm text-[color:var(--muted)]">${item.description || ""}</p>
-						<div class="flex items-center gap-2 mt-2">
-							<a class="text-sm underline underline-offset-4" href="${item.href}">Открыть</a>
-							<button class="text-sm text-[color:var(--muted)]" data-remove="${item.id}">Удалить</button>
-						</div>
-					`
-					listEl.appendChild(card)
-				})
-
-				listEl.querySelectorAll("[data-remove]").forEach((btn) => {
-					btn.addEventListener("click", () => {
-						const id = btn.getAttribute("data-remove")
-						const next = getBookmarks().filter((b) => b.id !== id)
-						setBookmarks(next)
-						render()
-					})
-				})
-			}
-
-			render()
-		})()
-	</script>
 </Layout>

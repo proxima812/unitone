@@ -1,6 +1,7 @@
 import mdx from "@astrojs/mdx";
 import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
+import svelte from "@astrojs/svelte";
 import vercel from "@astrojs/vercel";
 import tailwindcss from "@tailwindcss/vite";
 import icon from "astro-icon";
@@ -25,7 +26,7 @@ export default defineConfig({
 		icon(),
 		metaTags(),
 		react(),
-		
+		svelte(),
 	],
 	output: "static",
 	adapter: vercel(),

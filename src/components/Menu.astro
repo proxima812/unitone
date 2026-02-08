@@ -19,6 +19,16 @@ import { Icon } from "astro-icon/components"
 				>
 					<Icon name={link.icon} />
 					<span>{link.label}</span>
+					{
+						link.href === "/bookmarks" && (
+							<span
+								id="bookmarks-count-desktop"
+								class="min-w-5 rounded-full bg-[color:var(--accent)] px-1.5 py-0.5 text-center text-xs font-semibold text-white"
+							>
+								0
+							</span>
+						)
+					}
 				</a>
 			))
 	}
@@ -50,6 +60,16 @@ import { Icon } from "astro-icon/components"
 					>
 						<Icon name={link.icon} />
 						<span>{link.label}</span>
+						{
+							link.href === "/bookmarks" && (
+								<span
+									id="bookmarks-count-mobile"
+									class="min-w-5 rounded-full bg-[color:var(--accent)] px-1.5 py-0.5 text-center text-xs font-semibold text-white"
+								>
+									0
+								</span>
+							)
+						}
 					</a>
 				))
 		}
@@ -68,8 +88,26 @@ import { Icon } from "astro-icon/components"
 	const menu = document.querySelector("#menu")
 	const menuBtn = document.querySelector("#open")
 	const body = document.querySelector("body")
+	const desktopBookmarksCount = document.querySelector("#bookmarks-count-desktop")
+	const mobileBookmarksCount = document.querySelector("#bookmarks-count-mobile")
 
 	const menuLinks = document.querySelectorAll("#menu a")
+	const BOOKMARKS_KEY = "unitone_bookmarks"
+
+	const getBookmarksCount = () => {
+		try {
+			const list = JSON.parse(localStorage.getItem(BOOKMARKS_KEY) || "[]")
+			return Array.isArray(list) ? list.length : 0
+		} catch {
+			return 0
+		}
+	}
+
+	const renderBookmarksCount = () => {
+		const count = getBookmarksCount()
+		if (desktopBookmarksCount) desktopBookmarksCount.textContent = String(count)
+		if (mobileBookmarksCount) mobileBookmarksCount.textContent = String(count)
+	}
 
 	menuLinks.forEach(link => {
 		link.addEventListener("click", () => {
@@ -81,5 +119,17 @@ import { Icon } from "astro-icon/components"
 	menuBtn?.addEventListener("click", () => {
 		menu?.classList.toggle("hidden")
 		body?.classList.toggle("overflow-hidden")
+	})
+
+	renderBookmarksCount()
+
+	window.addEventListener("storage", (event) => {
+		if (event.key === BOOKMARKS_KEY) {
+			renderBookmarksCount()
+		}
+	})
+
+	window.addEventListener("bookmarks-updated", () => {
+		renderBookmarksCount()
 	})
 </script>

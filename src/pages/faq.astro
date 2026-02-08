@@ -1,0 +1,32 @@
+---
+import Layout from "@/layouts/Layout.astro"
+import { faq } from "@/data/links"
+
+const faqSchema = {
+	"@context": "https://schema.org",
+	"@type": "FAQPage",
+	mainEntity: faq.map((item) => ({
+		"@type": "Question",
+		name: item.question,
+		acceptedAnswer: {
+			"@type": "Answer",
+			text: item.answer,
+		},
+	})),
+}
+---
+
+<Layout title="FAQ" description="Частые вопросы о 12 шагах, выборе сообщества и старте практики.">
+	<section class="mx-auto flex w-full max-w-4xl flex-col gap-4">
+		{
+			faq.map((item) => (
+				<article class="rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] p-6">
+					<h2 class="mb-3 text-2xl font-semibold text-[color:var(--text)]">{item.question}</h2>
+					<p class="leading-relaxed text-[color:var(--muted)]">{item.answer}</p>
+				</article>
+			))
+		}
+	</section>
+
+	<script is:inline type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+</Layout>
