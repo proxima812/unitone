@@ -1,8 +1,0 @@
-
-
-User-agent: *
-Allow: /
-Allow: /ai.txt
-
-Sitemap: https://unitone.vercel.app/sitemap-index.xml
-Host: unitone.vercel.app
