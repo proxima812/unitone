@@ -5,12 +5,13 @@
 - `description` (optional)
 - `tags` (optional)
 - `author` (must match one profile in `docs/AUTHOR_VOICE_GUIDE.md`)
+- `relatedPosts` (optional, список `slug` похожих постов: без `/archive/` и без `.mdx`)
 
 ## Output Structure
 1. Intro paragraph in author voice.
 2. 2-4 short sections with `##` headings.
 3. One practical list (3 points).
-4. Closing paragraph in author voice.
+4. Closing paragraph in author voice + короткий призыв продолжать путь по шагам до 12-го.
 
 ## Hard Rules
 - Keep language Russian.

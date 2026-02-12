@@ -23,6 +23,44 @@ const encodedText = encodeURIComponent(
 )
 const currentAuthor = post.data.author?.[0] || ""
 const currentTags = post.data.tags || []
+const archiveById = new Map(archive.map((item) => [item.id, item]))
+const normalizeArchiveId = (value: string) =>
+	value.trim().replace(/^\/+|\/+$/g, "").replace(/^archive\//, "")
+const manualRelatedIds = Array.isArray(post.data.relatedPosts)
+	? post.data.relatedPosts.map(normalizeArchiveId).filter(Boolean)
+	: []
+const manualRelatedPosts = manualRelatedIds
+	.map((id) => archiveById.get(id))
+	.filter((item) => item && item.id !== post.id)
+
+function detectStepNumber(title?: string, tags: string[] = []) {
+	const sources = [title || "", ...tags]
+	for (const source of sources) {
+		const match = source.match(/шаг\s*(\d{1,2})/i)
+		if (match) return Number(match[1])
+	}
+	return null
+}
+
+function dateValue(v?: string | Date) {
+	if (!v) return 0
+	return new Date(v).getTime() || 0
+}
+
+const currentStep = detectStepNumber(post.data.title, currentTags)
+const nextStepPost =
+	currentStep && currentStep < 12
+		? archive
+				.filter((item) => item.id !== post.id)
+				.map((item) => ({
+					item,
+					step: detectStepNumber(item.data.title, item.data.tags || []),
+					date: dateValue(item.data.pubDate),
+				}))
+				.filter((x) => x.step === currentStep + 1)
+				.sort((a, b) => b.date - a.date)[0]?.item
+		: null
+
 const shareLinks = [
 	{
 		label: "Telegram",
@@ -129,6 +167,58 @@ const { Content } = await render(post)
 					</div>
 				</header>
 				<Content />
+				{
+					manualRelatedPosts.length > 0 && (
+						<section class="mt-10 rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] p-5">
+							<h2 class="text-2xl font-semibold">Что еще почитать по этой теме</h2>
+							<p class="mt-2 text-sm text-[color:var(--muted)]">
+								Автор рекомендует эти материалы как смысловое продолжение.
+							</p>
+							<div class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+								{manualRelatedPosts.map((item) => (
+									<a
+										href={`/archive/${item.id}/`}
+										class="group rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] p-4 transition hover:shadow-sm hover:shadow-black/10"
+									>
+										<h3 class="line-clamp-2 text-lg font-semibold leading-tight group-hover:opacity-85">
+											{item.data.title}
+										</h3>
+										<p class="mt-2 line-clamp-3 text-sm text-[color:var(--muted)]">
+											{item.data.description}
+										</p>
+									</a>
+								))}
+							</div>
+						</section>
+					)
+				}
+				{
+					currentStep && (
+						<section class="mt-10 rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] p-5">
+							<h2 class="text-2xl font-semibold">Дальше по шагам</h2>
+							<p class="mt-2 text-[color:var(--muted)]">
+								Если этот текст откликнулся, продолжайте путь последовательно. Пройдите шаги дальше и
+								дойдите до 12 шага, чтобы увидеть полную картину изменений.
+							</p>
+							<div class="mt-4 flex flex-wrap gap-3">
+								{nextStepPost && (
+									<a
+										href={`/archive/${nextStepPost.id}/`}
+										class="inline-flex items-center rounded-full bg-[color:var(--text)] px-4 py-2 text-sm text-[color:var(--bg)] transition hover:opacity-85"
+									>
+										Читать шаг {currentStep + 1}
+									</a>
+								)}
+								<a
+									href="/archive"
+									class="inline-flex items-center rounded-full border border-[color:var(--border)] px-4 py-2 text-sm text-[color:var(--muted)] transition hover:opacity-75"
+								>
+									Все материалы по шагам
+								</a>
+							</div>
+						</section>
+					)
+				}
 				<div class="mt-8 rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] p-4 text-sm leading-relaxed text-[color:var(--muted)]">
 					Этот материал отражает личный опыт и мнение автора. Он не является руководством к действию,
 					не навязывает подход и не заменяет профессиональную помощь.

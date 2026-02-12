@@ -1,0 +1,35 @@
+{
+ "enabled": true,
+ "output": {
+ "format": "txt",
+ "filename": "llm.txt"
+ },
+ "include": {
+ "pages": true,
+ "headings": true,
+ "paragraphs": true,
+ "lists": true,
+ "tables": true,
+ "codeBlocks": true,
+ "meta": {
+ "title": true,
+ "description": true,
+ "keywords": true
+ }
+ },
+ "exclude": {
+ "paths": [],
+ "selectors": []
+ },
+ "safety": {
+ "stripEmails": true,
+ "stripPhoneNumbers": true,
+ "stripForms": true,
+ "stripScripts": true
+ },
+ "purpose": {
+ "llmTraining": true,
+ "ragIndexing": true,
+ "chatGrounding": true
+ }
+}
