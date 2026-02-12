@@ -1,0 +1,113 @@
+---
+import Article from "@/components/Article.astro"
+import Layout from "@/layouts/Layout.astro"
+import { getCollection } from "astro:content"
+
+type ArchivePost = Awaited<ReturnType<typeof getCollection<"archive">>>[number]
+
+export async function getStaticPaths() {
+	const posts = await getCollection("archive")
+	const byAuthor = new Map<string, ArchivePost[]>()
+
+	for (const post of posts) {
+		const names = Array.isArray(post.data.author) ? post.data.author : []
+		for (const name of names) {
+			if (!name) continue
+			const current = byAuthor.get(name) || []
+			current.push(post)
+			byAuthor.set(name, current)
+		}
+	}
+
+	return [...byAuthor.entries()].map(([author, list]) => ({
+		params: { author },
+		props: {
+			author,
+			posts: list.sort(
+				(a, b) => new Date(b.data.pubDate || 0).getTime() - new Date(a.data.pubDate || 0).getTime(),
+			),
+		},
+	}))
+}
+
+const { author, posts } = Astro.props as { author: string; posts: ArchivePost[] }
+const authorTags = [...new Set(posts.flatMap((item) => item.data.tags || []))].sort((a, b) =>
+	a.localeCompare(b),
+)
+---
+
+<Layout
+	title={`Автор: ${author}`}
+	description={`Все публикации автора ${author} в архиве.`}
+>
+	<div class="mb-4 flex flex-wrap items-center gap-3 text-sm text-[color:var(--muted)]">
+		<span>Всего постов: {posts.length}</span>
+		<a href={`/archive?author=${encodeURIComponent(author)}`} class="underline">
+			Открыть в архиве с фильтром
+		</a>
+		<a href="/authors" class="underline">Все авторы</a>
+	</div>
+
+	{
+		authorTags.length > 0 && (
+			<div class="mb-4 flex flex-wrap items-center gap-2" id="author-tags">
+				<button
+					type="button"
+					data-author-tag=""
+					class="rounded-full border border-[color:var(--border)] px-3 py-1 text-sm data-[active=true]:bg-[color:var(--text)] data-[active=true]:text-[color:var(--bg)]"
+					data-active="true"
+				>
+					Все теги
+				</button>
+				{
+					authorTags.map((tag) => (
+						<button
+							type="button"
+							data-author-tag={tag}
+							class="rounded-full border border-[color:var(--border)] px-3 py-1 text-sm data-[active=true]:bg-[color:var(--text)] data-[active=true]:text-[color:var(--bg)]"
+							data-active="false"
+						>
+							{tag}
+						</button>
+					))
+				}
+			</div>
+		)
+	}
+
+	<div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3" id="author-posts-grid">
+		{posts.map((item) => <Article data={item.data} id={item.id} />)}
+	</div>
+
+	<script is:inline>
+		(() => {
+			const tagButtons = Array.from(document.querySelectorAll("[data-author-tag]"))
+			const cards = Array.from(document.querySelectorAll("#author-posts-grid > a[data-tag]"))
+			if (!tagButtons.length || !cards.length) return
+
+			const setActive = (tag) => {
+				tagButtons.forEach((btn) => {
+					btn.dataset.active = (btn.dataset.authorTag || "") === tag ? "true" : "false"
+				})
+			}
+
+			const applyTag = (tag) => {
+				cards.forEach((card) => {
+					const tags = (card.getAttribute("data-tag") || "")
+						.split(",")
+						.map((x) => x.trim())
+						.filter(Boolean)
+					const visible = !tag || tags.includes(tag)
+					card.classList.toggle("hidden", !visible)
+				})
+				setActive(tag)
+			}
+
+			tagButtons.forEach((btn) => {
+				btn.addEventListener("click", () => {
+					applyTag(btn.dataset.authorTag || "")
+				})
+			})
+		})()
+	</script>
+</Layout>

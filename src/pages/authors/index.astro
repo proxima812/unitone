@@ -1,0 +1,59 @@
+---
+import Layout from "@/layouts/Layout.astro"
+import { i18nKeys } from "@/lib/i18n-runtime"
+import { getCollection } from "astro:content"
+
+const archive = await getCollection("archive")
+const authorsMap = new Map<
+	string,
+	{
+		count: number
+		latest: number
+	}
+>()
+
+for (const post of archive) {
+	const names = Array.isArray(post.data.author) ? post.data.author : []
+	const time = post.data.pubDate ? new Date(post.data.pubDate).getTime() : 0
+	for (const name of names) {
+		if (!name) continue
+		const current = authorsMap.get(name) || { count: 0, latest: 0 }
+		current.count += 1
+		current.latest = Math.max(current.latest, time)
+		authorsMap.set(name, current)
+	}
+}
+
+const authors = [...authorsMap.entries()]
+	.map(([name, meta]) => ({ name, ...meta }))
+	.sort((a, b) => b.count - a.count || b.latest - a.latest)
+---
+
+<Layout
+	title="Авторы"
+	description="Страницы авторов и все их посты."
+	titleKey={i18nKeys.authors.title}
+	descriptionKey={i18nKeys.authors.description}
+>
+	<div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+		{
+			authors.map((author) => (
+				<a
+					href={`/authors/${encodeURIComponent(author.name)}/`}
+					class="rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] p-5 transition hover:shadow-sm hover:shadow-black/10"
+				>
+					<h2 class="text-xl font-bold">{author.name}</h2>
+					<p class="mt-2 text-sm text-[color:var(--muted)]" data-i18n="authors.postsCount" data-i18n-param-count={String(author.count)}>
+						Постов: {author.count}
+					</p>
+					{author.latest > 0 && (
+						<p class="mt-1 text-xs text-[color:var(--muted)]">
+							<span data-i18n="authors.latestPost">Последняя публикация:</span>{" "}
+							{new Date(author.latest).toLocaleDateString("ru-RU")}
+						</p>
+					)}
+				</a>
+			))
+		}
+	</div>
+</Layout>

@@ -1,22 +1,25 @@
 ---
 import Layout from "@/layouts/Layout.astro"
+import { i18nKeys } from "@/lib/i18n-runtime"
 ---
 
 <Layout
 	title="Дисклеймер"
 	description="Важные юридические уточнения и границы ответственности."
+	titleKey={i18nKeys.disclaimer.title}
+	descriptionKey={i18nKeys.disclaimer.description}
 >
 	<section class="bg-[color:var(--surface)] border border-[color:var(--border)] rounded-xl p-6 space-y-4">
-		<p class="text-[color:var(--muted)]">
+		<p class="text-[color:var(--muted)]" data-i18n="disclaimer.p1">
 			Материалы сайта предназначены для ознакомления и не являются медицинской,
 			психологической или юридической консультацией.
 		</p>
 		<ul class="list-disc pl-6 text-[color:var(--muted)]">
-			<li>Проект не представляет интересы каких-либо организаций.</li>
-			<li>Все тексты собраны из открытых источников.</li>
-			<li>Ссылки на внешние ресурсы размещены для удобства поиска.</li>
+			<li data-i18n="disclaimer.l1">Проект не представляет интересы каких-либо организаций.</li>
+			<li data-i18n="disclaimer.l2">Все тексты собраны из открытых источников.</li>
+			<li data-i18n="disclaimer.l3">Ссылки на внешние ресурсы размещены для удобства поиска.</li>
 		</ul>
-		<p class="text-[color:var(--muted)]">
+		<p class="text-[color:var(--muted)]" data-i18n="disclaimer.p2">
 			Если вам требуется помощь, обратитесь к профильным специалистам или в подходящее
 			сообщество поддержки.
 		</p>

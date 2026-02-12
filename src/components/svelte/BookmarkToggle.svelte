@@ -1,5 +1,6 @@
 <script>
 	import { onMount } from "svelte"
+	import { t, DEFAULT_LOCALE } from "@/lib/i18n-runtime"
 	import { bookmarks, initBookmarksStore, toggleBookmark } from "@/lib/bookmarks"
 
 	export let id
@@ -8,9 +9,16 @@
 	export let date = ""
 	export let href
 	export let variant = "article"
+	let locale = DEFAULT_LOCALE
 
 	onMount(() => {
 		initBookmarksStore()
+		const sync = (event) => {
+			locale = event?.detail?.locale || document.documentElement.getAttribute("data-locale") || DEFAULT_LOCALE
+		}
+		sync()
+		window.addEventListener("unitone:locale-updated", sync)
+		return () => window.removeEventListener("unitone:locale-updated", sync)
 	})
 
 	$: exists = $bookmarks.some((item) => item.id === id)
@@ -40,5 +48,5 @@
 			: "border-[color:var(--border)] bg-[color:var(--surface)] text-[color:var(--text)] hover:border-[color:var(--accent)]"
 	} ${isCard ? "relative z-10" : ""}`}
 >
-	{exists ? "В закладках" : "В закладки"}
+	{exists ? t(locale, "bookmark.exists") : t(locale, "bookmark.add")}
 </button>

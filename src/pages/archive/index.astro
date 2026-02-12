@@ -2,6 +2,7 @@
 import Article from "@/components/Article.astro"
 import ArchiveFilter from "@/components/svelte/ArchiveFilter.svelte"
 import Layout from "@/layouts/Layout.astro"
+import { i18nKeys } from "@/lib/i18n-runtime"
 import { getCollection } from "astro:content"
 
 const archives = (await getCollection("archive")).sort(
@@ -19,10 +20,43 @@ const archivesTags = archives
 <Layout
 	title="Архив 12 шагов"
 	description="Архив статей о 12 шагах: шаги выздоровления, практики, темы и опыт."
+	titleKey={i18nKeys.archive.title}
+	descriptionKey={i18nKeys.archive.description}
 >
 	<ArchiveFilter client:load tags={archivesTags} />
+	<div
+		id="author-filter-note"
+		class="hidden rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] px-4 py-3 text-sm text-[color:var(--muted)]"
+	>
+		<span data-i18n="archive.authorShown">Показаны посты автора:</span> <span id="author-filter-name" class="font-semibold text-[color:var(--text)]"></span>
+		<a href="/archive" class="ml-2 underline" data-i18n="common.reset">Сбросить</a>
+	</div>
 
 	<div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3" data-posts>
 		{archives && archives.map((item) => <Article data={item.data} id={item.id} />)}
 	</div>
+
+	<script is:inline>
+		(() => {
+			const params = new URLSearchParams(window.location.search)
+			const author = params.get("author")
+			if (!author) return
+
+			const note = document.getElementById("author-filter-note")
+			const name = document.getElementById("author-filter-name")
+			const cards = document.querySelectorAll("[data-posts] > a[data-author]")
+			let visible = 0
+
+			cards.forEach((card) => {
+				const authorAttr = card.getAttribute("data-author") || ""
+				const authors = authorAttr.split(",").map((x) => x.trim()).filter(Boolean)
+				const show = authors.includes(author)
+				card.classList.toggle("hidden", !show)
+				if (show) visible++
+			})
+
+			if (name) name.textContent = `${author} (${visible})`
+			if (note) note.classList.remove("hidden")
+		})()
+	</script>
 </Layout>

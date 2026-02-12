@@ -1,0 +1,26 @@
+---
+import Layout from "@/layouts/Layout.astro"
+import { i18nKeys } from "@/lib/i18n-runtime"
+---
+
+<Layout
+	title="Редакционная политика"
+	description="Как формируются материалы, какие тексты публикуются и какие принципы мы соблюдаем."
+	titleKey={i18nKeys.editorialPolicy.title}
+	descriptionKey={i18nKeys.editorialPolicy.description}
+>
+	<section class="bg-[color:var(--surface)] border border-[color:var(--border)] rounded-xl p-6 space-y-4">
+		<p class="text-[color:var(--muted)]" data-i18n="editorial.p1">
+			Мы собираем материалы из открытых источников и авторских вкладов, чтобы сделать информацию о 12 шагах более понятной и доступной.
+		</p>
+		<p class="text-[color:var(--muted)]" data-i18n="editorial.p2">
+			На сайте могут быть личные мнения, субъективный опыт и разные стили подачи. Мы не претендуем на единственно верную позицию.
+		</p>
+		<p class="text-[color:var(--muted)]" data-i18n="editorial.p3">
+			Часть публикаций может быть с элементами юмора. Такой контент не заменяет серьезную помощь и не должен восприниматься как строгая инструкция.
+		</p>
+		<p class="text-[color:var(--muted)]" data-i18n="editorial.p4">
+			Если вы заметили неточность или хотите предложить правку, используйте доступные каналы связи сообщества.
+		</p>
+	</section>
+</Layout>

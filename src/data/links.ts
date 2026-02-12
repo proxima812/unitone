@@ -75,6 +75,11 @@ export const links = [
 		icon: "mdi:archive-check-outline",
 	},
 	{
+		label: "Авторы",
+		href: "/authors",
+		icon: "mdi:account-edit-outline",
+	},
+	{
 		label: "FAQ",
 		href: "/faq",
 		icon: "mdi:help-circle-outline",
@@ -123,6 +128,10 @@ export const blockData = [
 ]
 
 export const telegrams = [
+  {
+    label: "12 шагов: Анонсы. Объявления. 5 традиция в интернете.",
+    href: "https://t.me/all_12steps",
+  },
 	{
 		label: "12 шагов - Контакты",
 		href: "https://t.me/all12_contacts",
@@ -130,10 +139,6 @@ export const telegrams = [
 	{
 		label: "12 шагов - Методы",
 		href: "https://t.me/all_12methods",
-	},
-	{
-		label: "12 шагов - База знаний",
-		href: "https://t.me/all_12steps",
 	},
 ]
 

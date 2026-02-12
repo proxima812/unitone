@@ -21,6 +21,18 @@ npm install
 npm run dev
 ```
 
+## Контент-пайплайн
+```bash
+bun run check:exclude
+bun run validate:posts
+bun run rewrite:posts -- --dry-run
+bun run rewrite:posts
+```
+
+- `docs/CONTENT_EXCLUDE.md` — список файлов, которые пропускаются при массовом переписывании и валидации.
+- `bun run rewrite:posts -- --dry-run` — показывает, какие файлы будут переписаны, без изменений на диске.
+- `bun run check:exclude` — проверяет, что все пути из `CONTENT_EXCLUDE.md` существуют.
+
 ## Стек
 - Astro
 - Tailwind CSS

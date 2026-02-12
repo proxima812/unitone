@@ -1,11 +1,14 @@
 ---
 import Layout from "@/layouts/Layout.astro"
+import { i18nKeys } from "@/lib/i18n-runtime"
 ---
 
 <Layout
 	title="Ошибка 404 - такой страницы не существует"
 	mainTitlePresent="Ошибка 404"
 	description="Страница не найдена. Возможно, она была удалена или перемещена."
+	titleKey={i18nKeys.error404.title}
+	descriptionKey={i18nKeys.error404.description}
 >
 	<h1></h1>
 </Layout>

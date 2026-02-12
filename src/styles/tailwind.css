@@ -7,23 +7,52 @@
 
 @layer base {
   :root {
-    --bg: #f5f5f7;
+    --color-my-palette-primary: #4281e0;
+    --color-my-palette-secondary: #7062e2;
+    --color-my-palette-accent: #41ddef;
+    --color-my-palette-foreground: #364050;
+    --color-my-palette-background: #fafbfb;
+    --bg: var(--color-my-palette-background);
     --surface: #ffffff;
-    --text: #1d1d1f;
-    --muted: #6e6e73;
-    --border: #d2d2d7;
-    --accent: #0071e3;
-    --sk-button-background: #0071e3;
-    --sk-button-background-hover: #0077ed;
-    --sk-button-background-active: #0068d1;
-    --sk-blocklink-color: #0066cc;
+    --text: var(--color-my-palette-foreground);
+    --muted: #5f6b7e;
+    --border: #d5deee;
+    --accent: var(--color-my-palette-accent);
+    --primary: var(--color-my-palette-primary);
+    --secondary: var(--color-my-palette-secondary);
+    --sk-button-background: var(--color-my-palette-primary);
+    --sk-button-background-hover: #3a74cb;
+    --sk-button-background-active: #305fab;
+    --sk-blocklink-color: var(--color-my-palette-primary);
+    --ring: color-mix(in srgb, var(--primary) 54%, white);
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #1e2735;
+    --surface: #273244;
+    --text: #e7eef8;
+    --muted: #afbdd3;
+    --border: #405471;
+    --accent: color-mix(in srgb, var(--color-my-palette-accent) 82%, white);
+    --sk-button-background: color-mix(in srgb, var(--color-my-palette-primary) 76%, white);
+    --sk-button-background-hover: color-mix(in srgb, var(--color-my-palette-primary) 70%, white);
+    --sk-button-background-active: color-mix(in srgb, var(--color-my-palette-primary) 64%, white);
+    --sk-blocklink-color: color-mix(in srgb, var(--color-my-palette-accent) 72%, white);
+    --ring: color-mix(in srgb, var(--primary) 45%, white);
   }
 
   html,
   body {
     background:
-      radial-gradient(circle at top right, rgba(0, 113, 227, 0.06), transparent 40%),
-      linear-gradient(180deg, #fbfbfd 0%, #f5f5f7 100%);
+      radial-gradient(circle at 15% 0%, color-mix(in srgb, var(--primary) 12%, transparent), transparent 44%),
+      linear-gradient(180deg, #ffffff 0%, var(--bg) 100%);
+  }
+
+  :root[data-theme="dark"] html,
+  :root[data-theme="dark"] body {
+    background:
+      radial-gradient(circle at 20% 0%, color-mix(in srgb, var(--primary) 16%, transparent), transparent 46%),
+      linear-gradient(180deg, color-mix(in srgb, var(--bg) 88%, black) 0%, var(--bg) 100%);
   }
 
   body {
@@ -32,11 +61,11 @@
 
   a {
     color: var(--text);
-    transition: color 0.2s ease;
+    transition: color 0.18s ease, background-color 0.18s ease, border-color 0.18s ease;
   }
 
   a:hover {
-    color: var(--accent);
+    color: var(--primary);
   }
 
   button,
@@ -44,14 +73,33 @@
   select,
   textarea {
     font: inherit;
+    transition:
+      color 0.18s ease,
+      background-color 0.18s ease,
+      border-color 0.18s ease,
+      box-shadow 0.18s ease,
+      opacity 0.18s ease;
   }
 
   button {
     @apply cursor-pointer;
   }
 
+  button:active,
+  a:active {
+    opacity: 0.88;
+  }
+
+  input,
+  select,
+  textarea {
+    background-color: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+
   :focus-visible {
-    outline: 2px solid color-mix(in srgb, var(--accent) 55%, white);
+    outline: 2px solid var(--ring);
     outline-offset: 2px;
   }
 
@@ -80,25 +128,23 @@
     --tw-prose-quote-borders: var(--border);
     --tw-prose-captions: var(--muted);
     --tw-prose-code: var(--text);
-    --tw-prose-pre-bg: #f2f2f5;
+    --tw-prose-pre-bg: color-mix(in srgb, var(--primary) 8%, var(--surface));
     background-color: var(--surface);
     color: var(--text);
     border: 1px solid var(--border);
-    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.04);
   }
 
   .my-prose pre {
     overflow-x: auto;
-    border: 1px solid #c9deef;
+    border: 1px solid color-mix(in srgb, var(--primary) 22%, white);
     border-radius: 14px 14px 14px 6px;
-    background: linear-gradient(180deg, #eef8ff 0%, #e5f3ff 100%);
-    box-shadow: 0 6px 18px rgba(43, 130, 196, 0.14);
+    background: color-mix(in srgb, var(--primary) 7%, var(--surface));
   }
 
   .my-prose pre code {
     display: block;
     margin-top: 0;
-    color: #1f3b57;
+    color: #253a58;
     font-size: 0.9em;
     font-weight: 500;
     line-height: 1.7;
@@ -107,10 +153,10 @@
   }
 
   .my-prose :not(pre) > code {
-    border: 1px solid #c8dced;
+    border: 1px solid color-mix(in srgb, var(--primary) 25%, white);
     border-radius: 8px;
-    background: #e8f4ff;
-    color: #20496b;
+    background: color-mix(in srgb, var(--accent) 20%, white);
+    color: #284564;
     padding: 0.12rem 0.4rem;
     font-size: 0.9em;
     font-weight: 500;

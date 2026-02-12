@@ -6,7 +6,11 @@
 		"dev": "astro dev",
 		"build": "astro build",
 		"preview": "astro preview",
-		"astro": "astro"
+		"astro": "astro",
+		"check:exclude": "node scripts/check-content-exclude.mjs",
+		"validate:post": "bun validate-post.ts",
+		"validate:posts": "node scripts/validate-all-posts.mjs",
+		"rewrite:posts": "node scripts/rewrite-posts.mjs"
 	},
 	"dependencies": {
 		"@astrojs/mdx": "4.1.0",

@@ -1,22 +1,25 @@
 ---
 import Layout from "@/layouts/Layout.astro"
+import { i18nKeys } from "@/lib/i18n-runtime"
 ---
 
 <Layout
 	title="Условия использования"
 	description="Правила использования материалов и ответственность сторон."
+	titleKey={i18nKeys.terms.title}
+	descriptionKey={i18nKeys.terms.description}
 >
 	<section class="bg-[color:var(--surface)] border border-[color:var(--border)] rounded-xl p-6 space-y-4">
-		<p class="text-[color:var(--muted)]">
+		<p class="text-[color:var(--muted)]" data-i18n="terms.p1">
 			Используя сайт, вы соглашаетесь с тем, что материалы предоставляются «как есть» и
 			носят справочный характер.
 		</p>
 		<ul class="list-disc pl-6 text-[color:var(--muted)]">
-			<li>Материалы не заменяют профессиональную помощь.</li>
-			<li>Ответственность за использование информации лежит на пользователе.</li>
-			<li>Сайт может обновляться без предварительного уведомления.</li>
+			<li data-i18n="terms.l1">Материалы не заменяют профессиональную помощь.</li>
+			<li data-i18n="terms.l2">Ответственность за использование информации лежит на пользователе.</li>
+			<li data-i18n="terms.l3">Сайт может обновляться без предварительного уведомления.</li>
 		</ul>
-		<p class="text-[color:var(--muted)]">
+		<p class="text-[color:var(--muted)]" data-i18n="terms.p2">
 			Если вы не согласны с условиями, пожалуйста, не используйте сайт.
 		</p>
 	</section>

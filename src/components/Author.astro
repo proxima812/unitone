@@ -1,27 +1,69 @@
 ---
-import { cn } from "@/utils/cn"
+import { AUTHORS } from "@/data/authors";
+import { cn } from "@/utils/cn";
 
-const { data, class: className } = Astro.props
+const { data, class: className, link = true } = Astro.props;
 
 function authorColor() {
-	return "bg-[color:var(--text)]"
+	return "bg-[color:var(--text)]";
 }
 
-const authors = Array.isArray(data.author) ? data.author : [data.author]
+const authors = (Array.isArray(data.author) ? data.author : [data.author]).filter(Boolean);
 ---
 
 <div class={cn("flex items-center", authors.length >= 1 ? "gap-1 flex-col" : "gap-2")}>
 	{
-		authors.map(author => (
-			<div class="flex items-center gap-2 self-start">
-				<div
-					class={cn(className, "w-6 h-6 rounded-full", authorColor(author))}
-					title={author}
-				/>
-				{authors.length >= 1 && (
-					<span class="text-[color:var(--muted)]">{author}</span>
-				)}
-			</div>
-		))
+		authors.map((author) => {
+			const avatarUrl = AUTHORS[author as keyof typeof AUTHORS]?.avatarUrl;
+			const authorHref = `/authors/${encodeURIComponent(author)}/`;
+			return (
+				<div class="flex items-center gap-2 self-start">
+					{link ? (
+						<a href={authorHref} aria-label={`Открыть страницу автора ${author}`}>
+							{avatarUrl ? (
+								<img
+									src={avatarUrl}
+									alt={`Аватар ${author}`}
+									title={author}
+									class={cn(className, "w-6 h-6 rounded-full object-cover")}
+									loading="lazy"
+									decoding="async"
+								/>
+							) : (
+								<div
+									class={cn(className, "w-6 h-6 rounded-full", authorColor(author))}
+									title={author}
+								/>
+							)}
+						</a>
+					) : avatarUrl ? (
+						<img
+							src={avatarUrl}
+							alt={`Аватар ${author}`}
+							title={author}
+							class={cn(className, "w-6 h-6 rounded-full object-cover")}
+							loading="lazy"
+							decoding="async"
+						/>
+					) : (
+						<div
+							class={cn(className, "w-6 h-6 rounded-full", authorColor(author))}
+							title={author}
+						/>
+					)}
+					{authors.length >= 1 &&
+						(link ? (
+							<a
+								href={authorHref}
+								class="text-[color:var(--muted)] transition hover:opacity-75"
+							>
+								{author}
+							</a>
+						) : (
+							<span class="text-[color:var(--muted)]">{author}</span>
+						))}
+				</div>
+			);
+		})
 	}
 </div>

@@ -1,34 +1,42 @@
 ---
-import { links } from "@/data/links"
-import { cn } from "@/utils/cn"
-import { Icon } from "astro-icon/components"
+import { links } from "@/data/links";
+import { cn } from "@/utils/cn";
+import { Icon } from "astro-icon/components";
+
+const i18nByHref: Record<string, string> = {
+	"/communities": "nav.communities",
+	"/methods": "nav.methods",
+	"/archive": "nav.archive",
+	"/authors": "nav.authors",
+	"/faq": "nav.faq",
+	"/finder": "nav.finder",
+	"/bookmarks": "nav.bookmarks",
+};
 ---
 
 <nav class="hidden md:flex gap-5 items-center">
 	{
 		links &&
-			links.map(link => (
+			links.map((link) => (
 				<a
 					href={link.href}
 					title={link.label}
 					target={link.target}
 					class={cn(
-						"text-[color:var(--text)] flex items-center gap-1 transition-colors hover:text-[color:var(--muted)]",
+						"text-[color:var(--text)] flex items-center gap-1 hover:text-[color:var(--primary)]",
 						link.style,
 					)}
 				>
 					<Icon name={link.icon} />
-					<span>{link.label}</span>
-					{
-						link.href === "/bookmarks" && (
-							<span
-								id="bookmarks-count-desktop"
-								class="min-w-5 rounded-full bg-[color:var(--accent)] px-1.5 py-0.5 text-center text-xs font-semibold text-white"
-							>
-								0
-							</span>
-						)
-					}
+					<span data-i18n={i18nByHref[link.href]}>{link.label}</span>
+					{link.href === "/bookmarks" && (
+						<span
+							id="bookmarks-count-desktop"
+							class="min-w-5 rounded-full bg-[color:var(--accent)] px-1.5 py-0.5 text-center text-xs font-semibold text-white"
+						>
+							0
+						</span>
+					)}
 				</a>
 			))
 	}
@@ -36,100 +44,91 @@ import { Icon } from "astro-icon/components"
 
 <button
 	title="Мобильное меню"
+	data-i18n-title="menu.openTitle"
 	id="open"
-	class="text-[color:var(--bg)] md:hidden flex items-center gap-1 bg-[color:var(--text)] px-3.5 py-1.5 rounded-lg"
-	><Icon name="mdi:menu-swap" /><span class="font-medium">меню</span></button
+	class="text-white md:hidden flex items-center gap-1 bg-[color:var(--primary)] px-3.5 py-1.5 rounded-lg hover:bg-[var(--sk-button-background-hover)] active:bg-[var(--sk-button-background-active)]"
+	><Icon name="mdi:menu-swap" /><span class="font-medium" data-i18n="menu.openButton">меню</span></button
 >
 
 <div
 	id="menu"
-	class="hidden absolute rounded-xl z-50 w-full p-5 flex items-start min-h-full shadow-md bg-[color:var(--surface)] border border-[color:var(--border)] top-[85px] left-0"
+	class="hidden absolute rounded-xl z-50 w-full p-5 flex items-start min-h-full bg-[color:var(--surface)] border border-[color:var(--border)] top-[85px] left-0"
 >
 	<nav class="flex gap-5 flex-col">
 		{
 			links &&
-				links.map(link => (
+				links.map((link) => (
 					<a
 						href={link.href}
 						title={link.label}
 						target={link.target}
 						class={cn(
-							"text-[color:var(--text)] text-xl flex items-center gap-1",
+							"text-[color:var(--text)] text-xl flex items-center gap-1 hover:text-[color:var(--primary)]",
 							link.style,
 						)}
 					>
 						<Icon name={link.icon} />
-						<span>{link.label}</span>
-						{
-							link.href === "/bookmarks" && (
-								<span
-									id="bookmarks-count-mobile"
-									class="min-w-5 rounded-full bg-[color:var(--accent)] px-1.5 py-0.5 text-center text-xs font-semibold text-white"
-								>
-									0
-								</span>
-							)
-						}
+						<span data-i18n={i18nByHref[link.href]}>{link.label}</span>
+						{link.href === "/bookmarks" && (
+							<span
+								id="bookmarks-count-mobile"
+								class="min-w-5 rounded-full bg-[color:var(--accent)] px-1.5 py-0.5 text-center text-xs font-semibold text-white"
+							>
+								0
+							</span>
+						)}
 					</a>
 				))
 		}
-		<a
-			target="_blank"
-			href="https://t.me/legion_free"
-			class="bg-[color:var(--text)] tracking-tight text-[color:var(--bg)] rounded-md px-3 py-1.5 flex gap-1.5 items-center"
-		>
-			<div class="w-2 h-2 rounded-full bg-[color:var(--bg)]" />
-			<span>Обратная связь</span></a
-		>
-	</nav>
-</div>
+		</nav>
+	</div>
 
 <script>
-	const menu = document.querySelector("#menu")
-	const menuBtn = document.querySelector("#open")
-	const body = document.querySelector("body")
-	const desktopBookmarksCount = document.querySelector("#bookmarks-count-desktop")
-	const mobileBookmarksCount = document.querySelector("#bookmarks-count-mobile")
+	const menu = document.querySelector("#menu");
+	const menuBtn = document.querySelector("#open");
+	const body = document.querySelector("body");
+	const desktopBookmarksCount = document.querySelector("#bookmarks-count-desktop");
+	const mobileBookmarksCount = document.querySelector("#bookmarks-count-mobile");
 
-	const menuLinks = document.querySelectorAll("#menu a")
-	const BOOKMARKS_KEY = "unitone_bookmarks"
+	const menuLinks = document.querySelectorAll("#menu a");
+	const BOOKMARKS_KEY = "unitone_bookmarks";
 
 	const getBookmarksCount = () => {
 		try {
-			const list = JSON.parse(localStorage.getItem(BOOKMARKS_KEY) || "[]")
-			return Array.isArray(list) ? list.length : 0
+			const list = JSON.parse(localStorage.getItem(BOOKMARKS_KEY) || "[]");
+			return Array.isArray(list) ? list.length : 0;
 		} catch {
-			return 0
+			return 0;
 		}
-	}
+	};
 
 	const renderBookmarksCount = () => {
-		const count = getBookmarksCount()
-		if (desktopBookmarksCount) desktopBookmarksCount.textContent = String(count)
-		if (mobileBookmarksCount) mobileBookmarksCount.textContent = String(count)
-	}
+		const count = getBookmarksCount();
+		if (desktopBookmarksCount) desktopBookmarksCount.textContent = String(count);
+		if (mobileBookmarksCount) mobileBookmarksCount.textContent = String(count);
+	};
 
-	menuLinks.forEach(link => {
+	menuLinks.forEach((link) => {
 		link.addEventListener("click", () => {
-			menu?.classList.add("hidden")
-			body?.classList.remove("overflow-hidden")
-		})
-	})
+			menu?.classList.add("hidden");
+			body?.classList.remove("overflow-hidden");
+		});
+	});
 
 	menuBtn?.addEventListener("click", () => {
-		menu?.classList.toggle("hidden")
-		body?.classList.toggle("overflow-hidden")
-	})
+		menu?.classList.toggle("hidden");
+		body?.classList.toggle("overflow-hidden");
+	});
 
-	renderBookmarksCount()
+	renderBookmarksCount();
 
 	window.addEventListener("storage", (event) => {
 		if (event.key === BOOKMARKS_KEY) {
-			renderBookmarksCount()
+			renderBookmarksCount();
 		}
-	})
+	});
 
 	window.addEventListener("bookmarks-updated", () => {
-		renderBookmarksCount()
-	})
+		renderBookmarksCount();
+	});
 </script>

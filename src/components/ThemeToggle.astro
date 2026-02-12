@@ -1,0 +1,39 @@
+<button
+	id="theme-toggle"
+	type="button"
+	class="inline-flex items-center gap-2 rounded-lg border border-[color:var(--border)] bg-[color:var(--surface)] px-3 py-1.5 text-sm font-medium text-[color:var(--text)] hover:border-[color:var(--primary)] hover:text-[color:var(--primary)]"
+	aria-label="Переключить тему"
+	data-i18n-aria-label="theme.toggleAria"
+>
+	<span id="theme-toggle-text" class="text-base leading-none">🌙</span>
+</button>
+
+<script>
+	const THEME_KEY = "unitone_theme"
+	const root = document.documentElement
+	const toggle = document.getElementById("theme-toggle")
+	const text = document.getElementById("theme-toggle-text")
+	const meta = document.querySelector('meta[name="theme-color"]')
+
+	const getTheme = () => root.getAttribute("data-theme") || "light"
+
+	const render = () => {
+		const current = getTheme()
+		const isDark = current === "dark"
+		if (text) text.textContent = isDark ? "☀️" : "🌙"
+		if (toggle) toggle.setAttribute("aria-pressed", String(isDark))
+		if (meta) meta.setAttribute("content", isDark ? "#273244" : "#4281e0")
+	}
+
+	toggle?.addEventListener("click", () => {
+		const nextTheme = getTheme() === "dark" ? "light" : "dark"
+		root.setAttribute("data-theme", nextTheme)
+		try {
+			localStorage.setItem(THEME_KEY, nextTheme)
+		} catch {}
+		render()
+	})
+
+	window.addEventListener("unitone:locale-updated", render)
+	render()
+</script>

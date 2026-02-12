@@ -1,0 +1,76 @@
+---
+interface Props {
+	currentLabel?: string
+}
+
+const { currentLabel } = Astro.props as Props
+const { pathname } = Astro.url
+const cleanPath = pathname.replace(/\/+$/, "") || "/"
+const parts = cleanPath.split("/").filter(Boolean)
+
+const labelMap: Record<string, { label: string; key?: string }> = {
+	archive: { label: "Архив", key: "breadcrumbs.archive" },
+	methods: { label: "Методы", key: "breadcrumbs.methods" },
+	communities: { label: "Сообщества", key: "breadcrumbs.communities" },
+	authors: { label: "Авторы", key: "breadcrumbs.authors" },
+	faq: { label: "FAQ", key: "breadcrumbs.faq" },
+	finder: { label: "Подбор сообщества", key: "breadcrumbs.finder" },
+	bookmarks: { label: "Закладки", key: "breadcrumbs.bookmarks" },
+	about: { label: "О проекте", key: "breadcrumbs.about" },
+	privacy: { label: "Конфиденциальность", key: "breadcrumbs.privacy" },
+	terms: { label: "Условия", key: "breadcrumbs.terms" },
+	disclaimer: { label: "Дисклеймер", key: "breadcrumbs.disclaimer" },
+	"editorial-policy": { label: "Редакционная политика", key: "breadcrumbs.editorialPolicy" },
+}
+
+const crumbs = parts.map((part, index) => {
+	const href = `/${parts.slice(0, index + 1).join("/")}/`
+	const decoded = decodeURIComponent(part)
+	const isLast = index === parts.length - 1
+	const mapped = labelMap[decoded]
+	return {
+		href,
+		label: isLast && currentLabel ? currentLabel : (mapped?.label || decoded.replace(/-/g, " ")),
+		key: mapped?.key,
+		isLast,
+	}
+})
+---
+
+{
+	cleanPath !== "/" && (
+		<nav aria-label="Хлебные крошки" data-i18n-aria-label="breadcrumbs.aria" class="w-full overflow-x-auto">
+			<ol class="flex min-w-max items-center gap-2 rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)]/85 px-3 py-2 text-sm">
+				<li>
+					<a href="/" data-i18n="breadcrumbs.home" class="rounded-full px-2 py-1 text-[color:var(--muted)] transition hover:bg-[color:var(--bg)] hover:text-[color:var(--text)]">
+						Главная
+					</a>
+				</li>
+				{
+					crumbs.map((crumb) => (
+						<>
+							<li aria-hidden="true" class="text-[color:var(--muted)]">/</li>
+							<li>
+								{
+									crumb.isLast ? (
+										<span class="rounded-full bg-[color:var(--bg)] px-2 py-1 font-medium text-[color:var(--text)]">
+											{crumb.label}
+										</span>
+									) : (
+										<a
+											href={crumb.href}
+											class="rounded-full px-2 py-1 text-[color:var(--muted)] transition hover:bg-[color:var(--bg)] hover:text-[color:var(--text)]"
+											data-i18n={crumb.key}
+										>
+											{crumb.label}
+										</a>
+									)
+								}
+							</li>
+						</>
+					))
+				}
+			</ol>
+		</nav>
+	)
+}

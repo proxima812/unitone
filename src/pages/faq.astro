@@ -1,6 +1,7 @@
 ---
 import Layout from "@/layouts/Layout.astro"
 import { faq } from "@/data/links"
+import { i18nKeys } from "@/lib/i18n-runtime"
 
 const faqSchema = {
 	"@context": "https://schema.org",
@@ -16,7 +17,12 @@ const faqSchema = {
 }
 ---
 
-<Layout title="FAQ" description="Частые вопросы о 12 шагах, выборе сообщества и старте практики.">
+<Layout
+	title="FAQ"
+	description="Частые вопросы о 12 шагах, выборе сообщества и старте практики."
+	titleKey={i18nKeys.faq.title}
+	descriptionKey={i18nKeys.faq.description}
+>
 	<section class="mx-auto flex w-full max-w-4xl flex-col gap-4">
 		{
 			faq.map((item) => (

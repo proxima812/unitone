@@ -19,8 +19,11 @@ const isActive = href === pathname || href === pathname.replace(/\/$/, "")
 		@apply select-none flex items-center gap-1 border-r rounded-r-none last:border-r-0 last:rounded-l-none last:rounded-r-xl font-medium px-4 md:px-6 py-2 rounded-xl transition-colors ease-linear;
 		background: var(--surface);
 	}
+	a:hover {
+		background: color-mix(in srgb, var(--primary) 8%, var(--surface));
+	}
 	a.active {
-		background: var(--text);
-		color: var(--bg);
+		background: var(--primary);
+		color: white;
 	}
 </style>

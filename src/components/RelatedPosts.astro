@@ -1,27 +1,143 @@
 ---
-const { posts, href } = Astro.props
+const {
+	posts = [],
+	href = "",
+	currentId = "",
+	currentTags = [],
+	currentAuthor = "",
+	currentTitle = "",
+	limit = 3,
+} = Astro.props
+
+type PostLike = {
+	id: string
+	data: {
+		title?: string
+		description?: string
+		pubDate?: string | Date
+		tags?: string[]
+		author?: string[]
+	}
+}
+
+function dateValue(v?: string | Date) {
+	if (!v) return 0
+	return new Date(v).getTime() || 0
+}
+
+function uniqueTags(tags?: string[]) {
+	return Array.isArray(tags) ? [...new Set(tags)] : []
+}
+
+const stopWords = new Set([
+	"и",
+	"в",
+	"на",
+	"с",
+	"по",
+	"к",
+	"о",
+	"а",
+	"но",
+	"или",
+	"для",
+	"что",
+	"это",
+	"как",
+	"из",
+	"за",
+	"до",
+	"от",
+	"под",
+	"при",
+])
+
+function titleTokens(v?: string) {
+	if (!v) return []
+	return v
+		.toLowerCase()
+		.replace(/[^\p{L}\p{N}\s]/gu, " ")
+		.split(/\s+/)
+		.filter((w) => w.length > 2 && !stopWords.has(w))
+}
+
+const basePosts = (posts as PostLike[]).filter((item) => item && item.id && item.id !== currentId)
+const activeTags = uniqueTags(currentTags)
+const activeTitleTokens = titleTokens(currentTitle)
+
+const withScore = basePosts.map((item) => {
+	const itemTags = uniqueTags(item.data?.tags)
+	const itemAuthors = Array.isArray(item.data?.author) ? item.data.author : []
+	const itemTitleTokens = titleTokens(item.data?.title)
+	const tagMatches = activeTags.filter((tag) => itemTags.includes(tag)).length
+	const authorMatch = currentAuthor && itemAuthors.includes(currentAuthor) ? 1 : 0
+	const titleMatches = activeTitleTokens.filter((token) => itemTitleTokens.includes(token)).length
+	const score = tagMatches * 3 + authorMatch * 2 + titleMatches * 2
+	return {
+		item,
+		score,
+		tagMatches,
+		authorMatch,
+		titleMatches,
+		date: dateValue(item.data?.pubDate),
+	}
+})
+
+const hasSimilaritySignals = withScore.some((x) => x.score > 0)
+const related = (hasSimilaritySignals
+	? withScore
+			.sort((a, b) => b.score - a.score || b.date - a.date)
+	: basePosts
+			.sort((a, b) => dateValue(b.data?.pubDate) - dateValue(a.data?.pubDate))
+			.map((item) => ({
+				item,
+				score: 0,
+				tagMatches: 0,
+				authorMatch: 0,
+				titleMatches: 0,
+				date: dateValue(item.data?.pubDate),
+			}))
+).slice(0, limit)
+
+function matchLabel(tagMatches: number, authorMatch: number, titleMatches: number) {
+	if (tagMatches > 0 && authorMatch > 0) return "Совпали теги и автор"
+	if (tagMatches > 0) return "По теме"
+	if (titleMatches > 0) return "По заголовку"
+	if (authorMatch > 0) return "Тот же автор"
+	return "Свежее"
+}
 ---
 
-<h3 class="text-center text-xl font-medium">⚖ Последние</h3>
+{
+	related.length > 0 && (
+		<section class="mt-10">
+			<h3 class="text-center text-2xl font-semibold">Похожие посты</h3>
+			<p class="mt-2 text-center text-sm text-[color:var(--muted)]">
+				Подобраны по теме, автору и дате публикации.
+			</p>
 
-<div class="grid md:grid-cols-2 grid-cols-1 gap-6">
-	{
-		posts && posts.length > 0
-			? [...new Set(posts.map(item => item.id))].slice(0, 2).map(id => {
-					const item = posts.find(post => post.id === id)
-					return (
-						<a href={`${href}/${item.id}`}>
-							<article class="bg-[color:var(--surface)] border border-[color:var(--border)] p-6 rounded-xl relative flex-col flex gap-3">
-								<h2 class="leading-tight line-clamp-2 text-lg font-bold">
-									{item.data.title}
-								</h2>
-								<p class="line-clamp-3 text-[color:var(--muted)]">
-									{item.data.description}
-								</p>
+			<div class="mt-5 grid grid-cols-1 gap-6 md:grid-cols-3">
+				{
+					related.map(({ item, tagMatches, authorMatch, titleMatches }) => (
+						<a href={`${href}/${item.id}`} class="group block">
+							<article class="flex h-full flex-col gap-3 rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] p-6 transition group-hover:shadow-sm group-hover:shadow-black/10">
+								<span class="inline-flex w-fit rounded-full border border-[color:var(--border)] px-2 py-1 text-xs text-[color:var(--muted)]">
+									{matchLabel(tagMatches, authorMatch, titleMatches)}
+								</span>
+								<h4 class="line-clamp-2 text-lg font-bold leading-tight">{item.data.title}</h4>
+								<p class="line-clamp-3 text-[color:var(--muted)]">{item.data.description}</p>
+								{
+									item.data.pubDate && (
+										<time class="mt-auto text-xs text-[color:var(--muted)]">
+											{new Date(item.data.pubDate).toLocaleDateString("ru-RU")}
+										</time>
+									)
+								}
 							</article>
 						</a>
-					)
-				})
-			: ""
-	}
-</div>
+					))
+				}
+			</div>
+		</section>
+	)
+}

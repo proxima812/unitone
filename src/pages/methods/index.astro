@@ -1,5 +1,6 @@
 ---
 import Layout from "@/layouts/Layout.astro";
+import { i18nKeys } from "@/lib/i18n-runtime";
 import { Masonry } from "astro-masonry";
 import { getCollection } from "astro:content";
 import { marked } from "marked";
@@ -15,10 +16,12 @@ const methodsCommunities = methods
 <Layout
 	title="Методы шагов"
 	description={`Методы 12 шагов: воркбуки, группы и практики для прохождения программы. ${methods.length} методов.`}
+	titleKey={i18nKeys.methods.title}
+	descriptionKey={i18nKeys.methods.description}
 >
 	<section class="flex flex-col gap-4" data-filter>
 		<div class="flex flex-col gap-2 text-center">
-			<p class="text-sm text-[color:var(--muted)]">
+			<p class="text-sm text-[color:var(--muted)]" data-i18n="methods.filterHint">
 				Выберите сообщество или введите слово — список обновится автоматически.
 			</p>
 		</div>
@@ -27,12 +30,15 @@ const methodsCommunities = methods
 				type="search"
 				placeholder="Поиск по названию и описанию"
 				aria-label="Поиск по методам"
+				data-i18n-placeholder="methods.searchPlaceholder"
+				data-i18n-aria-label="methods.searchAria"
 				class="w-full md:w-96 px-4 py-2 rounded-lg border border-[color:var(--border)] bg-[color:var(--surface)] shadow-2xs focus:outline-none focus:ring-2 focus:ring-black/10"
 				data-search
 			/>
 			<button
 				type="button"
 				class="reset-button text-sm cursor-pointer px-3 py-2 rounded-lg shadow-2xs text-[color:var(--muted)] border border-[color:var(--border)] bg-[color:var(--surface)]"
+				data-i18n="common.reset"
 			>
 				Сбросить
 			</button>
@@ -50,7 +56,7 @@ const methodsCommunities = methods
 			}
 		</div>
 		<div class="text-center text-sm text-[color:var(--muted)]">
-			Найдено: <span data-count>0</span>
+			<span data-i18n="common.foundLabel">Найдено:</span> <span data-count>0</span>
 		</div>
 	</section>
 	<section class="relative -m-3 w-screen left-1/2 right-1/2 -ml-[50vw] -mr-[50vw]">

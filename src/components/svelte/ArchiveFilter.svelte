@@ -1,11 +1,13 @@
 <script>
 	import { onMount } from "svelte"
+	import { t, DEFAULT_LOCALE } from "@/lib/i18n-runtime"
 
 	export let tags = []
 
 	let search = ""
 	let activeTags = []
 	let visibleCount = 0
+	let locale = DEFAULT_LOCALE
 	let scroller
 	let canScrollLeft = false
 	let canScrollRight = false
@@ -62,10 +64,18 @@
 	}
 
 	onMount(() => {
+		const sync = (event) => {
+			locale = event?.detail?.locale || document.documentElement.getAttribute("data-locale") || DEFAULT_LOCALE
+		}
+		sync()
+		window.addEventListener("unitone:locale-updated", sync)
 		applyFilters()
 		updateScrollHints()
 		window.addEventListener("resize", updateScrollHints)
-		return () => window.removeEventListener("resize", updateScrollHints)
+		return () => {
+			window.removeEventListener("resize", updateScrollHints)
+			window.removeEventListener("unitone:locale-updated", sync)
+		}
 	})
 
 	$: search, applyFilters()
@@ -75,14 +85,14 @@
 <section class="flex flex-col gap-4" data-filter>
 	<div class="flex flex-col gap-2 text-center">
 		<p class="text-sm text-[color:var(--muted)]">
-			Выберите теги или введите слово, результат обновится автоматически.
+			{t(locale, "archive.filterHint")}
 		</p>
 	</div>
 	<div class="flex flex-wrap items-center justify-center gap-2">
 		<input
 			type="search"
-			placeholder="Поиск по заголовку и описанию"
-			aria-label="Поиск по архиву"
+			placeholder={t(locale, "archive.searchPlaceholder")}
+			aria-label={t(locale, "archive.searchAria")}
 			bind:value={search}
 			class="w-full rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] px-4 py-2 text-sm md:w-96 focus:border-[color:var(--accent)] focus:outline-none"
 		/>
@@ -91,7 +101,7 @@
 			on:click={resetFilters}
 			class="rounded-full border border-[color:var(--border)] bg-[color:var(--surface)] px-4 py-2 text-sm text-[color:var(--muted)] transition hover:text-[color:var(--text)]"
 		>
-			Сбросить
+			{t(locale, "common.reset")}
 		</button>
 	</div>
 	<div class="relative w-full">
@@ -120,6 +130,6 @@
 		</div>
 	</div>
 	<div class="text-center text-sm text-[color:var(--muted)]">
-		Найдено: <span>{visibleCount}</span>
+		{t(locale, "common.foundLabel")} <span>{visibleCount}</span>
 	</div>
 </section>

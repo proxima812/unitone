@@ -1,0 +1,102 @@
+---
+const { posts = [], href = "", currentId = "", author = "", currentTags = [], limit = 2 } = Astro.props
+
+type PostLike = {
+	id: string
+	data: {
+		title?: string
+		description?: string
+		pubDate?: string | Date
+		tags?: string[]
+		author?: string[]
+	}
+}
+
+function dateValue(v?: string | Date) {
+	if (!v) return 0
+	return new Date(v).getTime() || 0
+}
+
+function uniqueTags(tags?: string[]) {
+	return Array.isArray(tags) ? [...new Set(tags)] : []
+}
+
+const list = posts as PostLike[]
+const base = list.filter((item) => item && item.id && item.id !== currentId)
+const activeTags = uniqueTags(currentTags)
+const authorMatches = base
+	.filter((item) => Array.isArray(item.data?.author) && item.data.author.includes(author))
+	.map((item) => {
+		const tags = uniqueTags(item.data?.tags)
+		const tagScore = activeTags.filter((t) => tags.includes(t)).length
+		return { item, tagScore, date: dateValue(item.data?.pubDate) }
+	})
+	.sort((a, b) => b.tagScore - a.tagScore || b.date - a.date)
+	.map((x) => x.item)
+
+const byAuthor = authorMatches.slice(0, limit)
+
+if (byAuthor.length < limit) {
+	const authorIds = new Set(byAuthor.map((x) => x.id))
+	const byTags = base
+		.filter((item) => !authorIds.has(item.id))
+		.map((item) => {
+			const tags = uniqueTags(item.data?.tags)
+			const score = activeTags.filter((t) => tags.includes(t)).length
+			return { item, score, date: dateValue(item.data?.pubDate) }
+		})
+		.filter((x) => x.score > 0)
+		.sort((a, b) => b.score - a.score || b.date - a.date)
+		.map((x) => x.item)
+
+	for (const item of byTags) {
+		if (byAuthor.length >= limit) break
+		byAuthor.push(item)
+	}
+}
+
+const finalPosts = byAuthor.slice(0, limit)
+const authorArchiveHref = `/archive?author=${encodeURIComponent(author)}`
+---
+
+{
+	finalPosts.length > 0 && (
+		<section class="mt-10">
+			<div class="flex flex-wrap items-center justify-between gap-3">
+				<h3 class="text-2xl font-semibold">Ещё посты от автора</h3>
+				{
+					author && (
+						<a
+							href={authorArchiveHref}
+							class="inline-flex items-center rounded-full border border-[color:var(--border)] px-3 py-1.5 text-sm text-[color:var(--muted)] transition hover:opacity-75"
+						>
+							Все посты автора
+						</a>
+					)
+				}
+			</div>
+			<p class="mt-2 text-sm text-[color:var(--muted)]">
+				2 последних материала автора, а если их меньше - добираем по близким тегам.
+			</p>
+			<div class="mt-5 grid grid-cols-1 gap-6 md:grid-cols-2">
+				{
+					finalPosts.map((item) => (
+						<a href={`${href}/${item.id}`} class="group block">
+							<article class="flex h-full flex-col gap-3 rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] p-6 transition group-hover:shadow-sm group-hover:shadow-black/10">
+								<h4 class="line-clamp-2 text-lg font-bold leading-tight">{item.data.title}</h4>
+								<p class="line-clamp-3 text-[color:var(--muted)]">{item.data.description}</p>
+								{
+									item.data.pubDate && (
+										<time class="mt-auto text-xs text-[color:var(--muted)]">
+											{new Date(item.data.pubDate).toLocaleDateString("ru-RU")}
+										</time>
+									)
+								}
+							</article>
+						</a>
+					))
+				}
+			</div>
+		</section>
+	)
+}

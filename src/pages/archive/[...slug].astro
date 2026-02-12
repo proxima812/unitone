@@ -1,5 +1,6 @@
 ---
 import RelatedPosts from "@/components/RelatedPosts.astro"
+import MorePostsByAuthor from "@/components/MorePostsByAuthor.astro"
 import BookmarkToggle from "@/components/svelte/BookmarkToggle.svelte"
 import Layout from "@/layouts/Layout.astro"
 import { Icon } from "astro-icon/components"
@@ -20,6 +21,8 @@ const encodedTitle = encodeURIComponent(post.data.title)
 const encodedText = encodeURIComponent(
 	`${post.data.title}${post.data.description ? ` — ${post.data.description}` : ""}`,
 )
+const currentAuthor = post.data.author?.[0] || ""
+const currentTags = post.data.tags || []
 const shareLinks = [
 	{
 		label: "Telegram",
@@ -57,16 +60,20 @@ const articleSchema = {
 const { Content } = await render(post)
 ---
 
-	<Layout {...post.data} type ogImage={post.data.ogImage?.src} hidePageHeader>
+	<Layout
+		{...post.data}
+		type
+		ogImage={post.data.ogImage?.src}
+		hidePageHeader
+		breadcrumbCurrentLabel={post.data.title}
+	>
 		<main class="my-prose">
 			<article data-iv-article class="md:grid md:grid-cols-[auto_1fr] md:gap-6">
 				<section
 					class="mb-6 rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)]/90 p-4 md:sticky md:top-24 md:mb-0 md:h-fit md:p-2"
 				>
 					<div class="flex flex-wrap items-center gap-2 md:flex-col md:justify-center">
-						<p class="mr-2 text-xs font-semibold uppercase tracking-wide text-[color:var(--muted)]">
-							Поделиться
-						</p>
+						
 						{
 							shareLinks.map((share) => (
 								<a
@@ -91,7 +98,6 @@ const { Content } = await render(post)
 						>
 								<Icon name="mdi:content-copy" class="h-4 w-4" />
 							</button>
-						<span id="share-copy-status" class="text-xs text-[color:var(--muted)]" aria-live="polite"></span>
 					</div>
 				</section>
 				<div>
@@ -123,17 +129,37 @@ const { Content } = await render(post)
 					</div>
 				</header>
 				<Content />
+				<div class="mt-8 rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] p-4 text-sm leading-relaxed text-[color:var(--muted)]">
+					Этот материал отражает личный опыт и мнение автора. Он не является руководством к действию,
+					не навязывает подход и не заменяет профессиональную помощь.
+				</div>
 				</div>
 			</article>
 		</main>
-	<RelatedPosts posts={archive} href="/archive" />
+	<MorePostsByAuthor
+		posts={archive}
+		href="/archive"
+		currentId={post.id}
+		author={currentAuthor}
+		currentTags={currentTags}
+		limit={2}
+	/>
+	<RelatedPosts
+		posts={archive}
+		href="/archive"
+		currentId={post.id}
+		currentTags={currentTags}
+		currentAuthor={currentAuthor}
+		currentTitle={post.data.title}
+		limit={3}
+	/>
 
 	<script is:inline type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
 
 	<script is:inline>
 		(() => {
 			const shareCopyBtn = document.getElementById("share-copy")
-			const shareCopyStatus = document.getElementById("share-copy-status")
+			let copyFeedbackTimer
 
 			shareCopyBtn?.addEventListener("click", async () => {
 				const shareURL = shareCopyBtn.getAttribute("data-share-url") || window.location.href
@@ -148,12 +174,16 @@ const { Content } = await render(post)
 						document.execCommand("copy")
 						document.body.removeChild(fallbackInput)
 					}
-					if (shareCopyStatus) shareCopyStatus.textContent = "Ссылка скопирована"
-					setTimeout(() => {
-						if (shareCopyStatus) shareCopyStatus.textContent = ""
+					shareCopyBtn.classList.remove("bg-black")
+					shareCopyBtn.classList.add("bg-green-600")
+					clearTimeout(copyFeedbackTimer)
+					copyFeedbackTimer = setTimeout(() => {
+						shareCopyBtn.classList.remove("bg-green-600")
+						shareCopyBtn.classList.add("bg-black")
 					}, 2000)
 				} catch {
-					if (shareCopyStatus) shareCopyStatus.textContent = "Не удалось скопировать"
+					shareCopyBtn.classList.remove("bg-green-600")
+					shareCopyBtn.classList.add("bg-black")
 				}
 			})
 		})()

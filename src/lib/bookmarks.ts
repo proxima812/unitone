@@ -22,7 +22,7 @@ function sanitizeList(value: unknown): BookmarkItem[] {
 			const record = item as Record<string, unknown>
 			return {
 				id: String(record.id || ""),
-				title: String(record.title || "Без названия"),
+				title: String(record.title || ""),
 				description: record.description ? String(record.description) : "",
 				date: record.date ? String(record.date) : "",
 				href: String(record.href || ""),

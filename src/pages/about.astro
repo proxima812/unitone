@@ -1,27 +1,30 @@
 ---
 import Layout from "@/layouts/Layout.astro"
+import { i18nKeys } from "@/lib/i18n-runtime"
 ---
 
 <Layout
 	title="О проекте"
 	description="О проекте Unit One: независимая база о 12 шагах, методах и сообществах."
+	titleKey={i18nKeys.about.title}
+	descriptionKey={i18nKeys.about.description}
 >
 	<section class="bg-[color:var(--surface)] border border-[color:var(--border)] rounded-xl p-6 space-y-6">
-		<p class="text-[color:var(--muted)] text-lg">
+		<p class="text-[color:var(--muted)] text-lg" data-i18n="about.p1">
 			Unit One создан, чтобы собрать материалы о 12 шагах в одном месте и упростить
 			поиск знаний, методов и сообществ.
 		</p>
 		<div class="space-y-3">
-			<h2 class="text-2xl font-bold">Цели проекта</h2>
+			<h2 class="text-2xl font-bold" data-i18n="about.goals">Цели проекта</h2>
 			<ul class="list-disc pl-6 text-[color:var(--muted)]">
-				<li>Систематизировать материалы о 12 шагах и сделать их доступными.</li>
-				<li>Помочь людям находить подходящие сообщества и форматы работы.</li>
-				<li>Публиковать проверенные практики и методы прохождения шагов.</li>
-				<li>Поддерживать ясность, честность и уважение к личному пути каждого.</li>
-				<li>Развивать безопасное пространство знаний без рекламы и давления.</li>
+				<li data-i18n="about.g1">Систематизировать материалы о 12 шагах и сделать их доступными.</li>
+				<li data-i18n="about.g2">Помочь людям находить подходящие сообщества и форматы работы.</li>
+				<li data-i18n="about.g3">Публиковать проверенные практики и методы прохождения шагов.</li>
+				<li data-i18n="about.g4">Поддерживать ясность, честность и уважение к личному пути каждого.</li>
+				<li data-i18n="about.g5">Развивать безопасное пространство знаний без рекламы и давления.</li>
 			</ul>
 		</div>
-		<p class="text-[color:var(--muted)]">
+		<p class="text-[color:var(--muted)]" data-i18n="about.p2">
 			Проект независим и не представляет ни одно сообщество. Все тексты собраны из
 			открытых источников и предназначены для справочного ознакомления.
 		</p>

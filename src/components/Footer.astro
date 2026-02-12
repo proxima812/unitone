@@ -4,24 +4,33 @@ import { getCollection } from "astro:content"
 import Container from "./Container.astro"
 
 const methods = await getCollection("methods")
+const i18nByHref: Record<string, string> = {
+	"/communities": "nav.communities",
+	"/methods": "nav.methods",
+	"/archive": "nav.archive",
+	"/authors": "nav.authors",
+	"/faq": "nav.faq",
+	"/finder": "nav.finder",
+	"/bookmarks": "nav.bookmarks",
+}
 ---
 
-<footer class="border-t border-[color:var(--border)] bg-[color:var(--surface)]">
+<footer class="border-t border-[color:var(--border)] bg-[color:var(--surface)]/92 backdrop-blur">
 	<Container>
 		<div class="grid grid-cols-1 gap-12 py-12 md:grid-cols-2 lg:grid-cols-4">
 			<div class="flex flex-col items-center gap-4 md:items-start">
-				<span class="text-lg font-semibold text-[color:var(--text)]">Страницы</span>
+				<span class="text-lg font-semibold text-[color:var(--text)]" data-i18n="footer.pages">Страницы</span>
 				{
 					links &&
 						links.map((item) => (
 							<a class="text-[color:var(--muted)] hover:text-[color:var(--accent)]" href={item.href}>
-								{item.label}
+								<span data-i18n={i18nByHref[item.href]}>{item.label}</span>
 							</a>
 						))
 				}
 			</div>
 			<div class="flex flex-col items-center gap-4 md:items-start">
-				<span class="text-lg font-semibold text-[color:var(--text)]">Методы шагов</span>
+				<span class="text-lg font-semibold text-[color:var(--text)]" data-i18n="footer.methods">Методы шагов</span>
 				{
 					methods &&
 						methods.map((item) => (
@@ -32,7 +41,7 @@ const methods = await getCollection("methods")
 				}
 			</div>
 			<div class="flex flex-col items-center gap-4 md:items-start">
-				<span class="text-lg font-semibold text-[color:var(--text)]">Ресурсы</span>
+				<span class="text-lg font-semibold text-[color:var(--text)]" data-i18n="footer.resources">Ресурсы</span>
 				{
 					telegrams &&
 						telegrams.map((item) => (
@@ -43,11 +52,12 @@ const methods = await getCollection("methods")
 				}
 			</div>
 			<div class="flex flex-col items-center gap-4 md:items-start">
-				<span class="text-lg font-semibold text-[color:var(--text)]">Информация</span>
-				<a class="text-[color:var(--muted)] hover:text-[color:var(--accent)]" href="/about">О проекте</a>
-				<a class="text-[color:var(--muted)] hover:text-[color:var(--accent)]" href="/privacy">Политика конфиденциальности</a>
-				<a class="text-[color:var(--muted)] hover:text-[color:var(--accent)]" href="/terms">Условия использования</a>
-				<a class="text-[color:var(--muted)] hover:text-[color:var(--accent)]" href="/disclaimer">Дисклеймер</a>
+				<span class="text-lg font-semibold text-[color:var(--text)]" data-i18n="footer.info">Информация</span>
+				<a class="text-[color:var(--muted)] hover:text-[color:var(--accent)]" href="/about" data-i18n="footer.about">О проекте</a>
+				<a class="text-[color:var(--muted)] hover:text-[color:var(--accent)]" href="/privacy" data-i18n="footer.privacy">Политика конфиденциальности</a>
+				<a class="text-[color:var(--muted)] hover:text-[color:var(--accent)]" href="/terms" data-i18n="footer.terms">Условия использования</a>
+				<a class="text-[color:var(--muted)] hover:text-[color:var(--accent)]" href="/disclaimer" data-i18n="footer.disclaimer">Дисклеймер</a>
+				<a class="text-[color:var(--muted)] hover:text-[color:var(--accent)]" href="/editorial-policy" data-i18n="footer.editorial">Ред. политика</a>
 			</div>
 		</div>
 
@@ -58,11 +68,14 @@ const methods = await getCollection("methods")
 					<span class="font-medium text-[color:var(--muted)]">{new Date().getFullYear()}</span>
 					<span class="font-bold">UnitOne</span>
 				</p>
-				<p class="text-[color:var(--muted)]">сделано с душой и вниманием</p>
+				<p class="text-[color:var(--muted)]" data-i18n="footer.made">сделано с душой и вниманием</p>
 			</div>
 
-			<p class="mt-4 text-sm text-[color:var(--muted)]">
-				Все тексты собраны из открытых источников и предназначены для справочного ознакомления.
+			<p class="mt-4 text-sm text-[color:var(--muted)]" data-i18n="footer.noteSources">
+				Источники: открытые материалы, авторские мнения и личный опыт участников.
+			</p>
+			<p class="mt-2 text-sm text-[color:var(--muted)]" data-i18n="footer.noteHumor">
+				Иногда встречается шуточный контент - относитесь к нему с легкостью.
 			</p>
 		</div>
 	</Container>

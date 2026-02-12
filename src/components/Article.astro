@@ -7,6 +7,7 @@ const { data, id } = Astro.props
 
 <a
 	data-tag={data.tags?.join(",") ?? ""}
+	data-author={Array.isArray(data.author) ? data.author.join(",") : data.author ?? ""}
 	href={`/archive/${id}/`}
 	class="block relative"
 >
@@ -22,7 +23,7 @@ const { data, id } = Astro.props
 			</p>
 
 			<div class="mt-auto flex items-center justify-between gap-2">
-				<Author data={data} />
+				<Author data={data} link={false} />
 				{
 					data.pubDate && (
 						<time datetime={data.pubDate} class="text-sm text-[color:var(--muted)]">
