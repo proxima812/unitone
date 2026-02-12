@@ -9,8 +9,6 @@ import "@/styles/tailwind.css";
 interface Props {
 	title: string;
 	description: string;
-	titleKey?: string;
-	descriptionKey?: string;
 	keywords?: string;
 	datePublished?: string;
 	bodyStyle?: string;
@@ -18,7 +16,6 @@ interface Props {
 	indexRobots?: string;
 	type?: any;
 	ogImage?: any;
-	mainTitlePresent?: string;
 	hidePageHeader?: boolean;
 	breadcrumbCurrentLabel?: string;
 }
@@ -31,8 +28,6 @@ const {
 	title,
 	type,
 	description,
-	titleKey,
-	descriptionKey,
 	keywords,
 	ogImage,
 	hidePageHeader,
@@ -70,12 +65,8 @@ const {
 		</script>
 	</head>
 	<body
-		data-title-key={titleKey}
-		data-description-key={descriptionKey}
 		class={`${bodyStyle || ""} flex min-h-screen flex-col bg-[color:var(--bg)] text-[color:var(--text)]`}
 	>
-		
-
 		<div
 			id="app-loader"
 			class="fixed inset-0 z-[60] flex items-center justify-center bg-[color:var(--bg)]"
@@ -95,12 +86,12 @@ const {
 					hidePageHeader ? null : (
 						<section class="text-center">
 							{title && (
-								<h1 data-i18n={titleKey} class="mb-3 text-5xl font-black tracking-tight md:text-6xl xl:text-7xl">
+								<h1 class="mb-3 text-5xl font-black tracking-tight md:text-6xl xl:text-7xl">
 									{title}
 								</h1>
 							)}
 							{description && (
-								<p data-i18n={descriptionKey} class="mx-auto max-w-xl text-base text-[color:var(--muted)] md:text-lg lg:text-xl">
+								<p class="mx-auto max-w-xl text-base text-[color:var(--muted)] md:text-lg lg:text-xl">
 									{description}
 								</p>
 							)}
@@ -117,31 +108,27 @@ const {
 		>
 			<div class="space-y-2">
 				<p class="text-sm font-medium text-[color:var(--text)]">
-					<span data-i18n="layout.pwa.title">Установить приложение на устройство?</span>
+					<span>Установить приложение на устройство?</span>
 				</p>
 				<p class="text-sm text-[color:var(--muted)]">
-					<span data-i18n="layout.pwa.description">Будет быстрее открываться и работать как отдельное приложение.</span>
+					<span>Будет быстрее открываться и работать как отдельное приложение.</span>
 				</p>
 				<div class="flex gap-2">
 					<button
 						id="pwa-install-btn"
 						class="rounded-full bg-[var(--sk-button-background)] px-3 py-1.5 text-sm text-white hover:bg-[var(--sk-button-background-hover)] active:bg-[var(--sk-button-background-active)]"
 					>
-						<span data-i18n="layout.pwa.install">Установить</span>
+						<span>Установить</span>
 					</button>
 					<button
 						id="pwa-install-close"
 						class="rounded-full border border-[color:var(--border)] px-3 py-1.5 text-sm hover:border-[color:var(--primary)] hover:text-[color:var(--primary)] active:opacity-80"
 					>
-						<span data-i18n="layout.pwa.later">Позже</span>
+						<span>Позже</span>
 					</button>
 				</div>
 			</div>
 		</div>
-		<script>
-			import { initI18n } from "@/lib/i18n-runtime";
-			initI18n();
-		</script>
 		<script is:inline>
 			window.addEventListener("load", () => {
 				const loader = document.getElementById("app-loader");

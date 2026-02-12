@@ -2,7 +2,6 @@
 import Article from "@/components/Article.astro"
 import ArchiveFilter from "@/components/svelte/ArchiveFilter.svelte"
 import Layout from "@/layouts/Layout.astro"
-import { i18nKeys } from "@/lib/i18n-runtime"
 import { getCollection } from "astro:content"
 
 const archives = (await getCollection("archive")).sort(
@@ -20,16 +19,14 @@ const archivesTags = archives
 <Layout
 	title="Архив 12 шагов"
 	description="Архив статей о 12 шагах: шаги выздоровления, практики, темы и опыт."
-	titleKey={i18nKeys.archive.title}
-	descriptionKey={i18nKeys.archive.description}
 >
 	<ArchiveFilter client:load tags={archivesTags} />
 	<div
 		id="author-filter-note"
 		class="hidden rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] px-4 py-3 text-sm text-[color:var(--muted)]"
 	>
-		<span data-i18n="archive.authorShown">Показаны посты автора:</span> <span id="author-filter-name" class="font-semibold text-[color:var(--text)]"></span>
-		<a href="/archive" class="ml-2 underline" data-i18n="common.reset">Сбросить</a>
+		<span>Показаны посты автора:</span> <span id="author-filter-name" class="font-semibold text-[color:var(--text)]"></span>
+		<a href="/archive" class="ml-2 underline">Сбросить</a>
 	</div>
 
 	<div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3" data-posts>

@@ -1,17 +1,14 @@
 ---
 import BookmarksList from "@/components/svelte/BookmarksList.svelte"
 import Layout from "@/layouts/Layout.astro"
-import { i18nKeys } from "@/lib/i18n-runtime"
 ---
 
 <Layout
 	title="Закладки"
 	description="Сохраненные статьи из архива 12 шагов."
-	titleKey={i18nKeys.bookmarks.title}
-	descriptionKey={i18nKeys.bookmarks.description}
 >
 	<section class="space-y-4 rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] p-6">
-		<p class="text-[color:var(--muted)]" data-i18n="bookmarks.p1">
+		<p class="text-[color:var(--muted)]">
 			Здесь отображаются статьи, которые вы сохранили. Закладки хранятся в вашем браузере.
 		</p>
 		<BookmarksList client:load />

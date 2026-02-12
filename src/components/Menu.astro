@@ -2,16 +2,6 @@
 import { links } from "@/data/links";
 import { cn } from "@/utils/cn";
 import { Icon } from "astro-icon/components";
-
-const i18nByHref: Record<string, string> = {
-	"/communities": "nav.communities",
-	"/methods": "nav.methods",
-	"/archive": "nav.archive",
-	"/authors": "nav.authors",
-	"/faq": "nav.faq",
-	"/finder": "nav.finder",
-	"/bookmarks": "nav.bookmarks",
-};
 ---
 
 <nav class="hidden md:flex gap-5 items-center">
@@ -28,7 +18,7 @@ const i18nByHref: Record<string, string> = {
 					)}
 				>
 					<Icon name={link.icon} />
-					<span data-i18n={i18nByHref[link.href]}>{link.label}</span>
+					<span>{link.label}</span>
 					{link.href === "/bookmarks" && (
 						<span
 							id="bookmarks-count-desktop"
@@ -44,10 +34,9 @@ const i18nByHref: Record<string, string> = {
 
 <button
 	title="Мобильное меню"
-	data-i18n-title="menu.openTitle"
 	id="open"
 	class="text-white md:hidden flex items-center gap-1 bg-[color:var(--primary)] px-3.5 py-1.5 rounded-lg hover:bg-[var(--sk-button-background-hover)] active:bg-[var(--sk-button-background-active)]"
-	><Icon name="mdi:menu-swap" /><span class="font-medium" data-i18n="menu.openButton">меню</span></button
+	><Icon name="mdi:menu-swap" /><span class="font-medium">меню</span></button
 >
 
 <div
@@ -68,7 +57,7 @@ const i18nByHref: Record<string, string> = {
 						)}
 					>
 						<Icon name={link.icon} />
-						<span data-i18n={i18nByHref[link.href]}>{link.label}</span>
+						<span>{link.label}</span>
 						{link.href === "/bookmarks" && (
 							<span
 								id="bookmarks-count-mobile"

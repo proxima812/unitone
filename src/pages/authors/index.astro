@@ -1,6 +1,5 @@
 ---
 import Layout from "@/layouts/Layout.astro"
-import { i18nKeys } from "@/lib/i18n-runtime"
 import { getCollection } from "astro:content"
 
 const archive = await getCollection("archive")
@@ -32,8 +31,6 @@ const authors = [...authorsMap.entries()]
 <Layout
 	title="Авторы"
 	description="Страницы авторов и все их посты."
-	titleKey={i18nKeys.authors.title}
-	descriptionKey={i18nKeys.authors.description}
 >
 	<div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
 		{
@@ -43,12 +40,12 @@ const authors = [...authorsMap.entries()]
 					class="rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] p-5 transition hover:shadow-sm hover:shadow-black/10"
 				>
 					<h2 class="text-xl font-bold">{author.name}</h2>
-					<p class="mt-2 text-sm text-[color:var(--muted)]" data-i18n="authors.postsCount" data-i18n-param-count={String(author.count)}>
+					<p class="mt-2 text-sm text-[color:var(--muted)]">
 						Постов: {author.count}
 					</p>
 					{author.latest > 0 && (
 						<p class="mt-1 text-xs text-[color:var(--muted)]">
-							<span data-i18n="authors.latestPost">Последняя публикация:</span>{" "}
+							<span>Последняя публикация:</span>{" "}
 							{new Date(author.latest).toLocaleDateString("ru-RU")}
 						</p>
 					)}

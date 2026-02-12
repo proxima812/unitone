@@ -1,13 +1,11 @@
 <script>
 	import { onMount } from "svelte"
-	import { t, DEFAULT_LOCALE } from "@/lib/i18n-runtime"
 
 	export let tags = []
 
 	let search = ""
 	let activeTags = []
 	let visibleCount = 0
-	let locale = DEFAULT_LOCALE
 	let scroller
 	let canScrollLeft = false
 	let canScrollRight = false
@@ -64,17 +62,11 @@
 	}
 
 	onMount(() => {
-		const sync = (event) => {
-			locale = event?.detail?.locale || document.documentElement.getAttribute("data-locale") || DEFAULT_LOCALE
-		}
-		sync()
-		window.addEventListener("unitone:locale-updated", sync)
 		applyFilters()
 		updateScrollHints()
 		window.addEventListener("resize", updateScrollHints)
 		return () => {
 			window.removeEventListener("resize", updateScrollHints)
-			window.removeEventListener("unitone:locale-updated", sync)
 		}
 	})
 
@@ -85,14 +77,14 @@
 <section class="flex flex-col gap-4" data-filter>
 	<div class="flex flex-col gap-2 text-center">
 		<p class="text-sm text-[color:var(--muted)]">
-			{t(locale, "archive.filterHint")}
+			Выберите теги или введите слово, результат обновится автоматически.
 		</p>
 	</div>
 	<div class="flex flex-wrap items-center justify-center gap-2">
 		<input
 			type="search"
-			placeholder={t(locale, "archive.searchPlaceholder")}
-			aria-label={t(locale, "archive.searchAria")}
+			placeholder="Поиск по заголовку и описанию"
+			aria-label="Поиск по архиву"
 			bind:value={search}
 			class="w-full rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] px-4 py-2 text-sm md:w-96 focus:border-[color:var(--accent)] focus:outline-none"
 		/>
@@ -101,7 +93,7 @@
 			on:click={resetFilters}
 			class="rounded-full border border-[color:var(--border)] bg-[color:var(--surface)] px-4 py-2 text-sm text-[color:var(--muted)] transition hover:text-[color:var(--text)]"
 		>
-			{t(locale, "common.reset")}
+			Сбросить
 		</button>
 	</div>
 	<div class="relative w-full">
@@ -130,6 +122,6 @@
 		</div>
 	</div>
 	<div class="text-center text-sm text-[color:var(--muted)]">
-		{t(locale, "common.foundLabel")} <span>{visibleCount}</span>
+		Найдено: <span>{visibleCount}</span>
 	</div>
 </section>

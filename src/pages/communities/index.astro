@@ -1,15 +1,12 @@
 ---
 import { communities } from "@/data/communities"
 import Layout from "@/layouts/Layout.astro"
-import { i18nKeys } from "@/lib/i18n-runtime"
 import { Icon } from "astro-icon/components"
 ---
 
 <Layout
 	title="Список сообществ"
 	description={`Каталог ${communities.length} 12‑шаговых сообществ: темы, контакты и ссылки.`}
-	titleKey={i18nKeys.communities.title}
-	descriptionKey={i18nKeys.communities.description}
 >
 	<!-- <Warning color="bg-green-50 border-green-200 text-green-700">
 		<b>Информация на 2025 год составляет 57 сообщества.</b> Некоторые сообщества образованы
@@ -20,7 +17,7 @@ import { Icon } from "astro-icon/components"
 
 	<div class="flex gap-3 justify-center items-center flex-wrap">
 		<p class="text-[color:var(--muted)] text-sm font-medium">
-			<span data-i18n="communities.updatedNote">Группа обновляется.</span> <b><u>(30.06.2025)</u></b>
+			<span>Группа обновляется.</span> <b><u>(30.06.2025)</u></b>
 		</p>
 		<a
 			href="https://t.me/all12_contacts"
@@ -46,17 +43,17 @@ import { Icon } from "astro-icon/components"
 								class="flex gap-3 items-center border-t border-[color:var(--border)] rounded-t-xl p-3 justify-between"
 							>
 								<span class="text-sm">
-									<span data-i18n="communities.infoLabel">Информация:</span>{" "}
+									<span>Информация:</span>{" "}
 									<b>
-										<span class="text-sm" data-i18n={item.find === true ? "communities.yes" : "communities.no"}>
+										<span class="text-sm">
 											{item.find === true ? "Есть." : "Нет."}
 										</span>
 									</b>
 								</span>
 								<span class="text-sm">
-									<span data-i18n="communities.foundedLabel">Основан:</span>{" "}
+									<span>Основан:</span>{" "}
 									<b>
-										<span class="text-sm" data-i18n={item.since ? undefined : "communities.unknown"}>
+										<span class="text-sm">
 											{item.since || "Неизвестно."}
 										</span>
 									</b>
@@ -70,7 +67,7 @@ import { Icon } from "astro-icon/components"
 								class={`p-3 text-sm text-[color:var(--text)] border-t border-[color:var(--border)] flex items-center gap-1 justify-center hover:bg-[color:var(--bg)] transition-colors duration-75 ease-in ${item.wikipedia ? "rounded-b-none" : "rounded-b-xl"}`}
 							>
 								<Icon name="mdi:telegram" />
-								<span class="font-medium" data-i18n="communities.goTopic">Перейти к подтеме сообщества</span>
+								<span class="font-medium">Перейти к подтеме сообщества</span>
 							</a>
 							{item.wikipedia && (
 								<a
@@ -80,7 +77,7 @@ import { Icon } from "astro-icon/components"
 									class="p-3 text-sm text-[color:var(--muted)] border-t border-[color:var(--border)] rounded-b-xl flex items-center gap-1 justify-center hover:bg-[color:var(--bg)] transition-colors duration-75 ease-in"
 								>
 									<Icon name="mdi:wikipedia" />
-									<span class="font-medium" data-i18n="communities.wikiPage">Wikipedia страница</span>
+									<span class="font-medium">Wikipedia страница</span>
 								</a>
 							)}
 						</article>

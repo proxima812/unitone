@@ -3,7 +3,7 @@
 	type="button"
 	class="inline-flex items-center gap-2 rounded-lg border border-[color:var(--border)] bg-[color:var(--surface)] px-3 py-1.5 text-sm font-medium text-[color:var(--text)] hover:border-[color:var(--primary)] hover:text-[color:var(--primary)]"
 	aria-label="Переключить тему"
-	data-i18n-aria-label="theme.toggleAria"
+
 >
 	<span id="theme-toggle-text" class="text-base leading-none">🌙</span>
 </button>
@@ -34,6 +34,5 @@
 		render()
 	})
 
-	window.addEventListener("unitone:locale-updated", render)
 	render()
 </script>

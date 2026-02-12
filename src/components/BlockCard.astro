@@ -2,7 +2,6 @@
 import { cn } from "@/utils/cn"
 import { Icon } from "astro-icon/components"
 const { style, title, textBtn, styleBtn, description, icon, link } = Astro.props
-const { titleKey, textBtnKey, descriptionKey } = Astro.props
 ---
 
 <article
@@ -14,15 +13,14 @@ const { titleKey, textBtnKey, descriptionKey } = Astro.props
 	<div>
 		<h2 class="text-lg mb-3 font-bold flex gap-1 items-center">
 			{icon && <Icon name={icon} />}
-			<span data-i18n={titleKey}>{title}</span>
+			<span>{title}</span>
 		</h2>
-		<p class="text-[color:var(--muted)]" data-i18n={descriptionKey}>
+		<p class="text-[color:var(--muted)]">
 			{description}
 		</p>
 	</div>
 	<a
 		href={link}
-		data-i18n={textBtnKey}
 		class={cn(
 			"text-white mt-1.5 px-3 py-1.5 max-w-fit bg-[color:var(--primary)] rounded-md hover:bg-[var(--sk-button-background-hover)] active:bg-[var(--sk-button-background-active)]",
 			styleBtn,

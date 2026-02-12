@@ -1,34 +1,50 @@
 ---
-import Layout from "@/layouts/Layout.astro"
+import Layout from "@/layouts/Layout.astro";
 
-import BlockCard from "@/components/BlockCard.astro"
+import BlockCard from "@/components/BlockCard.astro";
 
-import { communities } from "@/data/communities"
-import { blockData } from "@/data/links"
-import { i18nKeys } from "@/lib/i18n-runtime"
+import { communities } from "@/data/communities";
+import { blockData } from "@/data/links";
 ---
 
 <Layout
 	title="12 шагов: материалы, методы и сообщества"
 	description={`Единая база о 12 шагах: статьи, практики, методы и ${communities.length} сообществ.`}
-	titleKey={i18nKeys.index.meta.title}
-	descriptionKey={i18nKeys.index.meta.description}
 >
 	<main class="mx-auto flex max-w-4xl flex-col gap-12">
-		<section class="relative overflow-hidden rounded-3xl border border-[color:var(--border)] bg-[color:var(--surface)] p-8 md:p-10">
-			<div class="absolute inset-0 -z-0 bg-gradient-to-br from-[color:color-mix(in_srgb,var(--primary)_16%,transparent)] via-transparent to-[color:color-mix(in_srgb,var(--secondary)_18%,transparent)]"></div>
-			<div class="absolute -right-12 -top-12 -z-0 h-40 w-40 rounded-full bg-[color:color-mix(in_srgb,var(--accent)_24%,transparent)] blur-2xl"></div>
+		<section
+			class="relative overflow-hidden rounded-3xl border border-[color:var(--border)] bg-[color:var(--surface)] p-8 md:p-10"
+		>
+			<div
+				class="absolute inset-0 -z-0 bg-gradient-to-br from-[color:color-mix(in_srgb,var(--primary)_16%,transparent)] via-transparent to-[color:color-mix(in_srgb,var(--secondary)_18%,transparent)]"
+			>
+			</div>
+			<div
+				class="absolute -right-12 -top-12 -z-0 h-40 w-40 rounded-full bg-[color:color-mix(in_srgb,var(--accent)_24%,transparent)] blur-2xl"
+			>
+			</div>
 			<div class="relative z-10">
-				<p class="mb-3 inline-flex rounded-full border border-[color:var(--border)] bg-[color:var(--surface)] px-3 py-1 text-xs font-semibold uppercase tracking-wide text-[color:var(--muted)]">
+				<p
+					class="mb-3 inline-flex rounded-full border border-[color:var(--border)] bg-[color:var(--surface)] px-3 py-1 text-xs font-semibold uppercase tracking-wide text-[color:var(--muted)]"
+				>
 					UnitOne
 				</p>
 				<h1>
-					<span class="block text-5xl font-black md:text-7xl" data-i18n="home.titleMain">12 шагов</span>
-					<span class="mt-2 block text-xl text-[color:var(--muted)] md:text-3xl" data-i18n="home.titleSub">
+					<span class="block text-5xl font-black md:text-7xl"
+						>12 шагов</span
+					>
+					<span
+						class="mt-2 block text-xl text-[color:var(--muted)] md:text-3xl"
+
+					>
 						Материалы, шаги и рабочие инструменты.
 					</span>
 				</h1>
-				<p class="mt-5 max-w-3xl text-lg text-[color:var(--muted)] md:text-2xl" data-i18n="home.hero" data-i18n-param-count={String(communities.length)}>
+				<p
+					class="mt-5 max-w-3xl text-lg text-[color:var(--muted)] md:text-2xl"
+
+
+				>
 					<b class="text-[color:var(--text)]">Полезная</b> информация, материалы,
 					<b class="text-[color:var(--text)]"> методы прохождения</b> двенадцати шагов,
 					<b class="text-[color:var(--text)]"> {`${communities.length}`}</b> видов сообществ и
@@ -38,20 +54,103 @@ import { i18nKeys } from "@/lib/i18n-runtime"
 					<a
 						href="/methods"
 						class="rounded-lg bg-[color:var(--primary)] px-4 py-2 text-sm font-semibold text-white hover:bg-[var(--sk-button-background-hover)] active:bg-[var(--sk-button-background-active)]"
-						data-i18n="home.ctaMethods"
+
 					>
 						Начать с методов
 					</a>
 					<a
 						href="/finder"
 						class="rounded-lg border border-[color:var(--border)] bg-[color:var(--surface)] px-4 py-2 text-sm font-semibold text-[color:var(--text)] hover:border-[color:var(--primary)] hover:text-[color:var(--primary)]"
-						data-i18n="home.ctaFinder"
+
 					>
 						Подобрать сообщество
 					</a>
 				</div>
 			</div>
 		</section>
+
+		<section
+			class="rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] p-6"
+		>
+			<h2 class="text-2xl font-bold text-[color:var(--text)] md:text-3xl">
+				Что такое 12 шагов
+			</h2>
+			<p class="mt-3 text-base text-[color:var(--muted)] md:text-lg">
+				12 шагов - это структурированная практика личных изменений: честный самоанализ,
+				принятие ответственности, восстановление отношений и регулярная поддержка в сообществе.
+			</p>
+
+			<h3 class="mt-6 text-xl font-semibold text-[color:var(--text)]">
+				Краткие факты и история
+			</h3>
+			<ul class="mt-3 list-disc space-y-2 pl-5 text-[color:var(--muted)]">
+				<li>
+					Современная 12-шаговая модель начала формироваться в 1935 году в Акроне (Огайо)
+					вокруг работы Билла Уилсона и доктора Боба Смита.
+				</li>
+				<li>
+					В 1939 году была опубликована книга <i>Alcoholics Anonymous</i>, где 12 шагов были
+					описаны как последовательная программа действий.
+				</li>
+				<li>
+					Подход вышел далеко за пределы одной темы: сегодня существуют десятки 12-шаговых
+					сообществ и форматов взаимопомощи, а в нашем каталоге уже <b>{communities.length}</b
+					>{" "}
+					направлений.
+				</li>
+			</ul>
+
+			<h3 class="mt-6 text-xl font-semibold text-[color:var(--text)]">
+				Чем это полезно здоровым людям
+			</h3>
+			<p class="mt-3 text-[color:var(--muted)]">
+				Даже без зависимостей практики 12 шагов можно использовать как систему личной гигиены:
+				регулярная самооценка поведения, признание ошибок, исправление ущерба в отношениях,
+				дисциплина и поддержка сообщества. Такие элементы связаны с ростом психологической
+				устойчивости, снижением изоляции и более стабильными изменениями привычек.
+			</p>
+
+			<p class="mt-4 text-sm text-[color:var(--muted)]">
+				Источники:{" "}
+				<a
+					class="underline"
+					href="https://www.history.com/articles/founding-alcoholics-anonymous"
+					target="_blank"
+					rel="noopener noreferrer">History.com</a
+				>,{" "}
+				<a
+					class="underline"
+					href="https://www.britannica.com/topic/Alcoholics-Anonymous"
+					target="_blank"
+					rel="noopener noreferrer">Britannica</a
+				>,{" "}
+				<a
+					class="underline"
+					href="https://www.appguktwelve.steps.org/news-events-1/2024/2/20/which-twelve-step-fellowships-are-there-in-the-uk"
+					target="_blank"
+					rel="noopener noreferrer">APPG UK Twelve Steps</a
+				>,{" "}
+				<a
+					class="underline"
+					href="https://www.cochrane.org/CD012880/ADDICTN_alcoholics-anonymous-and-other-12-step-programs-alcohol-use-disorder"
+					target="_blank"
+					rel="noopener noreferrer">Cochrane Review</a
+				>,{" "}
+				<a
+					class="underline"
+					href="https://www.cdc.gov/social-connectedness/risk-factors/index.html"
+					target="_blank"
+					rel="noopener noreferrer">CDC (social connectedness)</a
+				>,{" "}
+				<a
+					class="underline"
+					href="https://lektsii.com/3-105313.html"
+					target="_blank"
+					rel="noopener noreferrer">лекционный текст (Том П. младший)</a
+				>.
+			</p>
+		</section>
+
 		<div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
 			{
 				blockData &&
@@ -60,24 +159,25 @@ import { i18nKeys } from "@/lib/i18n-runtime"
 							key={block.link}
 							link={block.link}
 							title={block.title}
-							titleKey={`index.card.${block.link.replace("/", "") || "home"}.title`}
 							icon={block.icon}
 							textBtn={block.textBtn}
-							textBtnKey={`index.card.${block.link.replace("/", "") || "home"}.button`}
 							description={block.description}
-							descriptionKey={`index.card.${block.link.replace("/", "") || "home"}.description`}
 						/>
 					))
 			}
 		</div>
 
-		<section class="rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] p-6">
-			<p class="text-2xl italic text-[color:var(--muted)] md:text-3xl" data-i18n="home.quote">
+		<section
+			class="rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] p-6"
+		>
+			<p class="text-2xl italic text-[color:var(--muted)] md:text-3xl">
 				Собираем знания о 12 шагах <b class="text-[color:var(--text)]">в одном месте</b>, чтобы
 				каждый нашёл путь к ясности и поддержке. Это карта для тех, кто выбирает перемены и
 				действия.
 			</p>
-			<span class="mt-3 block text-base text-[color:var(--muted)]" data-i18n="home.editorial">Редакция UnitOne</span>
+			<span class="mt-3 block text-base text-[color:var(--muted)]"
+				>Редакция UnitOne</span
+			>
 		</section>
 	</main>
 </Layout>

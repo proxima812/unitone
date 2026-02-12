@@ -1,7 +1,6 @@
 ---
 import { communities } from "@/data/communities"
 import Layout from "@/layouts/Layout.astro"
-import { i18nKeys } from "@/lib/i18n-runtime"
 import { Icon } from "astro-icon/components"
 
 const categories = [
@@ -21,8 +20,6 @@ const categories = [
 <Layout
 	title="Поиск анонимного сообщества по категориям"
 	description="Категории 12‑шаговых сообществ и быстрый поиск нужной группы."
-	titleKey={i18nKeys.finder.title}
-	descriptionKey={i18nKeys.finder.description}
 >
 	<div id="category-filters" class="flex flex-wrap justify-center gap-2 mb-6">
 		{
@@ -41,8 +38,6 @@ const categories = [
 		<button
 			class="category-button px-3 py-1 transition-all duration-75 ease-in cursor-pointer rounded-full bg-[color:var(--surface)] border border-[color:var(--border)] text-sm"
 			data-category="all"
-			data-i18n="finder.showAll"
-			data-i18n-param-count={String(communities.length)}
 		>
 			Показать все ({communities.length})
 		</button>
@@ -76,7 +71,7 @@ const categories = [
 											class={`px-2 p-1.5 text-sm text-[color:var(--text)] border border-[color:var(--border)] flex items-center gap-1 justify-center hover:bg-[color:var(--bg)] transition-colors duration-75 ease-in rounded-md`}
 										>
 											<Icon name="mdi:telegram" />
-											<span class="font-medium" data-i18n="finder.descriptionButton">Описание</span>
+											<span class="font-medium">Описание</span>
 										</a>
 										{item.wikipedia && (
 											<a
@@ -86,7 +81,7 @@ const categories = [
 												class="px-2 p-1.5 text-sm text-[color:var(--muted)] border border-[color:var(--border)] rounded-md flex items-center gap-1 justify-center hover:bg-[color:var(--bg)] transition-colors duration-75 ease-in"
 											>
 												<Icon name="mdi:wikipedia" />
-												<span class="font-medium" data-i18n="finder.wikipediaButton">Wikipedia</span>
+												<span class="font-medium">Wikipedia</span>
 											</a>
 										)}
 									</div>
@@ -97,7 +92,7 @@ const categories = [
 											class={`px-2 p-1.5 text-sm text-[color:var(--muted)] border border-[color:var(--border)] flex items-center gap-1 justify-center hover:bg-[color:var(--bg)] transition-colors duration-75 ease-in rounded-md`}
 										>
 											<Icon name="mdi:subdirectory-arrow-right" />
-											<span class="font-medium" data-i18n="finder.findYandex">Найти в Yandex</span>
+											<span class="font-medium">Найти в Yandex</span>
 										</a>
 										<a
 											href={`https://www.google.com/search?q=${item.title}`}
@@ -105,7 +100,7 @@ const categories = [
 											class={`px-2 p-1.5 text-sm text-[color:var(--muted)] border border-[color:var(--border)] flex items-center gap-1 justify-center hover:bg-[color:var(--bg)] transition-colors duration-75 ease-in rounded-md`}
 										>
 											<Icon name="mdi:google" />
-											<span class="font-medium" data-i18n="finder.findGoogle">Найти в Google</span>
+											<span class="font-medium">Найти в Google</span>
 										</a>
 									</div>
 								</article>

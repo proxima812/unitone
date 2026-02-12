@@ -1,25 +1,22 @@
 ---
 import Layout from "@/layouts/Layout.astro"
-import { i18nKeys } from "@/lib/i18n-runtime"
 ---
 
 <Layout
 	title="Политика конфиденциальности"
 	description="Как мы обрабатываем данные и что важно знать о конфиденциальности."
-	titleKey={i18nKeys.privacy.title}
-	descriptionKey={i18nKeys.privacy.description}
 >
 	<section class="bg-[color:var(--surface)] border border-[color:var(--border)] rounded-xl p-6 space-y-4">
-		<p class="text-[color:var(--muted)]" data-i18n="privacy.p1">
+		<p class="text-[color:var(--muted)]">
 			Мы уважаем вашу конфиденциальность. Сайт не собирает персональные данные без вашего
 			явного согласия.
 		</p>
 		<ul class="list-disc pl-6 text-[color:var(--muted)]">
-			<li data-i18n="privacy.l1">Мы не запрашиваем ваше имя, телефон или адрес.</li>
-			<li data-i18n="privacy.l2">Аналитика может использоваться в агрегированном виде для улучшения сайта.</li>
-			<li data-i18n="privacy.l3">Сторонние ссылки ведут на внешние ресурсы с их собственной политикой.</li>
+			<li>Мы не запрашиваем ваше имя, телефон или адрес.</li>
+			<li>Аналитика может использоваться в агрегированном виде для улучшения сайта.</li>
+			<li>Сторонние ссылки ведут на внешние ресурсы с их собственной политикой.</li>
 		</ul>
-		<p class="text-[color:var(--muted)]" data-i18n="privacy.p2">
+		<p class="text-[color:var(--muted)]">
 			Если у вас есть вопросы, напишите через доступные каналы сообщества.
 		</p>
 	</section>
