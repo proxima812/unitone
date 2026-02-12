@@ -2,6 +2,7 @@
 import RelatedPosts from "@/components/RelatedPosts.astro"
 import BookmarkToggle from "@/components/svelte/BookmarkToggle.svelte"
 import Layout from "@/layouts/Layout.astro"
+import { Icon } from "astro-icon/components"
 import { getCollection, render } from "astro:content"
 
 const archive = await getCollection("archive")
@@ -14,6 +15,33 @@ export async function getStaticPaths() {
 }
 const post = Astro.props
 const canonicalURL = new URL(`/archive/${post.id}/`, Astro.site)
+const encodedURL = encodeURIComponent(canonicalURL.href)
+const encodedTitle = encodeURIComponent(post.data.title)
+const encodedText = encodeURIComponent(
+	`${post.data.title}${post.data.description ? ` — ${post.data.description}` : ""}`,
+)
+const shareLinks = [
+	{
+		label: "Telegram",
+		icon: "mdi:telegram",
+		href: `https://t.me/share/url?url=${encodedURL}&text=${encodedText}`,
+	},
+	{
+		label: "VK",
+		icon: "mdi:vk",
+		href: `https://vk.com/share.php?url=${encodedURL}&title=${encodedTitle}`,
+	},
+	{
+		label: "X",
+		icon: "mdi:twitter",
+		href: `https://twitter.com/intent/tweet?url=${encodedURL}&text=${encodedText}`,
+	},
+	{
+		label: "WhatsApp",
+		icon: "mdi:whatsapp",
+		href: `https://api.whatsapp.com/send?text=${encodedText}%20${encodedURL}`,
+	},
+]
 const articleSchema = {
 	"@context": "https://schema.org",
 	"@type": "Article",
@@ -29,13 +57,48 @@ const articleSchema = {
 const { Content } = await render(post)
 ---
 
-<Layout {...post.data} type ogImage={post.data.ogImage?.src} hidePageHeader>
-	<main class="my-prose">
-		<article data-iv-article>
-			<header class="mb-8">
-				<h1 data-iv-title class="mb-3 text-4xl font-black tracking-tight md:text-5xl">
-					{post.data.title}
-				</h1>
+	<Layout {...post.data} type ogImage={post.data.ogImage?.src} hidePageHeader>
+		<main class="my-prose">
+			<article data-iv-article class="md:grid md:grid-cols-[auto_1fr] md:gap-6">
+				<section
+					class="mb-6 rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)]/90 p-4 md:sticky md:top-24 md:mb-0 md:h-fit md:p-2"
+				>
+					<div class="flex flex-wrap items-center gap-2 md:flex-col md:justify-center">
+						<p class="mr-2 text-xs font-semibold uppercase tracking-wide text-[color:var(--muted)]">
+							Поделиться
+						</p>
+						{
+							shareLinks.map((share) => (
+								<a
+									href={share.href}
+									target="_blank"
+									rel="noopener noreferrer"
+									aria-label={`Поделиться в ${share.label}`}
+									title={`Поделиться в ${share.label}`}
+									class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-black text-white transition hover:opacity-85"
+								>
+									<Icon name={share.icon} class="h-4 w-4" />
+								</a>
+							))
+						}
+						<button
+							id="share-copy"
+							type="button"
+							data-share-url={canonicalURL.href}
+							aria-label="Копировать ссылку"
+							title="Копировать ссылку"
+							class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-black text-white transition hover:opacity-85"
+						>
+								<Icon name="mdi:content-copy" class="h-4 w-4" />
+							</button>
+						<span id="share-copy-status" class="text-xs text-[color:var(--muted)]" aria-live="polite"></span>
+					</div>
+				</section>
+				<div>
+				<header class="mb-8">
+					<h1 data-iv-title class="mb-3 text-4xl font-black tracking-tight md:text-5xl">
+						{post.data.title}
+					</h1>
 				{
 					post.data.pubDate && (
 						<time data-iv-date datetime={post.data.pubDate} class="text-sm text-[color:var(--muted)]">
@@ -47,194 +110,51 @@ const { Content } = await render(post)
 						</time>
 					)
 				}
-				<div class="mt-4 flex flex-wrap items-center gap-2">
-					<BookmarkToggle
-						client:load
+					<div class="mt-4 flex flex-wrap items-center gap-2">
+						<BookmarkToggle
+							client:load
 						id={post.id}
 						title={post.data.title}
 						description={post.data.description || ""}
 						date={String(post.data.pubDate || "")}
-						href={`/archive/${post.id}/`}
-						variant="article"
-					/>
-					<button
-						id="speech-play"
-						type="button"
-						class="rounded-full bg-[color:var(--text)] px-3 py-1.5 text-sm text-[color:var(--surface)]"
-					>
-						Прослушать
-					</button>
-					<button
-						id="speech-pause"
-						type="button"
-						class="rounded-full border border-[color:var(--border)] px-3 py-1.5 text-sm"
-					>
-						Пауза
-					</button>
-					<button
-						id="speech-stop"
-						type="button"
-						class="rounded-full border border-[color:var(--border)] px-3 py-1.5 text-sm"
-					>
-						Стоп
-					</button>
-					<select
-						id="speech-voice"
-						class="rounded-full border border-[color:var(--border)] bg-[color:var(--surface)] px-2 py-1 text-sm"
-						aria-label="Голос"
-					>
-						<option value="">Авто</option>
-					</select>
-					<label class="flex items-center gap-2 text-xs text-[color:var(--muted)]">
-						Скорость
-						<input id="speech-rate" type="range" min="0.8" max="1.3" step="0.1" value="1" />
-					</label>
-					<span id="speech-rate-value" class="text-xs text-[color:var(--muted)]">1.0x</span>
-					<span id="speech-status" class="text-xs text-[color:var(--muted)]"></span>
+							href={`/archive/${post.id}/`}
+							variant="article"
+						/>
+					</div>
+				</header>
+				<Content />
 				</div>
-			</header>
-			<Content />
-		</article>
-	</main>
+			</article>
+		</main>
 	<RelatedPosts posts={archive} href="/archive" />
 
 	<script is:inline type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
 
 	<script is:inline>
 		(() => {
-			const status = document.getElementById("speech-status")
-			const playBtn = document.getElementById("speech-play")
-			const pauseBtn = document.getElementById("speech-pause")
-			const stopBtn = document.getElementById("speech-stop")
-			const voiceSelect = document.getElementById("speech-voice")
-			const rateInput = document.getElementById("speech-rate")
-			const rateValue = document.getElementById("speech-rate-value")
-			const article = document.querySelector("[data-iv-article]")
+			const shareCopyBtn = document.getElementById("share-copy")
+			const shareCopyStatus = document.getElementById("share-copy-status")
 
-			if (!("speechSynthesis" in window)) {
-				if (status) status.textContent = "Браузер не поддерживает озвучивание"
-				return
-			}
-
-			let queue = []
-			let currentIndex = 0
-			let isPaused = false
-
-			const loadVoices = () => {
-				const voices = window.speechSynthesis.getVoices()
-				if (!voiceSelect) return
-				voiceSelect.innerHTML = '<option value="">Авто</option>'
-				voices.forEach((v) => {
-					const option = document.createElement("option")
-					option.value = v.name
-					option.textContent = `${v.name} (${v.lang})`
-					voiceSelect.appendChild(option)
-				})
-
-				const saved = localStorage.getItem("speechVoice")
-				const hasRu = voices.find((v) => v.lang?.toLowerCase().startsWith("ru"))
-				if (saved) {
-					voiceSelect.value = saved
-				} else if (hasRu) {
-					voiceSelect.value = hasRu.name
+			shareCopyBtn?.addEventListener("click", async () => {
+				const shareURL = shareCopyBtn.getAttribute("data-share-url") || window.location.href
+				try {
+					if (navigator.clipboard?.writeText) {
+						await navigator.clipboard.writeText(shareURL)
+					} else {
+						const fallbackInput = document.createElement("input")
+						fallbackInput.value = shareURL
+						document.body.appendChild(fallbackInput)
+						fallbackInput.select()
+						document.execCommand("copy")
+						document.body.removeChild(fallbackInput)
+					}
+					if (shareCopyStatus) shareCopyStatus.textContent = "Ссылка скопирована"
+					setTimeout(() => {
+						if (shareCopyStatus) shareCopyStatus.textContent = ""
+					}, 2000)
+				} catch {
+					if (shareCopyStatus) shareCopyStatus.textContent = "Не удалось скопировать"
 				}
-			}
-
-			loadVoices()
-			window.speechSynthesis.onvoiceschanged = loadVoices
-
-			const buildText = () => {
-				const text = article?.innerText || ""
-				return text.replace(/\s+\n/g, "\n").replace(/\n+/g, "\n").trim()
-			}
-
-			const applyRateLabel = () => {
-				const value = Number(rateInput?.value || 1).toFixed(1)
-				if (rateValue) rateValue.textContent = `${value}x`
-				localStorage.setItem("speechRate", value)
-			}
-
-			const savedRate = localStorage.getItem("speechRate")
-			if (savedRate && rateInput) {
-				rateInput.value = savedRate
-				applyRateLabel()
-			}
-
-			rateInput?.addEventListener("input", () => {
-				applyRateLabel()
-			})
-
-			voiceSelect?.addEventListener("change", () => {
-				localStorage.setItem("speechVoice", voiceSelect.value)
-			})
-
-			const stop = () => {
-				window.speechSynthesis.cancel()
-				queue = []
-				currentIndex = 0
-				isPaused = false
-				if (status) status.textContent = "Остановлено"
-			}
-
-			const speakNext = () => {
-				if (currentIndex >= queue.length) {
-					if (status) status.textContent = "Готово"
-					return
-				}
-
-				const chunk = queue[currentIndex]
-				const utterance = new SpeechSynthesisUtterance(chunk)
-				const voices = window.speechSynthesis.getVoices()
-				const selected = voiceSelect?.value
-				if (selected) {
-					const match = voices.find((v) => v.name === selected)
-					if (match) utterance.voice = match
-				}
-				utterance.lang = "ru-RU"
-				utterance.rate = Number(rateInput?.value || 1)
-				utterance.onend = () => {
-					if (isPaused) return
-					currentIndex += 1
-					setTimeout(speakNext, 300)
-				}
-				utterance.onerror = () => {
-					if (status) status.textContent = "Ошибка озвучивания"
-				}
-				window.speechSynthesis.speak(utterance)
-				if (status) status.textContent = "Воспроизведение"
-			}
-
-			playBtn?.addEventListener("click", () => {
-				if (window.speechSynthesis.speaking && window.speechSynthesis.paused) {
-					window.speechSynthesis.resume()
-					isPaused = false
-					if (status) status.textContent = "Продолжение"
-					return
-				}
-
-				if (window.speechSynthesis.speaking) {
-					window.speechSynthesis.cancel()
-				}
-
-				const text = buildText()
-				if (!text) return
-
-				queue = text.split("\n").map((t) => t.trim()).filter(Boolean)
-				currentIndex = 0
-				isPaused = false
-				speakNext()
-			})
-
-			pauseBtn?.addEventListener("click", () => {
-				if (window.speechSynthesis.speaking) {
-					window.speechSynthesis.pause()
-					isPaused = true
-					if (status) status.textContent = "Пауза"
-				}
-			})
-
-			stopBtn?.addEventListener("click", () => {
-				stop()
 			})
 		})()
 	</script>

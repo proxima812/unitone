@@ -8,6 +8,7 @@ import "@/styles/tailwind.css";
 interface Props {
 	title: string;
 	description: string;
+	keywords?: string;
 	datePublished?: string;
 	bodyStyle?: string;
 	dateModified?: string;
@@ -26,6 +27,7 @@ const {
 	title,
 	type,
 	description,
+	keywords,
 	ogImage,
 	hidePageHeader,
 } = Astro.props;
@@ -36,6 +38,7 @@ const {
 		<SEO
 			title={title}
 			description={description}
+			keywords={keywords}
 			indexRobots={indexRobots}
 			ogImage={ogImage}
 			type={type}
@@ -127,11 +130,19 @@ const {
 			const installBanner = document.getElementById("pwa-install");
 			const installBtn = document.getElementById("pwa-install-btn");
 			const closeBtn = document.getElementById("pwa-install-close");
+			const PWA_DISMISS_KEY = "pwaInstallDismissedAt";
+			const PWA_REMIND_AFTER_MS = 3 * 24 * 60 * 60 * 1000;
+
+			const canShowPwaBanner = () => {
+				const dismissedAt = Number(localStorage.getItem(PWA_DISMISS_KEY) || 0);
+				if (!dismissedAt) return true;
+				return Date.now() - dismissedAt >= PWA_REMIND_AFTER_MS;
+			};
 
 			window.addEventListener("beforeinstallprompt", (e) => {
 				e.preventDefault();
 				deferredPrompt = e;
-				if (installBanner) installBanner.classList.remove("hidden");
+				if (installBanner && canShowPwaBanner()) installBanner.classList.remove("hidden");
 			});
 
 			installBtn?.addEventListener("click", async () => {
@@ -143,6 +154,7 @@ const {
 			});
 
 			closeBtn?.addEventListener("click", () => {
+				localStorage.setItem(PWA_DISMISS_KEY, String(Date.now()));
 				if (installBanner) installBanner.classList.add("hidden");
 			});
 		</script>

@@ -6,6 +6,7 @@ const archive = defineCollection({
 	schema: z.object({
 		title: z.string(),
 		description: z.string().optional(),
+		keywords: z.string().optional(),
 		pubDate: z.union([z.string(), z.date()]).optional(),
 		author: z.array(z.string()).optional(),
 		ogImage: z.any().optional(),

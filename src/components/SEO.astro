@@ -32,6 +32,7 @@ const mainTitle = title ? `${title} • Unit One` : config.site.OG.title
 const mainDescription = description ? `${description} • Unit One` : config.site.OG.description
 const mainAuthor = author || config.site.OG.author
 const mainOGImage = socialImageURL || config.site.OG.defaultImage
+const mainKeywords = keywords || config.site.OG.keywords
 
 function formatDateToYYYYMMDD(date: Date): string {
 	return date.toISOString().substring(0, 10)
@@ -42,7 +43,7 @@ const jsonLd = {
 	"@type": type ? "BlogPosting" : "WebPage",
 	headline: mainTitle,
 	description: mainDescription,
-	keywords: keywords || config.site.OG.keywords,
+	keywords: mainKeywords,
 	author: {
 		"@type": "Person",
 		name: mainAuthor,
@@ -72,7 +73,7 @@ const jsonLd = {
 <meta property="og:image:height" content="630" />
 <meta property="og:locale" content={locale || config.site.OG.locale} />
 <meta property="og:site_name" content={name || config.site.OG.site_name} />
-<meta name="keywords" content={config.site.OG.keywords || keywords} />
+<meta name="keywords" content={mainKeywords} />
 {
 	type && (
 		<>
