@@ -1,0 +1,15 @@
+---
+import AdminApp from "@/components/react/admin/AdminApp";
+import Layout from "@/layouts/Layout.astro";
+
+export const prerender = false;
+---
+
+<Layout
+  title="Admin panel"
+  description="Управление статьями: создание, редактирование и публикация"
+>
+  <section class="mx-auto w-full max-w-7xl">
+    <AdminApp client:load />
+  </section>
+</Layout>

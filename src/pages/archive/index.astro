@@ -1,59 +1,45 @@
 ---
-import Article from "@/components/Article.astro"
-import ArchiveFilter from "@/components/svelte/ArchiveFilter.svelte"
-import Layout from "@/layouts/Layout.astro"
-import { getCollection } from "astro:content"
+import ArchiveFilter from "@/components/svelte/ArchiveFilter.svelte";
+import { listPublishedArticles } from "@/lib/db/articles";
+import Layout from "@/layouts/Layout.astro";
 
-const archives = (await getCollection("archive")).sort(
-	(a, b) => new Date(b.data.pubDate) - new Date(a.data.pubDate),
-)
+export const prerender = false;
 
-const archivesTags = archives
-	.reduce((acc, curr) => {
-		const tags = curr.data?.tags || []
-		return [...new Set([...acc, ...tags])]
-	}, [])
-	.sort((a, b) => a.localeCompare(b))
+const archives = await listPublishedArticles();
+
+const archivesTags = [] as string[];
 ---
 
 <Layout
-	title="Статьи 12 шагов"
-	description="Статьи о 12 шагах: шаги выздоровления, практики, темы и опыт."
+  title="Статьи 12 шагов"
+  description="Статьи о 12 шагах: шаги выздоровления, практики, темы и опыт."
 >
-	<ArchiveFilter client:load tags={archivesTags} />
-	<div
-		id="author-filter-note"
-		class="hidden rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] px-4 py-3 text-sm text-[color:var(--muted)]"
-	>
-		<span>Показаны статьи автора:</span> <span id="author-filter-name" class="font-semibold text-[color:var(--text)]"></span>
-		<a href="/archive" class="ml-2 underline">Сбросить</a>
-	</div>
+  <ArchiveFilter client:load tags={archivesTags} />
 
-	<div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3" data-posts>
-		{archives && archives.map((item) => <Article data={item.data} id={item.id} />)}
-	</div>
-
-	<script is:inline>
-		(() => {
-			const params = new URLSearchParams(window.location.search)
-			const author = params.get("author")
-			if (!author) return
-
-			const note = document.getElementById("author-filter-note")
-			const name = document.getElementById("author-filter-name")
-			const cards = document.querySelectorAll("[data-posts] > a[data-author]")
-			let visible = 0
-
-			cards.forEach((card) => {
-				const authorAttr = card.getAttribute("data-author") || ""
-				const authors = authorAttr.split(",").map((x) => x.trim()).filter(Boolean)
-				const show = authors.includes(author)
-				card.classList.toggle("hidden", !show)
-				if (show) visible++
-			})
-
-			if (name) name.textContent = `${author} (${visible})`
-			if (note) note.classList.remove("hidden")
-		})()
-	</script>
+  <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3" data-posts>
+    {
+      archives.map((item) => (
+        <a href={`/archive/${item.slug}/`} class="block relative" data-author={item.author_name || ""}>
+          <div class="rounded-2xl p-2">
+            <article class="flex h-full flex-col gap-3 rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] p-5">
+              <h2 class="line-clamp-2 text-xl font-semibold leading-tight text-[color:var(--text)]">{item.title}</h2>
+              <p class="line-clamp-3 text-[color:var(--muted)]">{item.description || ""}</p>
+              <div class="mt-auto flex items-center justify-between gap-2 text-sm text-[color:var(--muted)]">
+                <span>{item.author_name || "Unity One"}</span>
+                {item.published_at && (
+                  <time datetime={item.published_at}>
+                    {new Date(item.published_at).toLocaleDateString("ru-RU", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    })}
+                  </time>
+                )}
+              </div>
+            </article>
+          </div>
+        </a>
+      ))
+    }
+  </div>
 </Layout>

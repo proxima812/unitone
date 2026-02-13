@@ -13,6 +13,7 @@
 		"rewrite:posts": "node scripts/rewrite-posts.mjs"
 	},
 	"dependencies": {
+		"@supabase/supabase-js": "^2.49.4",
 		"@astrojs/mdx": "4.1.0",
 		"@astrojs/react": "4.2.1",
 		"@astrojs/rss": "^4.0.11",
@@ -37,6 +38,7 @@
 		"react": "^19.0.0",
 		"react-dom": "^19.0.0",
 		"svelte": "^5.50.0",
+		"swr": "^2.4.0",
 		"tailwind-merge": "^2.6.0",
 		"tailwindcss": "^4.0.9",
 		"typescript": "^5.7.3"

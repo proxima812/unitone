@@ -168,6 +168,27 @@
   .my-prose :not(pre) > code::after {
     content: "";
   }
+
+  .article-rich-content a {
+    text-decoration: none;
+  }
+
+  .article-rich-content .article-link-inner {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    border: 1px solid color-mix(in srgb, var(--primary) 22%, white);
+    border-radius: 999px;
+    padding: 0.18rem 0.6rem;
+    background: color-mix(in srgb, var(--primary) 6%, white);
+    line-height: 1.4;
+  }
+
+  .article-rich-content .article-link-icon {
+    width: 16px;
+    height: 16px;
+    border-radius: 999px;
+  }
 }
 
 @layer components {
