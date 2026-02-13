@@ -11,18 +11,12 @@ import metaTags from "astro-meta-tags";
 import astroNoEmail from "astro-noemail";
 import { defineConfig } from "astro/config";
 
-export default defineConfig(({ command }) => ({
+export default defineConfig({
 	// https://unity-one.space/
 	// https://unity-one.space
 	site: "https://unity-one.space",
 	vite: {
 		plugins: [tailwindcss()],
-		server:
-			command === "dev"
-				? {
-						allowedHosts: ["localhost", "127.0.0.1", ".ngrok-free.dev", ".ngrok-free.app"],
-					}
-				: undefined,
 	},
 	devToolbar: {
 		enabled: true,
@@ -46,4 +40,4 @@ export default defineConfig(({ command }) => ({
 	],
 	output: "static",
 	adapter: vercel(),
-}));
+});
