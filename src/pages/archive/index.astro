@@ -3,7 +3,7 @@ import ArchiveFilter from "@/components/svelte/ArchiveFilter.svelte";
 import { listPublishedArticles } from "@/lib/db/articles";
 import Layout from "@/layouts/Layout.astro";
 
-export const prerender = true;
+export const prerender = false;
 
 const archives = await listPublishedArticles();
 
