@@ -1,5 +1,5 @@
-import { glob } from "astro/loaders"
-import { defineCollection, z } from "astro:content"
+import { glob } from "astro/loaders";
+import { defineCollection, z } from "astro:content";
 
 const archive = defineCollection({
 	loader: glob({ pattern: "**/*.(md|mdx)", base: "./src/data/archive/" }),
@@ -14,7 +14,7 @@ const archive = defineCollection({
 		tags: z.array(z.string()).optional(),
 		// viewMainPage: z.boolean().default(false).optional(),
 	}),
-})
+});
 
 const methods = defineCollection({
 	loader: glob({ pattern: "**/*.(md|mdx)", base: "./src/data/methods/" }),
@@ -24,16 +24,6 @@ const methods = defineCollection({
 		ogImage: z.any().optional(),
 		community: z.array(z.string()).optional(),
 	}),
-})
+});
 
-const pages = defineCollection({
-	loader: glob({ pattern: "**/*.(md|mdx)", base: "./src/data/pages/" }),
-	schema: z.object({
-		title: z.string(),
-		description: z.string().optional(),
-		// keyswords: z.string().default("").optional(),
-		ogImage: z.any().optional(),
-	}),
-})
-
-export const collections = { archive, pages, methods }
+export const collections = { archive, methods };

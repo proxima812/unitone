@@ -7,52 +7,29 @@
 
 @layer base {
   :root {
-    --color-my-palette-primary: #4281e0;
-    --color-my-palette-secondary: #7062e2;
-    --color-my-palette-accent: #41ddef;
-    --color-my-palette-foreground: #364050;
-    --color-my-palette-background: #fafbfb;
+    --color-my-palette-primary: #10a8ff;
+    --color-my-palette-secondary: #7bcfff;
+    --color-my-palette-accent: #10a8ff;
+    --color-my-palette-foreground: #333333;
+    --color-my-palette-background: #fafafa;
     --bg: var(--color-my-palette-background);
     --surface: #ffffff;
     --text: var(--color-my-palette-foreground);
-    --muted: #5f6b7e;
-    --border: #d5deee;
+    --muted: #737373;
+    --border: #e5e7eb;
     --accent: var(--color-my-palette-accent);
     --primary: var(--color-my-palette-primary);
     --secondary: var(--color-my-palette-secondary);
     --sk-button-background: var(--color-my-palette-primary);
-    --sk-button-background-hover: #3a74cb;
-    --sk-button-background-active: #305fab;
+    --sk-button-background-hover: #0d9aed;
+    --sk-button-background-active: #0a8bd6;
     --sk-blocklink-color: var(--color-my-palette-primary);
     --ring: color-mix(in srgb, var(--primary) 54%, white);
   }
 
-  :root[data-theme="dark"] {
-    --bg: #1e2735;
-    --surface: #273244;
-    --text: #e7eef8;
-    --muted: #afbdd3;
-    --border: #405471;
-    --accent: color-mix(in srgb, var(--color-my-palette-accent) 82%, white);
-    --sk-button-background: color-mix(in srgb, var(--color-my-palette-primary) 76%, white);
-    --sk-button-background-hover: color-mix(in srgb, var(--color-my-palette-primary) 70%, white);
-    --sk-button-background-active: color-mix(in srgb, var(--color-my-palette-primary) 64%, white);
-    --sk-blocklink-color: color-mix(in srgb, var(--color-my-palette-accent) 72%, white);
-    --ring: color-mix(in srgb, var(--primary) 45%, white);
-  }
-
   html,
   body {
-    background:
-      radial-gradient(circle at 15% 0%, color-mix(in srgb, var(--primary) 12%, transparent), transparent 44%),
-      linear-gradient(180deg, #ffffff 0%, var(--bg) 100%);
-  }
-
-  :root[data-theme="dark"] html,
-  :root[data-theme="dark"] body {
-    background:
-      radial-gradient(circle at 20% 0%, color-mix(in srgb, var(--primary) 16%, transparent), transparent 46%),
-      linear-gradient(180deg, color-mix(in srgb, var(--bg) 88%, black) 0%, var(--bg) 100%);
+    background: #fafafa;
   }
 
   body {
@@ -77,12 +54,19 @@
       color 0.18s ease,
       background-color 0.18s ease,
       border-color 0.18s ease,
-      box-shadow 0.18s ease,
       opacity 0.18s ease;
   }
 
   button {
     @apply cursor-pointer;
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    background: var(--surface);
+    color: #111111;
+  }
+
+  button:hover {
+    border-color: color-mix(in srgb, var(--primary) 28%, var(--border));
   }
 
   button:active,
@@ -110,18 +94,36 @@
   h5,
   h6 {
     @apply text-balance;
+    color: #333333;
   }
 
-  p {
+  p,
+  li,
+  figcaption,
+  blockquote {
     @apply text-pretty;
+    color: #737373;
+  }
+
+  button[class*="bg-[var(--sk-button-background)]"],
+  button[class*="bg-[color:var(--primary)]"],
+  a[class*="bg-[var(--sk-button-background)]"],
+  a[class*="bg-[color:var(--primary)]"] {
+    color: #ffffff;
+    border-color: transparent;
+  }
+
+  button[class*="border"][class*="bg-[color:var(--surface)]"],
+  a[class*="border"][class*="bg-[color:var(--surface)]"] {
+    color: #111111;
   }
 
   .my-prose {
     @apply prose prose-lg xl:prose-xl prose-headings:first:mt-0 prose-p:first:mt-0 prose-p:text-pretty prose-headings:text-balance max-w-6xl rounded-2xl p-6 md:p-12 sm:mx-auto -mx-[20px];
     --tw-prose-links: var(--sk-blocklink-color);
-    --tw-prose-headings: var(--text);
-    --tw-prose-body: var(--text);
-    --tw-prose-bold: var(--text);
+    --tw-prose-headings: #333333;
+    --tw-prose-body: #737373;
+    --tw-prose-bold: #333333;
     --tw-prose-counters: var(--muted);
     --tw-prose-bullets: var(--muted);
     --tw-prose-quotes: var(--text);
@@ -181,6 +183,6 @@
 
   .heading-h3 {
     @apply text-xl font-medium;
-    color: var(--muted);
+    color: var(--text);
   }
 }

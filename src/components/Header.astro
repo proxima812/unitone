@@ -2,67 +2,63 @@
 import Container from "./Container.astro";
 import Logo from "./Logo.astro";
 import Menu from "./Menu.astro";
-import ThemeToggle from "./ThemeToggle.astro";
 ---
 
 <header
 	id="header"
-	class="sticky top-0 z-50 mx-0 mt-0 max-w-full rounded-none border-b border-[color:var(--border)] bg-[color:var(--surface)]/90 py-4 backdrop-blur transition-transform duration-300 will-change-transform md:top-5 md:mx-auto md:mt-5 md:w-[1180px] md:max-w-[calc(100%-2rem)] md:rounded-2xl md:border"
+	class="sticky top-0 z-50 mx-0 mt-0 w-full max-w-4xl rounded-none border-b border-[color:var(--border)] bg-[color:var(--surface)]/90 py-4 backdrop-blur transition-transform duration-300 will-change-transform md:top-5 md:mx-auto md:mt-5 md:rounded-2xl md:border"
 >
 	<Container class="flex justify-between gap-x-3">
 		<Logo />
-		<div class="flex items-center gap-2">
-			<ThemeToggle />
-			<Menu />
-		</div>
+		<Menu />
 	</Container>
 </header>
 
 <script>
-	const header = document.getElementById("header")
-	let lastY = window.scrollY
-	let ticking = false
-	const DELTA_THRESHOLD = 8
-	const TOP_OFFSET = 24
+	const header = document.getElementById("header");
+	let lastY = window.scrollY;
+	let ticking = false;
+	const DELTA_THRESHOLD = 8;
+	const TOP_OFFSET = 24;
 
 	const updateHeader = () => {
-		const currentY = window.scrollY
+		const currentY = window.scrollY;
 
 		if (!header) {
-			ticking = false
-			return
+			ticking = false;
+			return;
 		}
 
 		if (currentY <= TOP_OFFSET) {
-			header.classList.remove("-translate-y-full")
-			lastY = currentY
-			ticking = false
-			return
+			header.classList.remove("-translate-y-full");
+			lastY = currentY;
+			ticking = false;
+			return;
 		}
 
-		const delta = currentY - lastY
+		const delta = currentY - lastY;
 		if (Math.abs(delta) < DELTA_THRESHOLD) {
-			ticking = false
-			return
+			ticking = false;
+			return;
 		}
 
 		if (delta > 0) {
-			header.classList.add("-translate-y-full")
+			header.classList.add("-translate-y-full");
 		} else {
-			header.classList.remove("-translate-y-full")
+			header.classList.remove("-translate-y-full");
 		}
 
-		lastY = currentY
-		ticking = false
-	}
+		lastY = currentY;
+		ticking = false;
+	};
 
 	window.addEventListener(
 		"scroll",
 		() => {
-			if (ticking) return
-			ticking = true
-			window.requestAnimationFrame(updateHeader)
+			if (ticking) return;
+			ticking = true;
+			window.requestAnimationFrame(updateHeader);
 		},
 		{ passive: true },
-	)
+	);
 </script>

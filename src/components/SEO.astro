@@ -1,5 +1,5 @@
 ---
-import { config } from "@/config"
+import { config } from "@/config";
 const {
 	datePublished,
 	indexRobots,
@@ -12,30 +12,32 @@ const {
 	ogImage,
 	locale,
 	canonicalURL = new URL(Astro.url.pathname, Astro.site),
-} = Astro.props
+} = Astro.props;
 
 function formatCanonicalURL(url: string | URL) {
-	const path = url.toString()
-	const hasQueryParams = path.includes("?")
+	const path = url.toString();
+	const hasQueryParams = path.includes("?");
 	if (hasQueryParams) {
-		path.replace(/\/?$/, "")
+		path.replace(/\/?$/, "");
 	}
-	return path.replace(/\/?$/, hasQueryParams ? "" : "/")
+	return path.replace(/\/?$/, hasQueryParams ? "" : "/");
 }
 
 const socialImageURL = new URL(
 	ogImage ? ogImage : `/${config.site.OG.defaultImage}`,
 	Astro.url,
-).href
+).href;
 
-const mainTitle = title ? `${title} • Unit One` : config.site.OG.title
-const mainDescription = description ? `${description} • Unit One` : config.site.OG.description
-const mainAuthor = author || config.site.OG.author
-const mainOGImage = socialImageURL || config.site.OG.defaultImage
-const mainKeywords = keywords || config.site.OG.keywords
+const mainTitle = title
+	? `${title} • Unity One: мы о 12 шагах и лучшей версии себя!`
+	: config.site.OG.title;
+const mainDescription = description ? `${description}` : config.site.OG.description;
+const mainAuthor = author || config.site.OG.author;
+const mainOGImage = socialImageURL || config.site.OG.defaultImage;
+const mainKeywords = keywords || config.site.OG.keywords;
 
 function formatDateToYYYYMMDD(date: Date): string {
-	return date.toISOString().substring(0, 10)
+	return date.toISOString().substring(0, 10);
 }
 
 const jsonLd = {
@@ -50,7 +52,7 @@ const jsonLd = {
 		url: Astro.site,
 	},
 	inLanguage: locale || config.site.OG.locale,
-}
+};
 ---
 
 <meta charset="utf-8" />

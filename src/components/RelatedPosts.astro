@@ -120,7 +120,7 @@ function matchLabel(tagMatches: number, authorMatch: number, titleMatches: numbe
 				{
 					related.map(({ item, tagMatches, authorMatch, titleMatches }) => (
 						<a href={`${href}/${item.id}`} class="group block">
-							<article class="flex h-full flex-col gap-3 rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] p-6 transition group-hover:shadow-sm group-hover:shadow-black/10">
+							<article class="flex h-full flex-col gap-3 rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] p-6 transition">
 								<span class="inline-flex w-fit rounded-full border border-[color:var(--border)] px-2 py-1 text-xs text-[color:var(--muted)]">
 									{matchLabel(tagMatches, authorMatch, titleMatches)}
 								</span>

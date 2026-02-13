@@ -38,12 +38,12 @@ const authorTags = [...new Set(posts.flatMap((item) => item.data.tags || []))].s
 
 <Layout
 	title={`Автор: ${author}`}
-	description={`Все публикации автора ${author} в архиве.`}
+	description={`Все публикации автора ${author} в статьях.`}
 >
 	<div class="mb-4 flex flex-wrap items-center gap-3 text-sm text-[color:var(--muted)]">
-		<span>Всего постов: {posts.length}</span>
+		<span>Всего статей: {posts.length}</span>
 		<a href={`/archive?author=${encodeURIComponent(author)}`} class="underline">
-			Открыть в архиве с фильтром
+			Открыть в статьях с фильтром
 		</a>
 		<a href="/authors" class="underline">Все авторы</a>
 	</div>

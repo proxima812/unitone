@@ -2,6 +2,8 @@
 import RelatedPosts from "@/components/RelatedPosts.astro"
 import MorePostsByAuthor from "@/components/MorePostsByAuthor.astro"
 import BookmarkToggle from "@/components/svelte/BookmarkToggle.svelte"
+import { AUTHORS } from "@/data/authors"
+import { tg_link } from "@/data/links"
 import Layout from "@/layouts/Layout.astro"
 import { Icon } from "astro-icon/components"
 import { getCollection, render } from "astro:content"
@@ -23,6 +25,7 @@ const encodedText = encodeURIComponent(
 )
 const currentAuthor = post.data.author?.[0] || ""
 const currentTags = post.data.tags || []
+const authors = Array.isArray(post.data.author) ? post.data.author.filter(Boolean) : []
 const archiveById = new Map(archive.map((item) => [item.id, item]))
 const normalizeArchiveId = (value: string) =>
 	value.trim().replace(/^\/+|\/+$/g, "").replace(/^archive\//, "")
@@ -47,6 +50,10 @@ function dateValue(v?: string | Date) {
 	return new Date(v).getTime() || 0
 }
 
+function authorAvatar(authorName: string) {
+	return AUTHORS[authorName as keyof typeof AUTHORS]?.avatarUrl || ""
+}
+
 const currentStep = detectStepNumber(post.data.title, currentTags)
 const nextStepPost =
 	currentStep && currentStep < 12
@@ -64,22 +71,22 @@ const nextStepPost =
 const shareLinks = [
 	{
 		label: "Telegram",
-		icon: "mdi:telegram",
+		icon: "solar:plain-2-bold-duotone",
 		href: `https://t.me/share/url?url=${encodedURL}&text=${encodedText}`,
 	},
 	{
 		label: "VK",
-		icon: "mdi:vk",
+		icon: "solar:global-bold-duotone",
 		href: `https://vk.com/share.php?url=${encodedURL}&title=${encodedTitle}`,
 	},
 	{
 		label: "X",
-		icon: "mdi:twitter",
+		icon: "solar:hashtag-chat-bold-duotone",
 		href: `https://twitter.com/intent/tweet?url=${encodedURL}&text=${encodedText}`,
 	},
 	{
 		label: "WhatsApp",
-		icon: "mdi:whatsapp",
+		icon: "solar:chat-round-bold-duotone",
 		href: `https://api.whatsapp.com/send?text=${encodedText}%20${encodedURL}`,
 	},
 ]
@@ -89,84 +96,272 @@ const articleSchema = {
 	headline: post.data.title,
 	description: post.data.description,
 	datePublished: post.data.pubDate,
-	author: (post.data.author || ["UnitOne"]).map((name) => ({
+	author: (post.data.author || ["Unity One"]).map((name) => ({
 		"@type": "Person",
 		name,
 	})),
 	mainEntityOfPage: canonicalURL.href,
 }
+
+const postBodyText =
+	typeof post.body === "string"
+		? post.body
+				.replace(/```[\s\S]*?```/g, " ")
+				.replace(/`[^`]*`/g, " ")
+				.replace(/!\[[^\]]*]\([^)]*\)/g, " ")
+				.replace(/\[[^\]]*]\([^)]*\)/g, " ")
+		: ""
+const words = postBodyText.match(/[\p{L}\p{N}]+/gu) || []
+const readingMinutes = Math.max(1, Math.ceil(words.length / 180))
 const { Content } = await render(post)
 ---
 
-	<Layout
-		{...post.data}
-		type
-		ogImage={post.data.ogImage?.src}
-		hidePageHeader
-		breadcrumbCurrentLabel={post.data.title}
-	>
-		<main class="my-prose">
-			<article data-iv-article class="md:grid md:grid-cols-[auto_1fr] md:gap-6">
-				<section
-					class="mb-6 rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)]/90 p-4 md:sticky md:top-24 md:mb-0 md:h-fit md:p-2"
-				>
-					<div class="flex flex-wrap items-center gap-2 md:flex-col md:justify-center">
+<Layout
+	{...post.data}
+	type
+	ogImage={post.data.ogImage?.src}
+	hidePageHeader
+	breadcrumbCurrentLabel={post.data.title}
+>
+	<main class="mx-auto w-full max-w-6xl">
+		<article data-iv-article class="grid grid-cols-1 gap-6 lg:grid-cols-[230px_minmax(0,1fr)] lg:gap-8">
+			<aside class="hidden lg:sticky lg:top-28 lg:block lg:h-fit">
+				<div class="space-y-4">
+					<section class="rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] p-4">
+						<p class="text-xs uppercase tracking-wide text-[color:var(--muted)]">Автор</p>
+						<div class="mt-3 space-y-3">
+							{
+								authors.length > 0 ? (
+									authors.map((authorName: string) => {
+										const authorHref = `/authors/${encodeURIComponent(authorName)}/`
+										const avatar = authorAvatar(authorName)
+										return (
+											<a
+												href={authorHref}
+												class="flex items-center gap-3 rounded-xl border border-transparent p-2 transition hover:border-[color:var(--border)] hover:bg-[color:var(--bg)]"
+											>
+												{avatar ? (
+													<img
+														src={avatar}
+														alt={`Аватар ${authorName}`}
+														class="h-11 w-11 rounded-full object-cover"
+														loading="lazy"
+														decoding="async"
+													/>
+												) : (
+													<div class="h-11 w-11 rounded-full bg-[color:var(--text)]" />
+												)}
+												<span class="text-sm font-medium text-[color:var(--text)]">{authorName}</span>
+											</a>
+										)
+									})
+								) : (
+									<p class="text-sm text-[color:var(--muted)]">Автор не указан</p>
+								)
+							}
+						</div>
+					</section>
 
-						{
-							shareLinks.map((share) => (
-								<a
-									href={share.href}
-									target="_blank"
-									rel="noopener noreferrer"
-									aria-label={`Поделиться в ${share.label}`}
-									title={`Поделиться в ${share.label}`}
-									class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-black text-white transition hover:opacity-85"
-								>
-									<Icon name={share.icon} class="h-4 w-4" />
-								</a>
-							))
-						}
-						<button
-							id="share-copy"
-							type="button"
-							data-share-url={canonicalURL.href}
-							aria-label="Копировать ссылку"
-							title="Копировать ссылку"
-							class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-black text-white transition hover:opacity-85"
-						>
-								<Icon name="mdi:content-copy" class="h-4 w-4" />
+					<section class="rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] p-4">
+						<p class="text-xs uppercase tracking-wide text-[color:var(--muted)]">Поделиться</p>
+						<div class="mt-3 flex flex-wrap items-center gap-2">
+							{
+								shareLinks.map((share) => (
+									<a
+										href={share.href}
+										target="_blank"
+										rel="noopener noreferrer"
+										aria-label={`Поделиться в ${share.label}`}
+										title={`Поделиться в ${share.label}`}
+										class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-black text-white transition hover:opacity-85"
+									>
+										<Icon name={share.icon} class="h-4 w-4" />
+									</a>
+								))
+							}
+							<button
+								id="share-copy"
+								type="button"
+								data-share-url={canonicalURL.href}
+								aria-label="Копировать ссылку"
+								title="Копировать ссылку"
+								class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-black text-white transition hover:opacity-85"
+							>
+								<Icon name="solar:copy-bold-duotone" class="h-4 w-4" />
 							</button>
-					</div>
-				</section>
-				<div>
-				<header class="mb-8">
-					<h1 data-iv-title class="mb-3 text-4xl font-black tracking-tight md:text-5xl">
-						{post.data.title}
-					</h1>
-				{
-					post.data.pubDate && (
-						<time data-iv-date datetime={post.data.pubDate} class="text-sm text-[color:var(--muted)]">
-							{new Date(post.data.pubDate).toLocaleDateString("ru-RU", {
-								year: "numeric",
-								month: "numeric",
-								day: "numeric",
-							})}
-						</time>
-					)
-				}
-					<div class="mt-4 flex flex-wrap items-center gap-2">
+						</div>
+					</section>
+				</div>
+			</aside>
+
+			<div class="min-w-0">
+				<header class="rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] p-4 md:p-7">
+					<div class="mb-4 flex flex-wrap items-center gap-3 text-sm text-[color:var(--muted)]">
+						{
+							post.data.pubDate && (
+								<time data-iv-date datetime={post.data.pubDate}>
+									{new Date(post.data.pubDate).toLocaleDateString("ru-RU", {
+										year: "numeric",
+										month: "long",
+										day: "numeric",
+									})}
+								</time>
+							)
+						}
+						<span class="rounded-full border border-[color:var(--border)] px-2 py-1">
+							{readingMinutes} мин чтения
+						</span>
 						<BookmarkToggle
 							client:load
-						id={post.id}
-						title={post.data.title}
-						description={post.data.description || ""}
-						date={String(post.data.pubDate || "")}
+							id={post.id}
+							title={post.data.title}
+							description={post.data.description || ""}
+							date={String(post.data.pubDate || "")}
 							href={`/archive/${post.id}/`}
 							variant="article"
 						/>
 					</div>
+					<h1 data-iv-title class="text-4xl font-black leading-tight tracking-tight md:text-5xl">
+						{post.data.title}
+					</h1>
 				</header>
-				<Content />
+
+				<section class="mt-3 rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] p-3 lg:hidden">
+					<div>
+						<p class="text-[11px] uppercase tracking-wide text-[color:var(--muted)]">Автор</p>
+						<div class="mt-2 flex flex-wrap gap-2">
+							{
+								authors.length > 0 ? (
+									authors.map((authorName: string) => {
+										const authorHref = `/authors/${encodeURIComponent(authorName)}/`
+										const avatar = authorAvatar(authorName)
+										return (
+											<a
+												href={authorHref}
+												class="inline-flex items-center gap-2 rounded-full border border-[color:var(--border)] bg-[color:var(--bg)] px-2 py-1"
+											>
+												{avatar ? (
+													<img
+														src={avatar}
+														alt={`Аватар ${authorName}`}
+														class="h-7 w-7 rounded-full object-cover"
+														loading="lazy"
+														decoding="async"
+													/>
+												) : (
+													<div class="h-7 w-7 rounded-full bg-[color:var(--text)]" />
+												)}
+												<span class="text-xs font-medium text-[color:var(--text)]">{authorName}</span>
+											</a>
+										)
+									})
+								) : (
+									<p class="text-xs text-[color:var(--muted)]">Автор не указан</p>
+								)
+							}
+						</div>
+					</div>
+					<div class="mt-3">
+						<p class="text-[11px] uppercase tracking-wide text-[color:var(--muted)]">Поделиться</p>
+						<div class="mt-2 flex flex-wrap items-center gap-2">
+							{
+								shareLinks.map((share) => (
+									<a
+										href={share.href}
+										target="_blank"
+										rel="noopener noreferrer"
+										aria-label={`Поделиться в ${share.label}`}
+										title={`Поделиться в ${share.label}`}
+										class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-black text-white transition hover:opacity-85"
+									>
+										<Icon name={share.icon} class="h-4 w-4" />
+									</a>
+								))
+							}
+							<button
+								id="share-copy-mobile"
+								type="button"
+								data-share-url={canonicalURL.href}
+								aria-label="Копировать ссылку"
+								title="Копировать ссылку"
+								class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-black text-white transition hover:opacity-85"
+							>
+								<Icon name="solar:copy-bold-duotone" class="h-4 w-4" />
+							</button>
+						</div>
+					</div>
+				</section>
+
+				<section
+					class="mt-5 rounded-2xl border border-zinc-300 bg-zinc-50 p-3 md:p-5 dark:border-zinc-600 dark:bg-zinc-900/30"
+					data-ad-slot="article-top"
+					data-ad-format="native"
+					data-ad-status="placeholder"
+				>
+					<p class="text-sm font-semibold text-black dark:text-zinc-100">Рекламное место</p>
+					<p class="mt-1 text-sm text-zinc-700 dark:text-zinc-300">
+						Этот слот готов к подключению нативной рекламы и партнерских интеграций.
+					</p>
+				</section>
+
+				<section class="my-prose !mx-0 !mt-5 !max-w-none !p-5 md:!p-8">
+					<Content />
+				</section>
+
+				<section
+					class="mt-5 rounded-2xl border border-zinc-300 bg-zinc-50 p-3 md:p-5 dark:border-zinc-600 dark:bg-zinc-900/30"
+					data-ad-slot="article-mid"
+					data-ad-format="native"
+					data-ad-status="placeholder"
+				>
+					<p class="text-sm font-semibold text-black dark:text-zinc-100">
+						Партнерская интеграция в статье
+					</p>
+					<p class="mt-1 text-sm text-zinc-700 dark:text-zinc-300">
+						Показывается в середине материала и подходит для мягкой нативной подачи.
+					</p>
+				</section>
+
+				<section class="mt-5 overflow-hidden rounded-2xl border border-zinc-300 bg-zinc-50 dark:border-zinc-600 dark:bg-zinc-900/30">
+					<div class="bg-black px-4 py-2 text-sm font-semibold text-white dark:bg-zinc-800">
+						Ваш бренд может быть здесь
+					</div>
+					<div class="p-3 md:p-5">
+						<p class="text-black dark:text-zinc-100">
+							Размещайте нативные интеграции в релевантном контенте и обращайтесь к аудитории, которая
+							активно читает длинные материалы и сохраняет публикации в закладки.
+						</p>
+						<a
+							href={tg_link}
+							target="_blank"
+							rel="noopener noreferrer"
+							class="mt-4 inline-flex items-center rounded-full bg-[color:var(--text)] px-4 py-2 text-sm font-medium text-[color:var(--bg)] transition hover:opacity-85"
+						>
+							Обсудить размещение
+						</a>
+					</div>
+				</section>
+
+				<section class="mt-5 rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] p-3 md:p-4 text-sm leading-relaxed text-[color:var(--muted)]">
+					Этот материал отражает личный опыт и мнение автора. Он не является руководством к действию,
+					не навязывает подход и не заменяет профессиональную помощь.
+				</section>
+
+				<section class="mt-5 rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] p-3 md:p-5">
+					<h2 class="text-xl font-semibold text-[color:var(--text)]">Будьте с нами в Telegram</h2>
+					<p class="mt-2 text-[color:var(--muted)]">
+						Публикуем новые материалы, анонсы встреч и полезные обновления по теме 12 шагов.
+					</p>
+					<a
+						href={tg_link}
+						target="_blank"
+						rel="noopener noreferrer"
+						class="mt-3 inline-flex items-center rounded-full border border-[color:var(--border)] px-4 py-2 text-sm text-[color:var(--text)] transition hover:border-[color:var(--accent)]"
+					>
+						Перейти в канал
+					</a>
+				</section>
+
 				{
 					manualRelatedPosts.length > 0 && (
 						<section class="mt-10 rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] p-5">
@@ -178,7 +373,7 @@ const { Content } = await render(post)
 								{manualRelatedPosts.map((item) => (
 									<a
 										href={`/archive/${item.id}/`}
-										class="group rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] p-4 transition hover:shadow-sm hover:shadow-black/10"
+										class="group rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] p-4 transition"
 									>
 										<h3 class="line-clamp-2 text-lg font-semibold leading-tight group-hover:opacity-85">
 											{item.data.title}
@@ -192,6 +387,7 @@ const { Content } = await render(post)
 						</section>
 					)
 				}
+
 				{
 					currentStep && (
 						<section class="mt-10 rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] p-5">
@@ -219,13 +415,23 @@ const { Content } = await render(post)
 						</section>
 					)
 				}
-				<div class="mt-8 rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] p-4 text-sm leading-relaxed text-[color:var(--muted)]">
-					Этот материал отражает личный опыт и мнение автора. Он не является руководством к действию,
-					не навязывает подход и не заменяет профессиональную помощь.
-				</div>
-				</div>
-			</article>
-		</main>
+
+				<section
+					class="mt-5 rounded-2xl border border-zinc-300 bg-zinc-50 p-3 md:p-5 dark:border-zinc-600 dark:bg-zinc-900/30"
+					data-ad-slot="article-bottom"
+					data-ad-format="native"
+					data-ad-status="placeholder"
+				>
+					<p class="text-sm font-semibold text-black dark:text-zinc-100">
+						Нижний рекламный слот
+					</p>
+					<p class="mt-1 text-sm text-zinc-700 dark:text-zinc-300">
+						Подходит для размещения баннера, нативного блока или партнерской рекомендации.
+					</p>
+				</section>
+			</div>
+		</article>
+	</main>
 	<MorePostsByAuthor
 		posts={archive}
 		href="/archive"
@@ -249,10 +455,11 @@ const { Content } = await render(post)
 	<script is:inline>
 		(() => {
 			const shareCopyBtn = document.getElementById("share-copy")
+			const shareCopyBtnMobile = document.getElementById("share-copy-mobile")
 			let copyFeedbackTimer
 
-			shareCopyBtn?.addEventListener("click", async () => {
-				const shareURL = shareCopyBtn.getAttribute("data-share-url") || window.location.href
+			const handleCopy = async (button) => {
+				const shareURL = button.getAttribute("data-share-url") || window.location.href
 				try {
 					if (navigator.clipboard?.writeText) {
 						await navigator.clipboard.writeText(shareURL)
@@ -264,17 +471,24 @@ const { Content } = await render(post)
 						document.execCommand("copy")
 						document.body.removeChild(fallbackInput)
 					}
-					shareCopyBtn.classList.remove("bg-black")
-					shareCopyBtn.classList.add("bg-green-600")
+					button.classList.remove("bg-black")
+					button.classList.add("bg-green-600")
 					clearTimeout(copyFeedbackTimer)
 					copyFeedbackTimer = setTimeout(() => {
-						shareCopyBtn.classList.remove("bg-green-600")
-						shareCopyBtn.classList.add("bg-black")
+						button.classList.remove("bg-green-600")
+						button.classList.add("bg-black")
 					}, 2000)
 				} catch {
-					shareCopyBtn.classList.remove("bg-green-600")
-					shareCopyBtn.classList.add("bg-black")
+					button.classList.remove("bg-green-600")
+					button.classList.add("bg-black")
 				}
+			}
+
+			shareCopyBtn?.addEventListener("click", async () => {
+				await handleCopy(shareCopyBtn)
+			})
+			shareCopyBtnMobile?.addEventListener("click", async () => {
+				await handleCopy(shareCopyBtnMobile)
 			})
 		})()
 	</script>

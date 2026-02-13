@@ -1,0 +1,40 @@
+---
+interface Props {
+	description?: string
+	communities: string[]
+	title: string
+}
+
+const { description, communities, title } = Astro.props as Props
+
+function parseDuration(text?: string) {
+	if (!text) return "Не указано"
+	const match = text.match(/сроки\s*:\s*([^\.\n]+)/i)
+	return match ? match[1].trim() : "Не указано"
+}
+
+const facts = [
+	{ label: "Сроки", value: parseDuration(description) },
+	{ label: "Подходит для", value: communities.length > 0 ? communities.join(", ") : "Универсальный формат" },
+	{
+		label: "Тип",
+		value: /workbook|guide|журнал|воркбук|тетрад/i.test(`${title} ${description || ""}`)
+			? "Самостоятельная практика"
+			: "Групповой/смешанный формат",
+	},
+]
+---
+
+<section class="mt-4 rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] p-5 md:p-6">
+	<h2 class="text-2xl font-bold text-[color:var(--text)] md:text-3xl">Краткие факты</h2>
+	<div class="mt-4 grid grid-cols-1 gap-3 md:grid-cols-3">
+		{
+			facts.map((fact) => (
+				<div class="rounded-xl border border-[color:var(--border)] bg-[color:var(--bg)] p-4">
+					<p class="text-xs uppercase tracking-wide text-[color:var(--muted)]">{fact.label}</p>
+					<p class="mt-2 text-sm font-medium text-[color:var(--text)]">{fact.value}</p>
+				</div>
+			))
+		}
+	</div>
+</section>

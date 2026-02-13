@@ -17,15 +17,15 @@ const archivesTags = archives
 ---
 
 <Layout
-	title="Архив 12 шагов"
-	description="Архив статей о 12 шагах: шаги выздоровления, практики, темы и опыт."
+	title="Статьи 12 шагов"
+	description="Статьи о 12 шагах: шаги выздоровления, практики, темы и опыт."
 >
 	<ArchiveFilter client:load tags={archivesTags} />
 	<div
 		id="author-filter-note"
 		class="hidden rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] px-4 py-3 text-sm text-[color:var(--muted)]"
 	>
-		<span>Показаны посты автора:</span> <span id="author-filter-name" class="font-semibold text-[color:var(--text)]"></span>
+		<span>Показаны статьи автора:</span> <span id="author-filter-name" class="font-semibold text-[color:var(--text)]"></span>
 		<a href="/archive" class="ml-2 underline">Сбросить</a>
 	</div>
 

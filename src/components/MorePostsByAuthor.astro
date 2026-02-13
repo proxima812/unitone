@@ -82,7 +82,7 @@ const authorArchiveHref = `/archive?author=${encodeURIComponent(author)}`
 				{
 					finalPosts.map((item) => (
 						<a href={`${href}/${item.id}`} class="group block">
-							<article class="flex h-full flex-col gap-3 rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] p-6 transition group-hover:shadow-sm group-hover:shadow-black/10">
+							<article class="flex h-full flex-col gap-3 rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] p-6 transition">
 								<h4 class="line-clamp-2 text-lg font-bold leading-tight">{item.data.title}</h4>
 								<p class="line-clamp-3 text-[color:var(--muted)]">{item.data.description}</p>
 								{

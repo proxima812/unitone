@@ -1,0 +1,48 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { Icon } from "astro-icon/components";
+import MethodFacts from "@/components/methods/MethodFacts.astro";
+import { methods } from "@/data/methods";
+
+export async function getStaticPaths() {
+	return methods.map((item) => ({
+		params: { slug: item.slug },
+		props: { item },
+	}));
+}
+
+const { item } = Astro.props;
+---
+
+<Layout
+	title={item.title}
+	description={item.description || "Подробная информация о методе прохождения шагов."}
+>
+	<a
+		href="/methods"
+		class="inline-flex items-center gap-1 rounded-lg border border-[color:var(--border)] bg-[color:var(--surface)] px-3 py-2 text-sm text-[color:var(--text)]"
+	>
+		<Icon name="solar:alt-arrow-left-outline" />
+		<span>Назад к методам</span>
+	</a>
+
+	<MethodFacts
+		title={item.title}
+		description={item.description || ""}
+		communities={item.community || []}
+	/>
+
+	<section class="mt-6 rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] p-5 md:p-6">
+		<h3 class="text-xl font-semibold text-[color:var(--text)]">Что дальше</h3>
+		<p class="mt-2 text-[color:var(--muted)]">
+			Если метод вам откликается, зафиксируйте план на первую неделю и добавьте поддержку: группа,
+			наставник или рабочая пара.
+		</p>
+		<a
+			href="/communities"
+			class="mt-4 inline-flex items-center rounded-lg bg-[#10a8ff] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#0d9aed]"
+		>
+			Перейти к сообществам
+		</a>
+	</section>
+</Layout>

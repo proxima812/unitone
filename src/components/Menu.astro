@@ -2,12 +2,15 @@
 import { links } from "@/data/links";
 import { cn } from "@/utils/cn";
 import { Icon } from "astro-icon/components";
+
+const hiddenMenuHrefs = new Set(["/authors", "/faq"]);
+const menuLinks = links.filter((link) => !hiddenMenuHrefs.has(link.href));
 ---
 
 <nav class="hidden md:flex gap-5 items-center">
 	{
-		links &&
-			links.map((link) => (
+		menuLinks &&
+			menuLinks.map((link) => (
 				<a
 					href={link.href}
 					title={link.label}
@@ -36,7 +39,7 @@ import { Icon } from "astro-icon/components";
 	title="Мобильное меню"
 	id="open"
 	class="text-white md:hidden flex items-center gap-1 bg-[color:var(--primary)] px-3.5 py-1.5 rounded-lg hover:bg-[var(--sk-button-background-hover)] active:bg-[var(--sk-button-background-active)]"
-	><Icon name="mdi:menu-swap" /><span class="font-medium">меню</span></button
+	><Icon name="solar:hamburger-menu-linear" /><span class="font-medium">меню</span></button
 >
 
 <div
@@ -45,8 +48,8 @@ import { Icon } from "astro-icon/components";
 >
 	<nav class="flex gap-5 flex-col">
 		{
-			links &&
-				links.map((link) => (
+			menuLinks &&
+				menuLinks.map((link) => (
 					<a
 						href={link.href}
 						title={link.label}

@@ -6,13 +6,15 @@ import vercel from "@astrojs/vercel";
 import tailwindcss from "@tailwindcss/vite";
 import embeds from "astro-embed/integration";
 import icon from "astro-icon";
+import indexnow from "astro-indexnow";
 import metaTags from "astro-meta-tags";
 import astroNoEmail from "astro-noemail";
-import indexnow from "astro-indexnow";
 import { defineConfig } from "astro/config";
 
 export default defineConfig({
-	site: "https://unitone.vercel.app",
+  // https://unity-one.space/
+    // https://unity-one.space
+	site: "https://unity-one.space",
 	vite: {
 		plugins: [tailwindcss()],
 	},

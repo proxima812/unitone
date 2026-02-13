@@ -1,0 +1,80 @@
+---
+import { config } from "@/config";
+import { communities } from "@/data/communities";
+import Layout from "@/layouts/Layout.astro";
+import { Icon } from "astro-icon/components";
+---
+
+<Layout
+	title="Список анонимных сообществ"
+	description={`Каталог ${communities.length} 12‑шаговых анонимных сообществ: описание, контакты и ссылки.`}
+>
+	<div class="flex gap-3 justify-center items-center flex-wrap">
+		<p class="text-[color:var(--muted)] text-sm font-medium">
+			<span> {config.info_group.date}</span>
+		</p>
+		<a
+			href="https://t.me/all12_contacts"
+			class="bg-[color:var(--surface)] border border-[color:var(--border)] hover:bg-[color:var(--bg)] transition-colors duration-75 ease-in flex items-center gap-1 text-[color:var(--text)] px-2 py-1 rounded-md"
+			target="_blank"><Icon name="solar:plain-2-bold-duotone" /><span class="font-medium">Telegram</span></a
+		>
+	</div>
+	<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 items-start gap-4">
+		{
+			communities &&
+				[...communities]
+					.sort((a, b) => (b.wikipedia ? 1 : 0) - (a.wikipedia ? 1 : 0))
+					.map((item) => (
+						<article class="w-full flex flex-col text-center bg-[color:var(--surface)] border border-[color:var(--border)] rounded-xl">
+							<div class="p-6">
+								<h2 class="text-xl font-bold leading-tight mb-1">{item.title}</h2>
+								<p class="line-clamp-1 text-[color:var(--muted)]">{item.description}</p>
+							</div>
+							<div class="flex gap-3 items-center border-t border-[color:var(--border)] rounded-t-xl p-3 justify-between">
+								<span class="text-sm">
+									<span>Информация:</span>{" "}
+									<b>
+										<span
+											class={`text-sm ${item.find === true ? "text-emerald-600" : "text-red-600"}`}
+										>
+											{item.find === true ? "Есть." : "Нет."}
+										</span>
+									</b>
+								</span>
+								<span class="text-sm">
+									<span>Основан:</span>{" "}
+									<b>
+										<span
+											class={`text-sm ${item.since ? "text-emerald-600" : "text-red-600"}`}
+										>
+											{item.since || "Неизвестно."}
+										</span>
+									</b>
+								</span>
+							</div>
+
+							<a
+								href={item.tg_group_link_topic}
+								aria-label={item.title}
+								target="_blank"
+								class={`p-3 text-sm  border-t border-[color:var(--border)] flex items-center gap-1 justify-center bg-sky-100 text-sky-700 hover:bg-sky-200 transition-colors duration-75 ease-in ${item.wikipedia ? "rounded-b-none" : "rounded-b-xl"}`}
+							>
+								<Icon name="solar:plain-2-bold-duotone" />
+								<span class="font-medium">Перейти к подтеме сообщества</span>
+							</a>
+							{item.wikipedia && (
+								<a
+									href={item.wikipedia}
+									aria-label={item.title}
+									target="_blank"
+									class="p-3 text-sm text-[#202122] border-t border-[#A2A9B1] rounded-b-xl flex items-center gap-1 justify-center bg-[#F8F9FA] hover:bg-[#EAECF0] transition-colors duration-75 ease-in"
+								>
+									<Icon name="solar:book-2-bold-duotone" />
+									<span class="font-medium">Wikipedia страница</span>
+								</a>
+							)}
+						</article>
+					))
+		}
+	</section>
+</Layout>

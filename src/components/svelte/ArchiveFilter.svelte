@@ -84,7 +84,7 @@
 		<input
 			type="search"
 			placeholder="Поиск по заголовку и описанию"
-			aria-label="Поиск по архиву"
+			aria-label="Поиск по статьям"
 			bind:value={search}
 			class="w-full rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] px-4 py-2 text-sm md:w-96 focus:border-[color:var(--accent)] focus:outline-none"
 		/>

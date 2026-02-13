@@ -9,12 +9,12 @@ const cleanPath = pathname.replace(/\/+$/, "") || "/"
 const parts = cleanPath.split("/").filter(Boolean)
 
 const labelMap: Record<string, { label: string }> = {
-	archive: { label: "Архив" },
+	archive: { label: "Статьи" },
 	methods: { label: "Методы" },
 	communities: { label: "Сообщества" },
 	authors: { label: "Авторы" },
 	faq: { label: "FAQ" },
-	finder: { label: "Подбор сообщества" },
+	finder: { label: "Подбор групп" },
 	bookmarks: { label: "Закладки" },
 	about: { label: "О проекте" },
 	privacy: { label: "Конфиденциальность" },
@@ -39,7 +39,7 @@ const crumbs = parts.map((part, index) => {
 {
 	cleanPath !== "/" && (
 		<nav aria-label="Хлебные крошки" class="w-full overflow-x-auto">
-			<ol class="flex min-w-max items-center gap-2 rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)]/85 px-3 py-2 text-sm">
+			<ol class="flex max-w-fit items-center gap-2 rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)]/85 px-3 py-2 text-sm">
 				<li>
 					<a href="/" class="rounded-full px-2 py-1 text-[color:var(--muted)] transition hover:bg-[color:var(--bg)] hover:text-[color:var(--text)]">
 						Главная

@@ -48,21 +48,7 @@ const {
 			dateModified={dateModified}
 		/>
 		<link rel="manifest" href="/manifest.webmanifest" />
-		<meta name="theme-color" content="#4281e0" />
-		<script is:inline>
-			(() => {
-				const key = "unitone_theme";
-				let saved = null;
-				try {
-					saved = localStorage.getItem(key);
-				} catch {}
-				const systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-				const theme = saved === "dark" || saved === "light" ? saved : (systemDark ? "dark" : "light");
-				document.documentElement.setAttribute("data-theme", theme);
-				const meta = document.querySelector('meta[name="theme-color"]');
-				if (meta) meta.setAttribute("content", theme === "dark" ? "#273244" : "#4281e0");
-			})();
-		</script>
+		<meta name="theme-color" content="#10a8ff" />
 	</head>
 	<body
 		class={`${bodyStyle || ""} flex min-h-screen flex-col bg-[color:var(--bg)] text-[color:var(--text)]`}
@@ -76,59 +62,118 @@ const {
 			>
 			</div>
 		</div>
+		<div id="pwa-install" class="mx-auto hidden w-full max-w-4xl pt-0 md:pt-3 px-0">
+			<div class="rounded-px md:rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] px-4 py-3">
+				<div class="flex flex-col gap-3 justify-between sm:flex-row sm:items-center sm:gap-4">
+					<div class="flex items-center gap-3">
+						<img
+							src="/favicon.svg"
+							alt="Иконка приложения Unity One"
+							class="h-12 w-12 shrink-0 rounded-xl border border-[color:var(--border)] bg-[color:var(--bg)] p-2 sm:h-14 sm:w-14"
+							loading="lazy"
+							decoding="async"
+						/>
+						<div class="min-w-0 flex-1">
+							<p class="text-sm font-semibold text-[color:var(--text)]">Установите Unity One как приложение</p>
+							<p class="mt-1 text-sm text-[color:var(--muted)]">
+								Будет быстрее открываться и работать как отдельное приложение.
+							</p>
+						</div>
+					</div>
+					<button
+						id="pwa-install-btn"
+						class="w-full rounded-full bg-[var(--sk-button-background)] px-4 py-2 text-sm text-white hover:bg-[var(--sk-button-background-hover)] active:bg-[var(--sk-button-background-active)] sm:w-auto sm:shrink-0"
+					>
+						<span>Установить</span>
+					</button>
+				</div>
+			</div>
+		</div>
 		<Header />
+		<div
+			id="cookie-banner"
+			class="fixed bottom-4 left-1/2 z-[60] hidden w-full px-5 -translate-x-1/2 md:w-[620px] md:px-0"
+		>
+			<div class="rounded-2xl border-2 border-[color:var(--border)] bg-[color:var(--surface)] p-4">
+				<p class="text-sm text-[color:var(--text)]">
+					Этот сайт использует файлы cookie, чтобы улучшить ваш пользовательский опыт.
+				</p>
+				<div class="mt-3 flex flex-wrap gap-2">
+					<button
+						id="cookie-accept-all"
+						class="rounded-full bg-[var(--sk-button-background)] px-3 py-1.5 text-sm text-white hover:bg-[var(--sk-button-background-hover)] active:bg-[var(--sk-button-background-active)]"
+					>
+						Принять все
+					</button>
+					<button
+						id="cookie-essential-only"
+						class="rounded-full border border-[color:var(--border)] px-3 py-1.5 text-sm text-[color:var(--text)] hover:border-[color:var(--primary)]"
+					>
+						Только необходимые
+					</button>
+					<button
+						id="cookie-open-settings"
+						class="rounded-full border border-[color:var(--border)] px-3 py-1.5 text-sm text-[color:var(--text)] hover:border-[color:var(--primary)]"
+					>
+						Настройки
+					</button>
+				</div>
+				<div id="cookie-settings" class="mt-4 hidden rounded-xl border border-[color:var(--border)] p-3">
+					<p class="text-sm font-medium text-[color:var(--text)]">Настройки cookie</p>
+					<label class="mt-3 flex items-center justify-between gap-3 text-sm text-[color:var(--text)]">
+						<span>Необходимые</span>
+						<input type="checkbox" checked disabled />
+					</label>
+					<label class="mt-2 flex items-center justify-between gap-3 text-sm text-[color:var(--text)]">
+						<span>Аналитика</span>
+						<input id="cookie-analytics" type="checkbox" />
+					</label>
+					<label class="mt-2 flex items-center justify-between gap-3 text-sm text-[color:var(--text)]">
+						<span>Реклама</span>
+						<input id="cookie-ads" type="checkbox" />
+					</label>
+					<div class="mt-3 flex flex-wrap gap-2">
+						<button
+							id="cookie-save-settings"
+							class="rounded-full bg-[var(--sk-button-background)] px-3 py-1.5 text-sm text-white hover:bg-[var(--sk-button-background-hover)] active:bg-[var(--sk-button-background-active)]"
+						>
+							Сохранить
+						</button>
+						<button
+							id="cookie-close-settings"
+							class="rounded-full border border-[color:var(--border)] px-3 py-1.5 text-sm text-[color:var(--text)] hover:border-[color:var(--primary)]"
+						>
+							Закрыть
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
 		<Container class="py-20">
 			<div class="flex flex-col gap-12">
-				<Breadcrumbs currentLabel={breadcrumbCurrentLabel} />
-				{
-					Astro.url.pathname === "/" ||
+        {
+          Astro.url.pathname === "/" ||
 					new URL(Astro.url, Astro.site).pathname === "/" ||
 					hidePageHeader ? null : (
-						<section class="text-center">
+            <section class="">
 							{title && (
-								<h1 class="mb-3 text-5xl font-black tracking-tight md:text-6xl xl:text-7xl">
+                <h1 class="mb-3 text-5xl font-black tracking-tight md:text-6xl xl:text-7xl">
 									{title}
 								</h1>
 							)}
 							{description && (
-								<p class="mx-auto max-w-xl text-base text-[color:var(--muted)] md:text-lg lg:text-xl">
+                <p class="text-base text-[color:var(--muted)] md:text-lg lg:text-xl">
 									{description}
 								</p>
 							)}
 						</section>
 					)
 				}
+        <Breadcrumbs currentLabel={breadcrumbCurrentLabel} />
 				<slot />
 			</div>
 		</Container>
 		<Footer />
-		<div
-			id="pwa-install"
-			class="fixed md:w-[560px] w-[340px] bottom-4 left-1/2 z-[60] hidden -translate-x-1/2 rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] px-4 py-3 shadow-lg"
-		>
-			<div class="space-y-2">
-				<p class="text-sm font-medium text-[color:var(--text)]">
-					<span>Установить приложение на устройство?</span>
-				</p>
-				<p class="text-sm text-[color:var(--muted)]">
-					<span>Будет быстрее открываться и работать как отдельное приложение.</span>
-				</p>
-				<div class="flex gap-2">
-					<button
-						id="pwa-install-btn"
-						class="rounded-full bg-[var(--sk-button-background)] px-3 py-1.5 text-sm text-white hover:bg-[var(--sk-button-background-hover)] active:bg-[var(--sk-button-background-active)]"
-					>
-						<span>Установить</span>
-					</button>
-					<button
-						id="pwa-install-close"
-						class="rounded-full border border-[color:var(--border)] px-3 py-1.5 text-sm hover:border-[color:var(--primary)] hover:text-[color:var(--primary)] active:opacity-80"
-					>
-						<span>Позже</span>
-					</button>
-				</div>
-			</div>
-		</div>
 		<script is:inline>
 			window.addEventListener("load", () => {
 				const loader = document.getElementById("app-loader");
@@ -144,20 +189,31 @@ const {
 			let deferredPrompt = null;
 			const installBanner = document.getElementById("pwa-install");
 			const installBtn = document.getElementById("pwa-install-btn");
-			const closeBtn = document.getElementById("pwa-install-close");
-			const PWA_DISMISS_KEY = "pwaInstallDismissedAt";
-			const PWA_REMIND_AFTER_MS = 3 * 24 * 60 * 60 * 1000;
+			const PWA_SHOW_DELAY_MS = 8 * 1000;
 
-			const canShowPwaBanner = () => {
-				const dismissedAt = Number(localStorage.getItem(PWA_DISMISS_KEY) || 0);
-				if (!dismissedAt) return true;
-				return Date.now() - dismissedAt >= PWA_REMIND_AFTER_MS;
+			const showPwaBanner = () => {
+				if (installBanner) installBanner.classList.remove("hidden");
 			};
+			const updateInstallBtnState = () => {
+				if (!installBtn) return;
+				installBtn.disabled = !deferredPrompt;
+				installBtn.classList.toggle("opacity-60", !deferredPrompt);
+				installBtn.classList.toggle("cursor-not-allowed", !deferredPrompt);
+				installBtn.setAttribute(
+					"title",
+					deferredPrompt ? "Установить приложение" : "Установка пока недоступна в этом браузере",
+				);
+			};
+
+			setTimeout(() => {
+				showPwaBanner();
+				updateInstallBtnState();
+			}, PWA_SHOW_DELAY_MS);
 
 			window.addEventListener("beforeinstallprompt", (e) => {
 				e.preventDefault();
 				deferredPrompt = e;
-				if (installBanner && canShowPwaBanner()) installBanner.classList.remove("hidden");
+				updateInstallBtnState();
 			});
 
 			installBtn?.addEventListener("click", async () => {
@@ -165,12 +221,68 @@ const {
 				deferredPrompt.prompt();
 				await deferredPrompt.userChoice;
 				deferredPrompt = null;
+				updateInstallBtnState();
 				if (installBanner) installBanner.classList.add("hidden");
 			});
 
-			closeBtn?.addEventListener("click", () => {
-				localStorage.setItem(PWA_DISMISS_KEY, String(Date.now()));
-				if (installBanner) installBanner.classList.add("hidden");
+			const COOKIE_CONSENT_KEY = "cookieConsent_v1";
+			const cookieBanner = document.getElementById("cookie-banner");
+			const cookieSettings = document.getElementById("cookie-settings");
+			const cookieOpenSettings = document.getElementById("cookie-open-settings");
+			const cookieCloseSettings = document.getElementById("cookie-close-settings");
+			const cookieAcceptAll = document.getElementById("cookie-accept-all");
+			const cookieEssentialOnly = document.getElementById("cookie-essential-only");
+			const cookieSaveSettings = document.getElementById("cookie-save-settings");
+			const cookieAnalytics = document.getElementById("cookie-analytics");
+			const cookieAds = document.getElementById("cookie-ads");
+
+			const hideCookieBanner = () => {
+				cookieBanner?.classList.add("hidden");
+			};
+			const showCookieBanner = () => {
+				cookieBanner?.classList.remove("hidden");
+			};
+			const saveCookieConsent = (value) => {
+				localStorage.setItem(COOKIE_CONSENT_KEY, JSON.stringify(value));
+				hideCookieBanner();
+			};
+
+			try {
+				const savedConsent = localStorage.getItem(COOKIE_CONSENT_KEY);
+				if (!savedConsent) {
+					showCookieBanner();
+				} else {
+					const parsed = JSON.parse(savedConsent);
+					if (cookieAnalytics && typeof parsed.analytics === "boolean") {
+						cookieAnalytics.checked = parsed.analytics;
+					}
+					if (cookieAds && typeof parsed.ads === "boolean") {
+						cookieAds.checked = parsed.ads;
+					}
+				}
+			} catch {
+				showCookieBanner();
+			}
+
+			cookieOpenSettings?.addEventListener("click", () => {
+				cookieSettings?.classList.toggle("hidden");
+			});
+			cookieCloseSettings?.addEventListener("click", () => {
+				cookieSettings?.classList.add("hidden");
+			});
+			cookieAcceptAll?.addEventListener("click", () => {
+				saveCookieConsent({ essential: true, analytics: true, ads: true, updatedAt: Date.now() });
+			});
+			cookieEssentialOnly?.addEventListener("click", () => {
+				saveCookieConsent({ essential: true, analytics: false, ads: false, updatedAt: Date.now() });
+			});
+			cookieSaveSettings?.addEventListener("click", () => {
+				saveCookieConsent({
+					essential: true,
+					analytics: Boolean(cookieAnalytics?.checked),
+					ads: Boolean(cookieAds?.checked),
+					updatedAt: Date.now(),
+				});
 			});
 		</script>
 	</body>

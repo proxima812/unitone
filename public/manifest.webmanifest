@@ -1,10 +1,10 @@
 {
-  "name": "Unit One — 12 шагов",
-  "short_name": "Unit One",
+  "name": "Unity One — 12 шагов",
+  "short_name": "Unity One",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#fafbfb",
-  "theme_color": "#4281e0",
+  "background_color": "#fafafa",
+  "theme_color": "#10a8ff",
   "icons": [
     {
       "src": "/favicon.svg",

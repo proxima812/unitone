@@ -62,37 +62,37 @@ export const links = [
 	{
 		label: "Сообщества",
 		href: "/communities",
-		icon: "mdi:account-group",
+		icon: "solar:users-group-rounded-bold-duotone",
 	},
 	{
 		label: "Методы шагов",
 		href: "/methods",
-		icon: "mdi:lightbulb-group",
+		icon: "solar:lightbulb-bolt-bold-duotone",
 	},
 	{
-		label: "Архив",
+		label: "Статьи",
 		href: "/archive",
-		icon: "mdi:archive-check-outline",
+		icon: "solar:archive-check-bold-duotone",
 	},
 	{
 		label: "Авторы",
 		href: "/authors",
-		icon: "mdi:account-edit-outline",
+		icon: "solar:user-circle-bold-duotone",
 	},
 	{
 		label: "FAQ",
 		href: "/faq",
-		icon: "mdi:help-circle-outline",
+		icon: "solar:question-circle-bold-duotone",
 	},
 	{
-		label: "Подобрать сообщество",
+		label: "Подбор групп",
 		href: "/finder",
-		icon: "mdi:account-multiple-check",
+		icon: "solar:magnifer-bold-duotone",
 	},
 	{
 		label: "Закладки",
 		href: "/bookmarks",
-		icon: "mdi:bookmark-outline",
+		icon: "solar:bookmark-bold-duotone",
 	},
 ]
 
@@ -116,7 +116,7 @@ export const blockData = [
 		title: links[2].label,
 		icon: links[2].icon,
 		textBtn: "Подробнее",
-		description: "Архив постов и статей: шаги, традиции, личный опыт и прикладные разборы.",
+		description: "Статьи и посты: шаги, традиции, личный опыт и прикладные разборы.",
 	},
 	{
 		link: links[4].href,

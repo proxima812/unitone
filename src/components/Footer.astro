@@ -1,9 +1,7 @@
 ---
 import { links, telegrams } from "@/data/links"
-import { getCollection } from "astro:content"
+import { methodsByTitle } from "@/data/methods"
 import Container from "./Container.astro"
-
-const methods = await getCollection("methods")
 ---
 
 <footer class="border-t border-[color:var(--border)] bg-[color:var(--surface)]/92 backdrop-blur">
@@ -23,10 +21,10 @@ const methods = await getCollection("methods")
 			<div class="flex flex-col items-center gap-4 md:items-start">
 				<span class="text-lg font-semibold text-[color:var(--text)]">Методы шагов</span>
 				{
-					methods &&
-						methods.map((item) => (
+					methodsByTitle &&
+						methodsByTitle.map((item) => (
 							<a class="text-[color:var(--muted)] hover:text-[color:var(--accent)]" href="/methods">
-								{item.data.title}
+								{item.title}
 							</a>
 						))
 				}
@@ -57,7 +55,7 @@ const methods = await getCollection("methods")
 				<p>
 					&copy;
 					<span class="font-medium text-[color:var(--muted)]">{new Date().getFullYear()}</span>
-					<span class="font-bold">UnitOne</span>
+					<span class="font-bold">Unity One</span>
 				</p>
 				<p class="text-[color:var(--muted)]">сделано с душой и вниманием</p>
 			</div>
