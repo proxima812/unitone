@@ -4,6 +4,7 @@ import { getPublishedArticleBySlug } from "@/lib/db/articles";
 import { enhanceArticleLinksHtml } from "@/lib/content/sanitize";
 
 export const prerender = false;
+Astro.response.headers.set("Cache-Control", "no-store, max-age=0, must-revalidate");
 
 const rawSlug = Astro.params.slug || "";
 const slug = rawSlug.replace(/^\/+|\/+$/g, "").split("/")[0];
