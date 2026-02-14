@@ -2,7 +2,6 @@
 dist/
 .vercel/output/
 .vercel/
-.astro-indexnow-cache.json
 
 # generated types
 .astro/
@@ -30,6 +29,8 @@ bun.lockb
 # local markdown content sources
 src/data/_old-archive/
 src/data/_old-methods/
+
+docs/
 
 
 validate-post.ts
