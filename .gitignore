@@ -1,6 +1,8 @@
 # build output
 dist/
 .vercel/output/
+.vercel/
+.astro-indexnow-cache.json
 
 # generated types
 .astro/
