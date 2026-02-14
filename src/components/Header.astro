@@ -1,7 +1,10 @@
 ---
 import Container from "./Container.astro";
+import { getReleaseMeta } from "@/lib/release";
 import Logo from "./Logo.astro";
 import Menu from "./Menu.astro";
+
+const releaseMeta = getReleaseMeta();
 ---
 
 <header
@@ -9,7 +12,12 @@ import Menu from "./Menu.astro";
 	class="sticky top-0 z-50 mx-0 mt-0 w-full max-w-4xl rounded-none border-b border-[color:var(--border)] bg-[color:var(--surface)]/90 py-4 backdrop-blur transition-transform duration-300 will-change-transform md:top-5 md:mx-auto md:mt-5 md:rounded-2xl md:border"
 >
 	<Container class="flex justify-between gap-x-3">
-		<Logo />
+		<div class="flex items-center gap-2">
+			<Logo />
+			<span class="hidden rounded-full border border-[color:var(--border)] bg-[color:var(--bg)] px-2 py-1 text-xs font-medium text-[color:var(--muted)] sm:inline">
+				v{releaseMeta.version}
+			</span>
+		</div>
 		<Menu />
 	</Container>
 </header>

@@ -5,6 +5,16 @@ export const config = {
     description: '',
     date: 'Последнее обновление (13.02.2026)'
   },
+	release: {
+		// Увеличивай на +1 при каждом commit/push:
+		// 0 -> 2.1, 1 -> 2.2, 2 -> 2.3, 3 -> 2.4, 4 -> 2.5, 5 -> 3.0, 6 -> 3.1 и т.д.
+		versionStep: 1,
+		// Обновляется автоматически pre-push hook (время Астаны, UTC+5)
+		lastPushedAt: "2026-02-14T16:30:00+05:00",
+		timeZone: "Asia/Almaty",
+		utcOffsetLabel: "UTC+5",
+		locale: "ru-RU",
+	},
 	site: {
 		OG: {
 			title: "Unity One — мы о 12 шагов восстановления/выздоровления и программе 12 шагов. Меняемся к лучшему!",

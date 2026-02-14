@@ -1,6 +1,7 @@
 ---
 import { links, telegrams } from "@/data/links"
 import { methodsByTitle } from "@/data/methods"
+import { getReleaseMeta } from "@/lib/release"
 import Container from "./Container.astro"
 
 const technologies = [
@@ -14,6 +15,8 @@ const technologies = [
 	{ label: "mdx", href: "https://mdxjs.com/" },
 	{ label: "swr", href: "https://swr.vercel.app/" },
 ]
+
+const releaseMeta = getReleaseMeta()
 ---
 
 <footer class="border-t border-[color:var(--border)] bg-[color:var(--surface)]/92 backdrop-blur">
@@ -89,6 +92,11 @@ const technologies = [
 						</>
 					))
 				}
+			</p>
+			<p class="mt-2 text-sm text-[color:var(--muted)]">
+				Версия сайта: <span class="font-medium text-[color:var(--text)]">{releaseMeta.version}</span>
+				{" • "}
+				{releaseMeta.stamp}
 			</p>
 			<p class="mt-4 text-sm text-[color:var(--muted)]">
 				Источники: открытые материалы, авторские мнения и личный опыт участников.
