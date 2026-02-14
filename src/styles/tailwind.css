@@ -175,12 +175,9 @@
 
   .article-rich-content .article-link-inner {
     display: inline-flex;
-    align-items: center;
-    gap: 0.45rem;
-    border: 1px solid color-mix(in srgb, var(--primary) 22%, white);
-    border-radius: 999px;
-    padding: 0.18rem 0.6rem;
-    background: color-mix(in srgb, var(--primary) 6%, white);
+    align-items: center; 
+    gap: 10px;
+    font-size: 16px;
     line-height: 1.4;
   }
 

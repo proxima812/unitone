@@ -147,7 +147,7 @@ export default function ArticleEditor({ value, onChange, onSave, saving }: Artic
     });
 
     if (invalidFound) {
-      setLinkError("Часть ссылок не распознана. Используйте формат http/https.");
+      setLinkError("Часть ссылок не распознана. Используйте формат https://example.com");
     } else {
       setLinkError(null);
     }
@@ -215,10 +215,10 @@ export default function ArticleEditor({ value, onChange, onSave, saving }: Artic
         {linkError && <p className="mt-2 text-xs text-red-600">{linkError}</p>}
       </div>
 
-      <div>
-        <p className="mb-2 text-sm text-[color:var(--muted)]">Preview</p>
+      {/* <div>
+        <p className="mb-2 text-sm text-[color:var(--muted)]">Как выглядит:</p>
         <div className="my-prose !mx-0 !max-w-none !p-4" dangerouslySetInnerHTML={{ __html: previewHtml }} />
-      </div>
+      </div> */}
 
       <div className="flex justify-end">
         <button type="button" onClick={onSave} disabled={saving} className="rounded-lg bg-[var(--sk-button-background)] px-4 py-2 text-sm text-white disabled:opacity-60">
