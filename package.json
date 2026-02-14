@@ -6,11 +6,7 @@
 		"dev": "astro dev",
 		"build": "astro build",
 		"preview": "astro preview",
-		"astro": "astro",
-		"check:exclude": "node scripts/check-content-exclude.mjs",
-		"validate:post": "bun validate-post.ts",
-		"validate:posts": "node scripts/validate-all-posts.mjs",
-		"rewrite:posts": "node scripts/rewrite-posts.mjs"
+		"astro": "astro"
 	},
 	"dependencies": {
 		"@supabase/supabase-js": "^2.49.4",
