@@ -1,0 +1,114 @@
+---
+const { tags = [] } = Astro.props as { tags: string[] };
+---
+
+<section class="flex flex-col gap-4" data-filter>
+	<div class="flex flex-col gap-2 text-center">
+		<p class="text-sm text-[color:var(--muted)]">
+			Выберите теги или введите слово, результат обновится автоматически.
+		</p>
+	</div>
+	<div class="flex flex-wrap items-center justify-center gap-2">
+		<input
+			id="archive-search"
+			type="search"
+			placeholder="Поиск по заголовку и описанию"
+			aria-label="Поиск по статьям"
+			class="w-full rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] px-4 py-2 text-sm md:w-96 focus:border-[color:var(--accent)] focus:outline-none"
+		/>
+		<button
+			id="archive-reset"
+			type="button"
+			class="rounded-full border border-[color:var(--border)] bg-[color:var(--surface)] px-4 py-2 text-sm text-[color:var(--muted)] transition hover:text-[color:var(--text)]"
+		>
+			Сбросить
+		</button>
+	</div>
+	{
+		tags.length > 0 && (
+			<div class="w-full overflow-x-auto pb-1">
+				<div id="archive-tags" class="flex w-max min-w-full items-center gap-2 whitespace-nowrap">
+					{
+						tags.map((tag) => (
+							<button
+								type="button"
+								data-tag={tag}
+								data-active="false"
+								class="rounded-full border border-[color:var(--border)] bg-[color:var(--surface)] px-3 py-1.5 text-sm text-[color:var(--text)] transition hover:border-[color:var(--accent)]"
+							>
+								{tag}
+							</button>
+						))
+					}
+				</div>
+			</div>
+		)
+	}
+	<div class="text-center text-sm text-[color:var(--muted)]">
+		Найдено: <span id="archive-count"></span>
+	</div>
+</section>
+
+<script is:inline>
+	(() => {
+		const searchInput = document.getElementById("archive-search");
+		const resetBtn = document.getElementById("archive-reset");
+		const countNode = document.getElementById("archive-count");
+		const posts = Array.from(document.querySelectorAll("[data-posts] [data-tag]"));
+		const tagButtons = Array.from(document.querySelectorAll("#archive-tags [data-tag]"));
+		const activeTags = new Set();
+
+		const applyFilters = () => {
+			const query = (searchInput?.value || "").toLowerCase().trim();
+			let visibleCount = 0;
+
+			posts.forEach((post) => {
+				const postTags = (post.getAttribute("data-tag") || "")
+					.split(",")
+					.map((tag) => tag.toLowerCase().trim())
+					.filter(Boolean);
+				const text = (post.textContent || "").toLowerCase();
+				const byTags =
+					activeTags.size === 0 ||
+					[...activeTags].some((tag) => postTags.includes(String(tag).toLowerCase().trim()));
+				const byQuery = !query || text.includes(query);
+				const visible = byTags && byQuery;
+				post.classList.toggle("hidden", !visible);
+				if (visible) visibleCount += 1;
+			});
+
+			if (countNode) countNode.textContent = String(visibleCount);
+		};
+
+		tagButtons.forEach((button) => {
+			button.addEventListener("click", () => {
+				const tag = button.getAttribute("data-tag") || "";
+				if (!tag) return;
+				if (activeTags.has(tag)) activeTags.delete(tag);
+				else activeTags.add(tag);
+				const active = activeTags.has(tag);
+				button.setAttribute("data-active", active ? "true" : "false");
+				button.classList.toggle("border-[color:var(--accent)]", active);
+				button.classList.toggle("bg-[color:var(--accent)]", active);
+				button.classList.toggle("text-white", active);
+				button.classList.toggle("bg-[color:var(--surface)]", !active);
+				button.classList.toggle("text-[color:var(--text)]", !active);
+				applyFilters();
+			});
+		});
+
+		searchInput?.addEventListener("input", applyFilters);
+		resetBtn?.addEventListener("click", () => {
+			activeTags.clear();
+			if (searchInput) searchInput.value = "";
+			tagButtons.forEach((button) => {
+				button.setAttribute("data-active", "false");
+				button.classList.remove("border-[color:var(--accent)]", "bg-[color:var(--accent)]", "text-white");
+				button.classList.add("bg-[color:var(--surface)]", "text-[color:var(--text)]");
+			});
+			applyFilters();
+		});
+
+		applyFilters();
+	})();
+</script>

@@ -1,4 +1,4 @@
-import { ensureExternalAttrs, faviconUrlFromHref, sanitizeHref, shortenUrlForDisplay } from "@/lib/content/links";
+import { ensureAnchorClass, ensureExternalAttrs, faviconUrlFromHref, sanitizeHref, shortenUrlForDisplay } from "@/lib/content/links";
 
 const ALLOWED_TAGS = ["h2", "h3", "p", "strong", "em", "a", "ul", "ol", "li", "br"];
 
@@ -27,6 +27,7 @@ function stripDisallowedTags(input: string) {
         if (!href) return "<span>";
         let anchor = `<a href="${escapeHtml(href)}">`;
         anchor = ensureExternalAttrs(anchor, href, "");
+        anchor = ensureAnchorClass(anchor);
         return anchor;
       }
       return `<${tag}>`;
@@ -47,6 +48,7 @@ export function enhanceArticleLinksHtml(input: string, siteOrigin?: string) {
 
     let openTag = `<a${left}href="${escapeHtml(href)}"${right}>`;
     openTag = ensureExternalAttrs(openTag, href, siteOrigin);
+    openTag = ensureAnchorClass(openTag);
 
     const textOnly = inner.replace(/<[^>]+>/g, "").trim();
     const label = textOnly || shortenUrlForDisplay(href);

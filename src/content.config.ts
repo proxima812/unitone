@@ -16,14 +16,4 @@ const archive = defineCollection({
 	}),
 });
 
-const methods = defineCollection({
-	loader: glob({ pattern: "**/*.(md|mdx)", base: "./src/data/methods/" }),
-	schema: z.object({
-		title: z.string(),
-		description: z.string().optional(),
-		ogImage: z.any().optional(),
-		community: z.array(z.string()).optional(),
-	}),
-});
-
-export const collections = { archive, methods };
+export const collections = { archive };

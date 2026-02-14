@@ -1,0 +1,18 @@
+---
+const { id, title, description = "", date = "", href, variant = "article" } = Astro.props;
+const isCard = variant === "card";
+---
+
+<button
+	type="button"
+	class={`bookmark-toggle rounded-full border px-3 py-1.5 text-sm transition border-[color:var(--border)] bg-[color:var(--surface)] text-[color:var(--text)] hover:border-[color:var(--accent)] ${isCard ? "relative z-10" : ""}`}
+	data-bookmark-toggle
+	data-bookmark-id={id}
+	data-bookmark-title={title}
+	data-bookmark-description={description}
+	data-bookmark-date={date}
+	data-bookmark-href={href}
+	aria-pressed="false"
+>
+	В закладки
+</button>

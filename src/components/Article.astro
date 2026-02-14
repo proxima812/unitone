@@ -1,6 +1,6 @@
 ---
 import Author from "./Author.astro"
-import BookmarkToggle from "@/components/svelte/BookmarkToggle.svelte"
+import BookmarkToggle from "@/components/BookmarkToggle.astro"
 
 const { data, id } = Astro.props
 ---
@@ -39,7 +39,6 @@ const { data, id } = Astro.props
 
 			<div class="pt-2">
 				<BookmarkToggle
-					client:load
 					id={id}
 					title={data.title}
 					description={data.description || ""}

@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useRef, useState } from "react";
 import { env } from "@/lib/env";
 import type { TelegramVerifyRequest } from "@/lib/types";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 declare global {
   interface Window {
@@ -78,7 +78,7 @@ export default function LoginTelegram({ onAuthenticated }: LoginTelegramProps) {
     <div className="rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] p-5">
       <h2 className="text-xl font-semibold text-[color:var(--text)]">Вход в админ панель</h2>
       <p className="mt-2 text-sm text-[color:var(--muted)]">
-        Авторизация доступна только пользователям из whitelist таблицы `admin_users`.
+        Авторизация доступна только пользователям из whitelist. Напишите мне, чтобы попасть в белый список <a href="https://t.me/legion_free" target="_blank" className="text-blue-500 underline underline-offset-4">t.me/legion_free</a>
       </p>
       <div className="mt-4" ref={rootRef} />
       {loading && <p className="mt-3 text-sm text-[color:var(--muted)]">Проверяем аккаунт...</p>}

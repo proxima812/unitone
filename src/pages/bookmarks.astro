@@ -1,5 +1,5 @@
 ---
-import BookmarksList from "@/components/svelte/BookmarksList.svelte"
+import BookmarksList from "@/components/BookmarksList.astro"
 import Layout from "@/layouts/Layout.astro"
 ---
 
@@ -11,6 +11,6 @@ import Layout from "@/layouts/Layout.astro"
 		<p class="text-[color:var(--muted)]">
 			Здесь отображаются статьи, которые вы сохранили. Закладки хранятся в вашем браузере.
 		</p>
-		<BookmarksList client:load />
+		<BookmarksList />
 	</section>
 </Layout>

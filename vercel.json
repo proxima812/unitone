@@ -33,13 +33,31 @@
     {
       "source": "/archive",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate, s-maxage=259200, stale-while-revalidate=86400" }
+        { "key": "Cache-Control", "value": "no-store, max-age=0" }
       ]
     },
     {
       "source": "/archive/(.*)",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate, s-maxage=259200, stale-while-revalidate=86400" }
+        { "key": "Cache-Control", "value": "no-store, max-age=0" }
+      ]
+    },
+    {
+      "source": "/admin",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow" }
+      ]
+    },
+    {
+      "source": "/admin/(.*)",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow" }
+      ]
+    },
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow" }
       ]
     },
     {

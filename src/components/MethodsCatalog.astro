@@ -1,0 +1,197 @@
+---
+type MethodItem = {
+	slug: string;
+	title: string;
+	description?: string;
+	community?: string[];
+};
+
+const { methods = [] } = Astro.props as { methods: MethodItem[] };
+
+const normalizedMethods = methods
+	.map((item) => ({
+		...item,
+		community: Array.isArray(item.community) ? item.community : [],
+		searchText: `${item.title || ""} ${item.description || ""}`.toLowerCase(),
+	}))
+	.sort((a, b) => (a.title || "").localeCompare(b.title || "", "ru"));
+
+const communities = [...new Set(normalizedMethods.flatMap((item) => item.community))]
+	.filter(Boolean)
+	.sort((a, b) => a.localeCompare(b, "ru"));
+
+const counts = Object.fromEntries(
+	communities.map((community) => [
+		community,
+		normalizedMethods.filter((item) => item.community.includes(community)).length,
+	]),
+);
+
+function parseDuration(description?: string): string {
+	if (!description) return "Не указано";
+	const match = description.match(/сроки\s*:\s*([^\.\n]+)/i);
+	return match ? match[1].trim() : "Не указано";
+}
+
+function shortDescription(description?: string): string {
+	if (!description) return "Описание скоро добавим.";
+	return description.replace(/^✅\s*/u, "").trim();
+}
+---
+
+<section class="rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] p-5 md:p-6">
+	<h2 class="text-2xl font-bold text-[color:var(--text)] md:text-3xl">Подберите подходящий метод</h2>
+	<p class="mt-2 text-[color:var(--muted)]">
+		Используйте поиск и фильтр по сообществу. Каждая карточка показывает только главное: суть метода,
+		сроки и для кого он чаще подходит.
+	</p>
+
+	<div class="mt-4 grid grid-cols-1 gap-3 md:grid-cols-[1fr_auto]">
+		<input
+			id="methods-search"
+			type="search"
+			placeholder="Поиск по названию или описанию метода"
+			aria-label="Поиск по методам"
+			class="w-full rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] px-4 py-2.5 text-sm text-[color:var(--text)]"
+		/>
+		<button
+			id="methods-reset"
+			type="button"
+			class="rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] px-4 py-2.5 text-sm text-black"
+		>
+			Сбросить
+		</button>
+	</div>
+
+	<div id="methods-filters" class="mt-4 flex flex-wrap gap-2">
+		<button
+			type="button"
+			data-community="all"
+			data-active="true"
+			class="rounded-full border border-[color:var(--border)] bg-[color:var(--text)] px-3 py-1.5 text-sm text-[color:var(--bg)]"
+		>
+			Все ({normalizedMethods.length})
+		</button>
+		{
+			communities.map((community) => (
+				<button
+					type="button"
+					data-community={community}
+					data-active="false"
+					class="rounded-full border border-[color:var(--border)] bg-[color:var(--surface)] px-3 py-1.5 text-sm text-[color:var(--text)]"
+				>
+					{community} ({counts[community] || 0})
+				</button>
+			))
+		}
+	</div>
+
+	<p class="mt-3 text-sm text-[color:var(--muted)]">
+		Найдено методов: <span id="methods-count" class="font-semibold text-[color:var(--text)]">{normalizedMethods.length}</span>
+	</p>
+</section>
+
+<section id="methods-grid" class="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+	{
+		normalizedMethods.map((item) => (
+			<article
+				data-community={item.community.join(",")}
+				data-search={item.searchText}
+				class="flex h-full flex-col rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)]"
+			>
+				<div class="p-5">
+					<h3 class="text-lg font-semibold leading-tight text-[color:var(--text)]">{item.title}</h3>
+					<p class="mt-2 line-clamp-3 text-sm text-[color:var(--muted)]">{shortDescription(item.description)}</p>
+
+					<div class="mt-4 space-y-2 text-sm">
+						<p class="text-[color:var(--muted)]">
+							Формат: <b class="text-[color:var(--text)]">{item.community.join(", ") || "Универсальный"}</b>
+						</p>
+						<p class="text-[color:var(--muted)]">
+							Сроки: <b class="text-[color:var(--text)]">{parseDuration(item.description)}</b>
+						</p>
+					</div>
+				</div>
+
+				<div class="mt-auto border-t border-[color:var(--border)] p-4">
+					<a
+						href={`/methods/${item.slug}/`}
+						class="inline-flex w-full items-center justify-center rounded-lg bg-[#10a8ff] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#0d9aed]"
+					>
+						Смотреть
+					</a>
+				</div>
+			</article>
+		))
+	}
+</section>
+
+<div id="methods-empty" class="mt-6 hidden rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] p-4 text-center text-[color:var(--muted)]">
+	Ничего не найдено. Попробуйте убрать фильтр или изменить поисковый запрос.
+</div>
+
+<script is:inline>
+	(() => {
+		const searchInput = document.getElementById("methods-search");
+		const resetBtn = document.getElementById("methods-reset");
+		const filtersRoot = document.getElementById("methods-filters");
+		const countNode = document.getElementById("methods-count");
+		const emptyNode = document.getElementById("methods-empty");
+		const cards = Array.from(document.querySelectorAll("#methods-grid article"));
+		const buttons = Array.from(filtersRoot?.querySelectorAll("button[data-community]") || []);
+		let activeCommunity = "all";
+
+		const applyFilters = () => {
+			const query = (searchInput?.value || "").toLowerCase().trim();
+			let visibleCount = 0;
+
+			cards.forEach((card) => {
+				const communities = (card.getAttribute("data-community") || "")
+					.split(",")
+					.map((item) => item.trim())
+					.filter(Boolean);
+				const searchable = (card.getAttribute("data-search") || "").toLowerCase();
+				const byCommunity = activeCommunity === "all" || communities.includes(activeCommunity);
+				const byQuery = !query || searchable.includes(query);
+				const visible = byCommunity && byQuery;
+				card.classList.toggle("hidden", !visible);
+				if (visible) visibleCount += 1;
+			});
+
+			if (countNode) countNode.textContent = String(visibleCount);
+			emptyNode?.classList.toggle("hidden", visibleCount !== 0);
+		};
+
+		buttons.forEach((button) => {
+			button.addEventListener("click", () => {
+				activeCommunity = button.getAttribute("data-community") || "all";
+				buttons.forEach((btn) => {
+					const active = (btn.getAttribute("data-community") || "all") === activeCommunity;
+					btn.setAttribute("data-active", active ? "true" : "false");
+					btn.classList.toggle("bg-[color:var(--text)]", active);
+					btn.classList.toggle("text-[color:var(--bg)]", active);
+					btn.classList.toggle("bg-[color:var(--surface)]", !active);
+					btn.classList.toggle("text-[color:var(--text)]", !active);
+				});
+				applyFilters();
+			});
+		});
+
+		searchInput?.addEventListener("input", applyFilters);
+		resetBtn?.addEventListener("click", () => {
+			activeCommunity = "all";
+			if (searchInput) searchInput.value = "";
+			buttons.forEach((btn) => {
+				const active = (btn.getAttribute("data-community") || "all") === "all";
+				btn.setAttribute("data-active", active ? "true" : "false");
+				btn.classList.toggle("bg-[color:var(--text)]", active);
+				btn.classList.toggle("text-[color:var(--bg)]", active);
+				btn.classList.toggle("bg-[color:var(--surface)]", !active);
+				btn.classList.toggle("text-[color:var(--text)]", !active);
+			});
+			applyFilters();
+		});
+
+		applyFilters();
+	})();
+</script>

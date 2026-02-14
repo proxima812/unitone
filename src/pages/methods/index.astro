@@ -1,6 +1,6 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-import MethodsCatalog from "@/components/svelte/MethodsCatalog.svelte";
+import MethodsCatalog from "@/components/MethodsCatalog.astro";
 import { methodsByTitle } from "@/data/methods";
 
 const methodsCatalog = methodsByTitle.map((item) => ({
@@ -15,5 +15,5 @@ const methodsCatalog = methodsByTitle.map((item) => ({
 	title="Методы"
 	description={`Понятный каталог методов: ${methodsCatalog.length} вариантов с краткими фактами и отдельной подробной страницей по каждому методу.`}
 >
-	<MethodsCatalog client:load methods={methodsCatalog} />
+	<MethodsCatalog methods={methodsCatalog} />
 </Layout>

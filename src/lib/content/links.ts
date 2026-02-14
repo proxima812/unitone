@@ -1,5 +1,7 @@
 import type { EditorLinkMeta } from "@/lib/types";
 
+export const ARTICLE_LINK_CLASS = "flex gap-1 items-center underline text-blue-500 underline-offset-4";
+
 function toUrl(href: string): URL | null {
   try {
     return new URL(href);
@@ -75,4 +77,15 @@ export function ensureExternalAttrs(anchorTag: string, href: string, siteOrigin?
   return withTarget.includes("rel=")
     ? withTarget.replace(/rel=("|').*?("|')/i, 'rel="noopener noreferrer nofollow"')
     : withTarget.replace("<a", '<a rel="noopener noreferrer nofollow"');
+}
+
+export function ensureAnchorClass(anchorTag: string, className = ARTICLE_LINK_CLASS) {
+  if (!className.trim()) return anchorTag;
+  if (anchorTag.includes("class=")) {
+    return anchorTag.replace(/class=("|')(.*?)\1/i, (_m, quote: string, existing: string) => {
+      const merged = Array.from(new Set(`${existing} ${className}`.split(/\s+/).filter(Boolean))).join(" ");
+      return `class=${quote}${merged}${quote}`;
+    });
+  }
+  return anchorTag.replace("<a", `<a class="${className}"`);
 }

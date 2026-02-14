@@ -4,6 +4,7 @@ import Breadcrumbs from "@/components/Breadcrumbs.astro";
 import Footer from "@/components/Footer.astro";
 import Header from "@/components/Header.astro";
 import SEO from "@/components/SEO.astro";
+import clientInitUrl from "@/scripts/client-init.ts?url";
 import "@/styles/tailwind.css";
 
 interface Props {
@@ -53,15 +54,6 @@ const {
 	<body
 		class={`${bodyStyle || ""} flex min-h-screen flex-col bg-[color:var(--bg)] text-[color:var(--text)]`}
 	>
-		<div
-			id="app-loader"
-			class="fixed inset-0 z-[60] flex items-center justify-center bg-[color:var(--bg)]"
-		>
-			<div
-				class="h-8 w-8 animate-spin rounded-full border-2 border-[color:var(--border)] border-t-[color:var(--accent)]"
-			>
-			</div>
-		</div>
 		<div id="pwa-install" class="mx-auto hidden w-full max-w-4xl pt-0 md:pt-3 px-0">
 			<div class="rounded-px md:rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] px-4 py-3">
 				<div class="flex flex-col gap-3 justify-between sm:flex-row sm:items-center sm:gap-4">
@@ -174,116 +166,24 @@ const {
 			</div>
 		</Container>
 		<Footer />
-		<script is:inline>
-			window.addEventListener("load", () => {
-				const loader = document.getElementById("app-loader");
-				if (loader) loader.style.display = "none";
-			});
-
-			if ("serviceWorker" in navigator) {
-				window.addEventListener("load", () => {
-					navigator.serviceWorker.register("/sw.js");
+		<script define:vars={{ clientInitUrl }}>
+			const startClientInit = () => {
+				import(clientInitUrl).catch(() => {
+					// no-op: keep page usable if client module fails
 				});
-			}
-
-			let deferredPrompt = null;
-			const installBanner = document.getElementById("pwa-install");
-			const installBtn = document.getElementById("pwa-install-btn");
-			const PWA_SHOW_DELAY_MS = 8 * 1000;
-
-			const showPwaBanner = () => {
-				if (installBanner) installBanner.classList.remove("hidden");
-			};
-			const updateInstallBtnState = () => {
-				if (!installBtn) return;
-				installBtn.disabled = !deferredPrompt;
-				installBtn.classList.toggle("opacity-60", !deferredPrompt);
-				installBtn.classList.toggle("cursor-not-allowed", !deferredPrompt);
-				installBtn.setAttribute(
-					"title",
-					deferredPrompt ? "Установить приложение" : "Установка пока недоступна в этом браузере",
-				);
 			};
 
-			setTimeout(() => {
-				showPwaBanner();
-				updateInstallBtnState();
-			}, PWA_SHOW_DELAY_MS);
-
-			window.addEventListener("beforeinstallprompt", (e) => {
-				e.preventDefault();
-				deferredPrompt = e;
-				updateInstallBtnState();
-			});
-
-			installBtn?.addEventListener("click", async () => {
-				if (!deferredPrompt) return;
-				deferredPrompt.prompt();
-				await deferredPrompt.userChoice;
-				deferredPrompt = null;
-				updateInstallBtnState();
-				if (installBanner) installBanner.classList.add("hidden");
-			});
-
-			const COOKIE_CONSENT_KEY = "cookieConsent_v1";
-			const cookieBanner = document.getElementById("cookie-banner");
-			const cookieSettings = document.getElementById("cookie-settings");
-			const cookieOpenSettings = document.getElementById("cookie-open-settings");
-			const cookieCloseSettings = document.getElementById("cookie-close-settings");
-			const cookieAcceptAll = document.getElementById("cookie-accept-all");
-			const cookieEssentialOnly = document.getElementById("cookie-essential-only");
-			const cookieSaveSettings = document.getElementById("cookie-save-settings");
-			const cookieAnalytics = document.getElementById("cookie-analytics");
-			const cookieAds = document.getElementById("cookie-ads");
-
-			const hideCookieBanner = () => {
-				cookieBanner?.classList.add("hidden");
-			};
-			const showCookieBanner = () => {
-				cookieBanner?.classList.remove("hidden");
-			};
-			const saveCookieConsent = (value) => {
-				localStorage.setItem(COOKIE_CONSENT_KEY, JSON.stringify(value));
-				hideCookieBanner();
-			};
-
-			try {
-				const savedConsent = localStorage.getItem(COOKIE_CONSENT_KEY);
-				if (!savedConsent) {
-					showCookieBanner();
-				} else {
-					const parsed = JSON.parse(savedConsent);
-					if (cookieAnalytics && typeof parsed.analytics === "boolean") {
-						cookieAnalytics.checked = parsed.analytics;
+			window.addEventListener(
+				"load",
+				() => {
+					if ("requestIdleCallback" in window) {
+						window.requestIdleCallback(startClientInit, { timeout: 1500 });
+					} else {
+						setTimeout(startClientInit, 350);
 					}
-					if (cookieAds && typeof parsed.ads === "boolean") {
-						cookieAds.checked = parsed.ads;
-					}
-				}
-			} catch {
-				showCookieBanner();
-			}
-
-			cookieOpenSettings?.addEventListener("click", () => {
-				cookieSettings?.classList.toggle("hidden");
-			});
-			cookieCloseSettings?.addEventListener("click", () => {
-				cookieSettings?.classList.add("hidden");
-			});
-			cookieAcceptAll?.addEventListener("click", () => {
-				saveCookieConsent({ essential: true, analytics: true, ads: true, updatedAt: Date.now() });
-			});
-			cookieEssentialOnly?.addEventListener("click", () => {
-				saveCookieConsent({ essential: true, analytics: false, ads: false, updatedAt: Date.now() });
-			});
-			cookieSaveSettings?.addEventListener("click", () => {
-				saveCookieConsent({
-					essential: true,
-					analytics: Boolean(cookieAnalytics?.checked),
-					ads: Boolean(cookieAds?.checked),
-					updatedAt: Date.now(),
-				});
-			});
+				},
+				{ once: true },
+			);
 		</script>
 	</body>
 </html>

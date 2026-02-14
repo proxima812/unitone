@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { buildEditorLinkMeta, sanitizeHref } from "@/lib/content/links";
+import { ARTICLE_LINK_CLASS, sanitizeHref } from "@/lib/content/links";
 import { enhanceArticleLinksHtml } from "@/lib/content/sanitize";
 import type { Article, ArticleStatus } from "@/lib/types";
 
@@ -64,32 +64,98 @@ export default function ArticleEditor({ value, onChange, onSave, saving }: Artic
     onChange({ ...value, [field]: fieldValue });
   };
 
-  const updateEditorHtml = () => {
-    onChange({ ...value, content_html: editorRef.current?.innerHTML || "" });
+  const createAnchor = (href: string, label: string) => {
+    const anchor = document.createElement("a");
+    anchor.href = href;
+    anchor.target = "_blank";
+    anchor.rel = "noopener noreferrer nofollow";
+    anchor.className = ARTICLE_LINK_CLASS;
+    anchor.textContent = label;
+    return anchor;
   };
 
-  const insertLink = () => {
-    const rawHref = window.prompt("Вставьте ссылку");
-    if (!rawHref) return;
+  const normalizeEditorLinks = () => {
+    const editor = editorRef.current;
+    if (!editor) return;
 
-    const href = sanitizeHref(rawHref);
-    if (!href) {
-      setLinkError("Невалидная ссылка. Используйте http/https/mailto/tel или относительный URL.");
-      return;
+    editor.querySelectorAll("a").forEach((anchor) => {
+      const href = sanitizeHref(anchor.getAttribute("href") || "");
+      if (!href) {
+        anchor.replaceWith(document.createTextNode(anchor.textContent || ""));
+        return;
+      }
+      anchor.setAttribute("href", href);
+      anchor.setAttribute("target", "_blank");
+      anchor.setAttribute("rel", "noopener noreferrer nofollow");
+      anchor.className = ARTICLE_LINK_CLASS;
+    });
+
+    const textNodes: Text[] = [];
+    const walker = document.createTreeWalker(editor, NodeFilter.SHOW_TEXT);
+    let current = walker.nextNode();
+    while (current) {
+      if (current.nodeType === Node.TEXT_NODE && current.parentElement?.closest("a") === null) {
+        textNodes.push(current as Text);
+      }
+      current = walker.nextNode();
     }
 
-    const meta = buildEditorLinkMeta(href);
-    setLinkError(null);
+    const rawUrlPattern = /(https?:\/\/[^\s<]+)/gi;
+    let invalidFound = false;
 
-    const selection = window.getSelection();
-    const selectedText = selection?.toString().trim();
-    if (selectedText) {
-      cmd("createLink", href);
+    textNodes.forEach((node) => {
+      const text = node.nodeValue || "";
+      rawUrlPattern.lastIndex = 0;
+      if (!rawUrlPattern.test(text)) return;
+      rawUrlPattern.lastIndex = 0;
+
+      const fragment = document.createDocumentFragment();
+      let lastIndex = 0;
+      let match = rawUrlPattern.exec(text);
+
+      while (match) {
+        const fullMatch = match[0];
+        const trimmedMatch = fullMatch.replace(/[),.!?;:]+$/g, "");
+        const trailing = fullMatch.slice(trimmedMatch.length);
+        const href = sanitizeHref(trimmedMatch);
+        const startIndex = match.index;
+
+        if (startIndex > lastIndex) {
+          fragment.appendChild(document.createTextNode(text.slice(lastIndex, startIndex)));
+        }
+
+        if (href) {
+          fragment.appendChild(createAnchor(href, trimmedMatch));
+        } else {
+          fragment.appendChild(document.createTextNode(trimmedMatch));
+          invalidFound = true;
+        }
+
+        if (trailing) {
+          fragment.appendChild(document.createTextNode(trailing));
+        }
+
+        lastIndex = startIndex + fullMatch.length;
+        match = rawUrlPattern.exec(text);
+      }
+
+      if (lastIndex < text.length) {
+        fragment.appendChild(document.createTextNode(text.slice(lastIndex)));
+      }
+
+      node.replaceWith(fragment);
+    });
+
+    if (invalidFound) {
+      setLinkError("Часть ссылок не распознана. Используйте формат http/https.");
     } else {
-      cmd("insertHTML", `<a href="${meta.href}">${meta.displayText}</a>`);
+      setLinkError(null);
     }
+  };
 
-    updateEditorHtml();
+  const updateEditorHtml = () => {
+    normalizeEditorLinks();
+    onChange({ ...value, content_html: editorRef.current?.innerHTML || "" });
   };
 
   return (
@@ -118,6 +184,17 @@ export default function ArticleEditor({ value, onChange, onSave, saving }: Artic
             <option value="published">published</option>
           </select>
         </label>
+        <div className="md:col-span-2">
+          {value.status === "draft" ? (
+            <p className="rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-amber-800">
+              Сейчас это черновик. На странице архива отображаются только статьи со статусом `published`.
+            </p>
+          ) : (
+            <p className="rounded-lg border border-emerald-300 bg-emerald-50 px-3 py-2 text-sm text-emerald-800">
+              Статус `published`: статья доступна на публичной странице.
+            </p>
+          )}
+        </div>
       </div>
 
       <div className="rounded-xl border border-[color:var(--border)] p-3">
@@ -126,7 +203,6 @@ export default function ArticleEditor({ value, onChange, onSave, saving }: Artic
           <button type="button" className="px-2 py-1 text-sm" onClick={() => cmd("formatBlock", "H3")}>H3</button>
           <button type="button" className="px-2 py-1 text-sm" onClick={() => cmd("bold")}>Bold</button>
           <button type="button" className="px-2 py-1 text-sm" onClick={() => cmd("italic")}>Italic</button>
-          <button type="button" className="px-2 py-1 text-sm" onClick={insertLink}>Insert Link</button>
         </div>
 
         <div

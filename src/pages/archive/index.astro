@@ -1,5 +1,5 @@
 ---
-import ArchiveFilter from "@/components/svelte/ArchiveFilter.svelte";
+import ArchiveFilter from "@/components/ArchiveFilter.astro";
 import { listPublishedArticles } from "@/lib/db/articles";
 import Layout from "@/layouts/Layout.astro";
 
@@ -7,19 +7,25 @@ export const prerender = false;
 
 const archives = await listPublishedArticles();
 
-const archivesTags = [] as string[];
+const archivesTags = Array.from(
+  new Set(
+    archives
+      .map((item) => item.author_name?.trim() || "")
+      .filter(Boolean),
+  ),
+);
 ---
 
 <Layout
   title="Статьи 12 шагов"
   description="Статьи о 12 шагах: шаги выздоровления, практики, темы и опыт."
 >
-  <ArchiveFilter client:load tags={archivesTags} />
+  <ArchiveFilter tags={archivesTags} />
 
   <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3" data-posts>
     {
       archives.map((item) => (
-        <a href={`/archive/${item.slug}/`} class="block relative" data-author={item.author_name || ""}>
+        <a href={`/archive/${item.slug}/`} class="block relative" data-tag={item.author_name || ""}>
           <div class="rounded-2xl p-2">
             <article class="flex h-full flex-col gap-3 rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] p-5">
               <h2 class="line-clamp-2 text-xl font-semibold leading-tight text-[color:var(--text)]">{item.title}</h2>
