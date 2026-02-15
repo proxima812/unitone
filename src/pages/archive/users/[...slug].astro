@@ -96,7 +96,7 @@ const shareLinks = [
 
           <h1 class="text-4xl font-black leading-tight tracking-tight md:text-5xl">{post.title}</h1>
           {post.description && <p class="mt-3 text-[color:var(--muted)]">{post.description}</p>}
-          <div class="mt-4">
+          <!-- <div class="mt-4">
             <BookmarkToggle
               id={`archive-user-${post.id}`}
               title={post.title}
@@ -105,7 +105,7 @@ const shareLinks = [
               href={`/archive/users/${post.slug}/`}
               variant="article"
             />
-          </div>
+          </div> -->
         </header>
 
         <article class="my-prose article-rich-content !mx-0 !mt-5 !max-w-none !p-5 md:!p-8" set:html={safeHtml} />

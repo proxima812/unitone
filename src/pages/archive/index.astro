@@ -1,9 +1,9 @@
 ---
-import ArchiveFilter from "@/components/ArchiveFilter.astro";
 import Article from "@/components/Article.astro";
 import UserArchiveCard from "@/components/UserArchiveCard.astro";
 import Layout from "@/layouts/Layout.astro";
 import { listPublishedArticles } from "@/lib/db/articles";
+import { Icon } from "astro-icon/components";
 import { getCollection } from "astro:content";
 
 export const prerender = false;
@@ -21,9 +21,29 @@ const staticArticlesTags = Array.from(
 	title="Статьи 12 шагов"
 	description="Статьи о 12 шагах: шаги выздоровления, практики, темы и опыт."
 >
-	<ArchiveFilter tags={staticArticlesTags} />
+	<!-- <ArchiveFilter tags={staticArticlesTags} /> -->
 
 	<section class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3" data-posts>
+		<div class="p-2 rounded-2xl">
+			<article
+				class="grid place-items-center border border-zinc-300 bg-zinc-100 text-zinc-700 h-full flex-col rounded-2xl p-5"
+			>
+				<div>
+					<span>Вы открыли <b>сообщество</b>/<b>группу</b> либо прочее?</span>
+					<p class="my-4">
+						Мы с радостью напишем о вас. Мы всегда на связи. Можете прислать материалы по
+						ссылке ниже.
+					</p>
+					<a
+						target="_blank"
+						class="flex items-center gap-1.5 p-2 underline underline-offset-4"
+						href="https://t.me/legion_free?text=%D0%97%D0%B4%D0%B0%D1%80%D0%BE%D0%B2%D0%B0!%20%D0%AF%20%D0%BD%D0%B0%D1%81%D1%87%D0%B5%D1%82%20%D0%B0%D0%B2%D1%82%D0%BE%D1%80%D1%81%D1%82%D0%B2%D0%B0%20%D0%BD%D0%B0%20%D1%81%D0%B0%D0%B9%D1%82%D0%B5%20unityone.space.%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%BD%D0%B0%D0%BF%D0%B8%D1%81%D0%B0%D1%82%D1%8C%20%D0%BF%D0%BE%D1%81%D1%82.%20%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BF%D0%B0%D1%81%D1%82%D1%8C%20%D0%B2%20%D0%B1%D0%B5%D0%BB%D1%8B%D0%B9%20%D1%81%D0%BF%D0%B8%D1%81%D0%BE%D0%BA%20%D0%BB%D0%B8%D0%B1%D0%BE%20%D0%BF%D1%80%D0%B8%D1%81%D0%BB%D0%B0%D1%82%D1%8C%20%D0%BE%D0%B1%D1%8A%D1%8F%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D1%8F%3F
+"
+						><Icon name="solar:map-arrow-right-bold-duotone" /><span>t.me/legion_free</span></a
+					>
+				</div>
+			</article>
+		</div>
 		{
 			staticArticles &&
 				staticArticles.map((article, index) => (

@@ -89,11 +89,11 @@ export const links = [
 		href: "/finder",
 		icon: "solar:magnifer-bold-duotone",
 	},
-	{
-		label: "Закладки",
-		href: "/bookmarks",
-		icon: "solar:bookmark-bold-duotone",
-	},
+	// {
+	// 	label: "Закладки",
+	// 	href: "/bookmarks",
+	// 	icon: "solar:bookmark-bold-duotone",
+	// },
 ]
 
 export const blockData = [
