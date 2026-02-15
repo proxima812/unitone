@@ -1,5 +1,6 @@
 ---
 import Layout from "@/layouts/Layout.astro";
+import BookmarkToggle from "@/components/BookmarkToggle.astro";
 import MorePostsByAuthor from "@/components/MorePostsByAuthor.astro";
 import QuoteCopyEnhancer from "@/components/QuoteCopyEnhancer.astro";
 import RelatedPosts from "@/components/RelatedPosts.astro";
@@ -110,6 +111,16 @@ const shareLinks = [
 
 					<h1 class="text-4xl font-black leading-tight tracking-tight md:text-5xl">{post.data.title}</h1>
 					{post.data.description && <p class="mt-3 text-[color:var(--muted)]">{post.data.description}</p>}
+					<div class="mt-4">
+						<BookmarkToggle
+							id={`archive-static-${post.id}`}
+							title={post.data.title}
+							description={post.data.description || ""}
+							date={publishedAtISO || ""}
+							href={`/archive/static/${post.id}/`}
+							variant="article"
+						/>
+					</div>
 				</header>
 
 				<section class="my-prose article-rich-content !mx-0 !mt-5 !max-w-none !p-5 md:!p-8">
