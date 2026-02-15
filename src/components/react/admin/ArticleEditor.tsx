@@ -11,6 +11,7 @@ interface ArticleEditorValue {
   author_name: string;
   status: ArticleStatus;
   content_html: string;
+  published_at?: string;
 }
 
 interface ArticleEditorProps {
@@ -33,6 +34,7 @@ export function mapArticleToEditor(article: Article): ArticleEditorValue {
     author_name: article.author_name || "",
     status: article.status,
     content_html: article.content_html || "",
+    published_at: article.published_at || "",
   };
 }
 
@@ -44,6 +46,7 @@ export function emptyEditorValue(): ArticleEditorValue {
     author_name: "",
     status: "draft",
     content_html: "",
+    published_at: "",
   };
 }
 
@@ -59,6 +62,28 @@ export default function ArticleEditor({ value, onChange, onSave, saving }: Artic
   }, [value.content_html]);
 
   const previewHtml = useMemo(() => enhanceArticleLinksHtml(value.content_html), [value.content_html]);
+  const previewDateISO = useMemo(() => {
+    const fallback = new Date().toISOString();
+    if (!value.published_at) return fallback;
+    const parsed = new Date(value.published_at);
+    if (Number.isNaN(parsed.getTime())) return fallback;
+    return parsed.toISOString();
+  }, [value.published_at]);
+  const previewDateLabel = useMemo(
+    () =>
+      new Date(previewDateISO).toLocaleDateString("ru-RU", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      }),
+    [previewDateISO],
+  );
+  const previewReadingMinutes = useMemo(() => {
+    const words = value.content_html
+      .replace(/<[^>]+>/g, " ")
+      .match(/[\p{L}\p{N}]+/gu);
+    return Math.max(1, Math.ceil((words?.length || 0) / 180));
+  }, [value.content_html]);
 
   const updateField = (field: keyof ArticleEditorValue, fieldValue: string) => {
     onChange({ ...value, [field]: fieldValue });
@@ -397,6 +422,28 @@ export default function ArticleEditor({ value, onChange, onSave, saving }: Artic
         />
         {linkError && <p className="mt-2 text-xs text-red-600">{linkError}</p>}
       </div>
+
+      <section className="rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] p-3">
+        <p className="mb-3 text-sm text-[color:var(--muted)]">Предпросмотр поста (как на сайте)</p>
+        <header className="rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] p-4 md:p-7">
+          <div className="mb-4 flex flex-wrap items-center gap-3 text-sm text-[color:var(--muted)]">
+            <time dateTime={previewDateISO}>{previewDateLabel}</time>
+            <span className="rounded-full border border-[color:var(--border)] px-2 py-1">
+              {previewReadingMinutes} мин чтения
+            </span>
+          </div>
+          <h1 className="text-4xl font-black leading-tight tracking-tight md:text-5xl">
+            {value.title?.trim() || "Заголовок поста"}
+          </h1>
+          <p className="mt-3 text-[color:var(--muted)]">
+            {value.description?.trim() || "Краткое описание поста"}
+          </p>
+        </header>
+        <section
+          className="my-prose article-rich-content !mx-0 !mt-5 !max-w-none !p-5 md:!p-8"
+          dangerouslySetInnerHTML={{ __html: previewHtml || "<p></p>" }}
+        />
+      </section>
 
       <div className="flex justify-end">
         <button type="button" onClick={onSave} disabled={saving} className="rounded-lg bg-[var(--sk-button-background)] px-4 py-2 text-sm text-white disabled:opacity-60">
