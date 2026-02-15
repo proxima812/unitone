@@ -151,9 +151,61 @@ export default function ArticleEditor({ value, onChange, onSave, saving }: Artic
     return true;
   };
 
+  const normalizeEmptyParagraphs = (editor: HTMLDivElement) => {
+    editor.querySelectorAll("p").forEach((paragraph) => {
+      const hasOnlyEmptyContent = Array.from(paragraph.childNodes).every((node) => {
+        if (node.nodeType === Node.TEXT_NODE) {
+          const text = (node.textContent || "").replace(/\u00a0/g, " ").trim();
+          return text.length === 0;
+        }
+        if (node.nodeType === Node.ELEMENT_NODE) {
+          return (node as Element).tagName === "BR";
+        }
+        return false;
+      });
+
+      if (hasOnlyEmptyContent) {
+        paragraph.innerHTML = "";
+      }
+    });
+  };
+
+  const normalizeDivParagraphs = (editor: HTMLDivElement) => {
+    const blockTags = new Set([
+      "P",
+      "DIV",
+      "H1",
+      "H2",
+      "H3",
+      "H4",
+      "H5",
+      "H6",
+      "UL",
+      "OL",
+      "LI",
+      "BLOCKQUOTE",
+      "PRE",
+    ]);
+
+    editor.querySelectorAll("div").forEach((node) => {
+      if (!(node instanceof HTMLDivElement)) return;
+      const hasNestedBlocks = Array.from(node.children).some((child) => blockTags.has(child.tagName));
+      if (hasNestedBlocks) return;
+
+      const paragraph = document.createElement("p");
+      while (node.firstChild) {
+        paragraph.appendChild(node.firstChild);
+      }
+      node.replaceWith(paragraph);
+    });
+  };
+
   const normalizeEditorLinks = () => {
     const editor = editorRef.current;
     if (!editor) return;
+
+    normalizeDivParagraphs(editor);
+    normalizeEmptyParagraphs(editor);
 
     editor.querySelectorAll("a").forEach((anchor) => {
       const href = sanitizeHref(anchor.getAttribute("href") || "");
@@ -265,6 +317,14 @@ export default function ArticleEditor({ value, onChange, onSave, saving }: Artic
     onChange({ ...value, content_html: editorRef.current?.innerHTML || "" });
   };
 
+  const insertCleanParagraph = () => {
+    editorRef.current?.focus();
+    cmd("insertParagraph");
+    cmd("removeFormat");
+    cmd("unlink");
+    updateEditorHtml();
+  };
+
   const handlePaste = (event: ClipboardEvent<HTMLDivElement>) => {
     const pasted = event.clipboardData.getData("text/plain").trim();
     const href = sanitizeHref(pasted);
@@ -322,6 +382,7 @@ export default function ArticleEditor({ value, onChange, onSave, saving }: Artic
           <button type="button" className="px-2 py-1 text-sm" onMouseDown={(e) => e.preventDefault()} onClick={() => applyCommand("formatBlock", "H3")}>H3</button>
           <button type="button" className="px-2 py-1 text-sm" onMouseDown={(e) => e.preventDefault()} onClick={() => applyCommand("bold")}>Bold</button>
           <button type="button" className="px-2 py-1 text-sm" onMouseDown={(e) => e.preventDefault()} onClick={() => applyCommand("italic")}>Italic</button>
+          <button type="button" className="px-2 py-1 text-sm" onMouseDown={(e) => e.preventDefault()} onClick={insertCleanParagraph}>Новый абзац</button>
           <button type="button" className="px-2 py-1 text-sm" onMouseDown={(e) => e.preventDefault()} onClick={insertLinkFromPrompt}>Ссылка</button>
           <button type="button" className="px-2 py-1 text-sm" onMouseDown={(e) => e.preventDefault()} onClick={() => applyCommand("unlink")}>Убрать ссылку</button>
         </div>
