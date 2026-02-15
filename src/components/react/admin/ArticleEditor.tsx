@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type ClipboardEvent } from "react";
 import { ARTICLE_LINK_CLASS, sanitizeHref } from "@/lib/content/links";
 import { enhanceArticleLinksHtml } from "@/lib/content/sanitize";
 import type { Article, ArticleStatus } from "@/lib/types";
@@ -74,6 +74,83 @@ export default function ArticleEditor({ value, onChange, onSave, saving }: Artic
     return anchor;
   };
 
+  const getEditorRange = () => {
+    const editor = editorRef.current;
+    const selection = window.getSelection();
+    if (!editor || !selection || selection.rangeCount === 0) return null;
+    const range = selection.getRangeAt(0);
+    if (!editor.contains(range.commonAncestorContainer)) return null;
+    return range;
+  };
+
+  const ensureSpaceAfterLink = (anchor: HTMLAnchorElement) => {
+    const next = anchor.nextSibling;
+    if (next?.nodeType === Node.TEXT_NODE) {
+      const textNode = next as Text;
+      if (!textNode.data.startsWith(" ")) {
+        textNode.data = ` ${textNode.data}`;
+      }
+      return textNode;
+    }
+    const spacer = document.createTextNode(" ");
+    anchor.parentNode?.insertBefore(spacer, next || null);
+    return spacer;
+  };
+
+  const placeCaretIntoTextNodeEnd = (node: Text) => {
+    const selection = window.getSelection();
+    if (!selection) return;
+    const nextRange = document.createRange();
+    nextRange.setStart(node, node.data.length);
+    nextRange.collapse(true);
+    selection.removeAllRanges();
+    selection.addRange(nextRange);
+  };
+
+  const moveCaretOutsideCurrentLink = () => {
+    const editor = editorRef.current;
+    const range = getEditorRange();
+    if (!editor || !range || !range.collapsed) return;
+
+    const anchor =
+      (range.startContainer instanceof Element
+        ? range.startContainer.closest("a")
+        : range.startContainer.parentElement?.closest("a")) || null;
+    if (!(anchor instanceof HTMLAnchorElement) || !editor.contains(anchor)) return;
+
+    const tailRange = range.cloneRange();
+    tailRange.selectNodeContents(anchor);
+    tailRange.setStart(range.startContainer, range.startOffset);
+    if (tailRange.toString().length > 0) return;
+
+    const spacer = ensureSpaceAfterLink(anchor);
+    placeCaretIntoTextNodeEnd(spacer);
+  };
+
+  const insertAnchorAtCaret = (href: string, label: string) => {
+    const editor = editorRef.current;
+    const selection = window.getSelection();
+    if (!editor || !selection) return false;
+
+    let range = getEditorRange();
+    if (!range) {
+      editor.focus();
+      range = document.createRange();
+      range.selectNodeContents(editor);
+      range.collapse(false);
+      selection.removeAllRanges();
+      selection.addRange(range);
+    }
+
+    const anchor = createAnchor(href, label);
+    range.deleteContents();
+    range.insertNode(anchor);
+
+    const spacer = ensureSpaceAfterLink(anchor);
+    placeCaretIntoTextNodeEnd(spacer);
+    return true;
+  };
+
   const normalizeEditorLinks = () => {
     const editor = editorRef.current;
     if (!editor) return;
@@ -100,7 +177,8 @@ export default function ArticleEditor({ value, onChange, onSave, saving }: Artic
       current = walker.nextNode();
     }
 
-    const rawUrlPattern = /(https?:\/\/[^\s<]+)/gi;
+    // ASCII URL pattern: keeps normal URLs clickable and avoids swallowing non-latin text after pasted links.
+    const rawUrlPattern = /https?:\/\/[A-Za-z0-9\-._~:/?#[\]@!$&'()*+,;=%]+/g;
     let invalidFound = false;
 
     textNodes.forEach((node) => {
@@ -151,10 +229,51 @@ export default function ArticleEditor({ value, onChange, onSave, saving }: Artic
     } else {
       setLinkError(null);
     }
+
+    moveCaretOutsideCurrentLink();
   };
 
   const updateEditorHtml = () => {
     normalizeEditorLinks();
+    onChange({ ...value, content_html: editorRef.current?.innerHTML || "" });
+  };
+
+  const applyCommand = (command: string, commandValue?: string) => {
+    editorRef.current?.focus();
+    cmd(command, commandValue);
+    updateEditorHtml();
+  };
+
+  const insertLinkFromPrompt = () => {
+    const input = window.prompt("Вставьте ссылку (https://...)", "https://");
+    if (input === null) return;
+
+    const href = sanitizeHref(input.trim());
+    if (!href) {
+      setLinkError("Неверная ссылка. Используйте формат https://example.com");
+      return;
+    }
+
+    const range = getEditorRange();
+    if (range && !range.collapsed) {
+      applyCommand("createLink", href);
+      return;
+    }
+
+    insertAnchorAtCaret(href, href);
+    setLinkError(null);
+    onChange({ ...value, content_html: editorRef.current?.innerHTML || "" });
+  };
+
+  const handlePaste = (event: ClipboardEvent<HTMLDivElement>) => {
+    const pasted = event.clipboardData.getData("text/plain").trim();
+    const href = sanitizeHref(pasted);
+    if (!href) return;
+    if (/\s/.test(pasted)) return;
+
+    event.preventDefault();
+    insertAnchorAtCaret(href, pasted);
+    setLinkError(null);
     onChange({ ...value, content_html: editorRef.current?.innerHTML || "" });
   };
 
@@ -199,26 +318,24 @@ export default function ArticleEditor({ value, onChange, onSave, saving }: Artic
 
       <div className="rounded-xl border border-[color:var(--border)] p-3">
         <div className="mb-2 flex flex-wrap gap-2">
-          <button type="button" className="px-2 py-1 text-sm" onClick={() => cmd("formatBlock", "H2")}>H2</button>
-          <button type="button" className="px-2 py-1 text-sm" onClick={() => cmd("formatBlock", "H3")}>H3</button>
-          <button type="button" className="px-2 py-1 text-sm" onClick={() => cmd("bold")}>Bold</button>
-          <button type="button" className="px-2 py-1 text-sm" onClick={() => cmd("italic")}>Italic</button>
+          <button type="button" className="px-2 py-1 text-sm" onMouseDown={(e) => e.preventDefault()} onClick={() => applyCommand("formatBlock", "H2")}>H2</button>
+          <button type="button" className="px-2 py-1 text-sm" onMouseDown={(e) => e.preventDefault()} onClick={() => applyCommand("formatBlock", "H3")}>H3</button>
+          <button type="button" className="px-2 py-1 text-sm" onMouseDown={(e) => e.preventDefault()} onClick={() => applyCommand("bold")}>Bold</button>
+          <button type="button" className="px-2 py-1 text-sm" onMouseDown={(e) => e.preventDefault()} onClick={() => applyCommand("italic")}>Italic</button>
+          <button type="button" className="px-2 py-1 text-sm" onMouseDown={(e) => e.preventDefault()} onClick={insertLinkFromPrompt}>Ссылка</button>
+          <button type="button" className="px-2 py-1 text-sm" onMouseDown={(e) => e.preventDefault()} onClick={() => applyCommand("unlink")}>Убрать ссылку</button>
         </div>
 
         <div
           ref={editorRef}
           contentEditable
           suppressContentEditableWarning
+          onPaste={handlePaste}
           onInput={updateEditorHtml}
           className="min-h-[260px] rounded-lg border border-[color:var(--border)] p-3 text-[color:var(--text)]"
         />
         {linkError && <p className="mt-2 text-xs text-red-600">{linkError}</p>}
       </div>
-
-      {/* <div>
-        <p className="mb-2 text-sm text-[color:var(--muted)]">Как выглядит:</p>
-        <div className="my-prose !mx-0 !max-w-none !p-4" dangerouslySetInnerHTML={{ __html: previewHtml }} />
-      </div> */}
 
       <div className="flex justify-end">
         <button type="button" onClick={onSave} disabled={saving} className="rounded-lg bg-[var(--sk-button-background)] px-4 py-2 text-sm text-white disabled:opacity-60">
