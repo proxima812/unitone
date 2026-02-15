@@ -2,9 +2,29 @@ import { config } from "@/config";
 
 function computeVersion(step: number) {
 	const normalized = Number.isFinite(step) ? Math.max(0, Math.floor(step)) : 0;
-	const major = 2 + Math.floor((normalized + 1) / 6);
-	const minor = (normalized + 1) % 6;
-	return `${major}.${minor}`;
+	const baseMajor = 2;
+	const baseMinor = 4;
+	const basePatch = 0;
+
+	const patchTotal = basePatch + normalized;
+	const patchCarry = Math.floor(patchTotal / 6);
+	const patch = patchTotal % 6;
+
+	const minorTotal = baseMinor + patchCarry;
+	const majorCarry = Math.floor(minorTotal / 6);
+	const minor = minorTotal % 6;
+	const major = baseMajor + majorCarry;
+
+	// Формат:
+	// - старт: 2.4.0
+	// - далее: 2.4.1 ... 2.4.5 -> 2.5 -> 2.5.1 ...
+	// - на границе major: 4.0.0
+	if (patch === 0) {
+		if (normalized === 0 || minor === 0) return `${major}.${minor}.0`;
+		return `${major}.${minor}`;
+	}
+
+	return `${major}.${minor}.${patch}`;
 }
 
 export function getReleaseMeta(now = new Date()) {
