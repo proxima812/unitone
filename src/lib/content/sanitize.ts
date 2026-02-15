@@ -1,6 +1,6 @@
 import { ensureAnchorClass, ensureExternalAttrs, faviconUrlFromHref, sanitizeHref, shortenUrlForDisplay } from "@/lib/content/links";
 
-const ALLOWED_TAGS = ["h2", "h3", "p", "strong", "em", "a", "ul", "ol", "li", "br"];
+const ALLOWED_TAGS = ["h2", "h3", "p", "strong", "em", "a", "ul", "ol", "li", "blockquote", "br"];
 
 function escapeHtml(text: string) {
   return text

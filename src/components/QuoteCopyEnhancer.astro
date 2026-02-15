@@ -1,0 +1,90 @@
+---
+const { rootSelector = ".article-rich-content" } = Astro.props as { rootSelector?: string };
+---
+
+<script is:inline define:vars={{ rootSelector }}>
+	(() => {
+		const BUTTON_CLASS = "quote-copy-btn";
+		const ENHANCED_ATTR = "data-quote-enhanced";
+
+		const normalizeText = (value) =>
+			value
+				.replace(/\r\n/g, "\n")
+				.replace(/\u00a0/g, " ")
+				.replace(/[ \t]+\n/g, "\n")
+				.replace(/\n{3,}/g, "\n\n")
+				.trim();
+
+		const getQuoteText = (quote) => {
+			const clone = quote.cloneNode(true);
+			clone.querySelectorAll(`.${BUTTON_CLASS}`).forEach((node) => node.remove());
+			return normalizeText(clone.textContent || "");
+		};
+
+		const fallbackCopy = (text) => {
+			const area = document.createElement("textarea");
+			area.value = text;
+			area.setAttribute("readonly", "true");
+			area.style.position = "fixed";
+			area.style.top = "-9999px";
+			document.body.appendChild(area);
+			area.focus();
+			area.select();
+			const ok = document.execCommand("copy");
+			document.body.removeChild(area);
+			return ok;
+		};
+
+		const copyText = async (text) => {
+			if (!text) return false;
+			try {
+				if (navigator.clipboard?.writeText) {
+					await navigator.clipboard.writeText(text);
+					return true;
+				}
+				return fallbackCopy(text);
+			} catch {
+				return fallbackCopy(text);
+			}
+		};
+
+		const setButtonState = (button, done) => {
+			button.dataset.state = done ? "done" : "idle";
+			button.textContent = done ? "Скопировано" : "Копировать";
+		};
+
+		const enhanceQuotes = () => {
+			const quotes = Array.from(document.querySelectorAll(`${rootSelector} blockquote`));
+			quotes.forEach((quote) => {
+				if (!(quote instanceof HTMLElement)) return;
+				if (quote.hasAttribute(ENHANCED_ATTR)) return;
+				quote.setAttribute(ENHANCED_ATTR, "true");
+
+				const button = document.createElement("button");
+				button.type = "button";
+				button.className = BUTTON_CLASS;
+				button.dataset.state = "idle";
+				button.textContent = "Копировать";
+				button.setAttribute("aria-label", "Копировать цитату");
+
+				let resetTimer;
+				button.addEventListener("click", async () => {
+					const text = getQuoteText(quote);
+					const ok = await copyText(text);
+					setButtonState(button, ok);
+					clearTimeout(resetTimer);
+					resetTimer = setTimeout(() => setButtonState(button, false), 1400);
+				});
+
+				quote.appendChild(button);
+			});
+		};
+
+		if (document.readyState === "loading") {
+			document.addEventListener("DOMContentLoaded", enhanceQuotes, { once: true });
+		} else {
+			enhanceQuotes();
+		}
+		document.addEventListener("astro:page-load", enhanceQuotes);
+	})();
+</script>

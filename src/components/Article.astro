@@ -2,13 +2,15 @@
 import Author from "./Author.astro"
 import BookmarkToggle from "@/components/BookmarkToggle.astro"
 
-const { data, id } = Astro.props
+const { data, id, hrefBase = "/archive/static" } = Astro.props
+const normalizedHrefBase = String(hrefBase).replace(/\/+$/, "")
+const articleHref = `${normalizedHrefBase}/${id}/`
 ---
 
 <a
 	data-tag={data.tags?.join(",") ?? ""}
 	data-author={Array.isArray(data.author) ? data.author.join(",") : data.author ?? ""}
-	href={`/archive/${id}/`}
+	href={articleHref}
 	class="block relative"
 >
 	<div class="rounded-2xl p-2">
@@ -43,7 +45,7 @@ const { data, id } = Astro.props
 					title={data.title}
 					description={data.description || ""}
 					date={String(data.pubDate || "")}
-					href={`/archive/${id}/`}
+					href={articleHref}
 					variant="card"
 				/>
 			</div>

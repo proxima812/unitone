@@ -1,52 +1,51 @@
 ---
 import ArchiveFilter from "@/components/ArchiveFilter.astro";
-import { listPublishedArticles } from "@/lib/db/articles";
+import Article from "@/components/Article.astro";
+import UserArchiveCard from "@/components/UserArchiveCard.astro";
 import Layout from "@/layouts/Layout.astro";
+import { listPublishedArticles } from "@/lib/db/articles";
+import { getCollection } from "astro:content";
 
 export const prerender = false;
 Astro.response.headers.set("Cache-Control", "no-store, max-age=0, must-revalidate");
 
 const archives = await listPublishedArticles();
 
-const archivesTags = Array.from(
-  new Set(
-    archives
-      .map((item) => item.author_name?.trim() || "")
-      .filter(Boolean),
-  ),
-);
+const staticArticles = await getCollection("archive");
+const staticArticlesTags = Array.from(
+	new Set(staticArticles.flatMap((item) => item.data.tags || []).filter(Boolean)),
+).sort((a, b) => a.localeCompare(b));
 ---
 
 <Layout
-  title="Статьи 12 шагов"
-  description="Статьи о 12 шагах: шаги выздоровления, практики, темы и опыт."
+	title="Статьи 12 шагов"
+	description="Статьи о 12 шагах: шаги выздоровления, практики, темы и опыт."
 >
-  <ArchiveFilter tags={archivesTags} />
+	<ArchiveFilter tags={staticArticlesTags} />
 
-  <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3" data-posts>
-    {
-      archives.map((item) => (
-        <a href={`/archive/${item.slug}/`} class="block relative" data-tag={item.author_name || ""}>
-          <div class="rounded-2xl p-2">
-            <article class="flex h-full flex-col gap-3 rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] p-5">
-              <h2 class="line-clamp-2 text-xl font-semibold leading-tight text-[color:var(--text)]">{item.title}</h2>
-              <p class="line-clamp-3 text-[color:var(--muted)]">{item.description || ""}</p>
-              <div class="mt-auto flex items-center justify-between gap-2 text-sm text-[color:var(--muted)]">
-                <span>{item.author_name || "Unity One"}</span>
-                {item.published_at && (
-                  <time datetime={item.published_at}>
-                    {new Date(item.published_at).toLocaleDateString("ru-RU", {
-                      year: "numeric",
-                      month: "short",
-                      day: "numeric",
-                    })}
-                  </time>
-                )}
-              </div>
-            </article>
-          </div>
-        </a>
-      ))
-    }
-  </div>
+	<section class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3" data-posts>
+		{
+			staticArticles &&
+				staticArticles.map((article, index) => (
+					<Article index={index} data={article.data} id={article.id} />
+				))
+		}
+	</section>
+
+	<h2 class="text-2xl font-bold">Пользовательские статьи</h2>
+
+	<section class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+		{
+			archives &&
+				archives.map((item) => (
+					<UserArchiveCard
+						slug={item.slug}
+						title={item.title}
+						description={item.description}
+						authorName={item.author_name}
+						publishedAt={item.published_at}
+					/>
+				))
+		}
+	</section>
 </Layout>

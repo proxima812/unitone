@@ -1,0 +1,42 @@
+---
+interface Props {
+	slug: string
+	title: string
+	description?: string | null
+	authorName?: string | null
+	publishedAt?: string | null
+}
+
+const { slug, title, description, authorName, publishedAt } = Astro.props as Props
+const publishedDate = publishedAt ? new Date(publishedAt) : null
+const hasPublishedDate = Boolean(publishedDate && !Number.isNaN(publishedDate.getTime()))
+---
+
+<a
+	href={`/archive/users/${slug}/`}
+	class="block relative"
+	data-tag={authorName || ""}
+>
+	<div class="rounded-2xl p-2">
+		<article class="flex h-full flex-col gap-3 rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] p-5">
+			<h2 class="line-clamp-2 text-xl font-semibold leading-tight text-[color:var(--text)]">
+				{title}
+			</h2>
+			<p class="line-clamp-3 text-[color:var(--muted)]">{description || ""}</p>
+			<div class="mt-auto flex items-center justify-between gap-2 text-sm text-[color:var(--muted)]">
+				<span>{authorName || "Unity One"}</span>
+				{
+					hasPublishedDate && (
+						<time datetime={publishedAt || ""}>
+							{publishedDate?.toLocaleDateString("ru-RU", {
+								year: "numeric",
+								month: "short",
+								day: "numeric",
+							})}
+						</time>
+					)
+				}
+			</div>
+		</article>
+	</div>
+</a>

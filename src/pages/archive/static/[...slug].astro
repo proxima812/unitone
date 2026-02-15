@@ -1,0 +1,140 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import MorePostsByAuthor from "@/components/MorePostsByAuthor.astro";
+import QuoteCopyEnhancer from "@/components/QuoteCopyEnhancer.astro";
+import RelatedPosts from "@/components/RelatedPosts.astro";
+import { getCollection, render } from "astro:content";
+
+type ArchivePost = Awaited<ReturnType<typeof getCollection<"archive">>>[number];
+
+const archive = await getCollection("archive");
+
+export async function getStaticPaths() {
+	const posts = await getCollection("archive");
+	return posts.map((post) => ({
+		params: { slug: post.id },
+		props: { post },
+	}));
+}
+
+const { post } = Astro.props as { post: ArchivePost };
+const { Content } = await render(post);
+
+const canonicalURL = new URL(`/archive/static/${post.id}/`, Astro.site);
+const encodedURL = encodeURIComponent(canonicalURL.href);
+const encodedTitle = encodeURIComponent(post.data.title);
+const encodedText = encodeURIComponent(
+	`${post.data.title}${post.data.description ? ` — ${post.data.description}` : ""}`,
+);
+const readingWords = (post.body || "").match(/[\p{L}\p{N}]+/gu) || [];
+const readingMinutes = Math.max(1, Math.ceil(readingWords.length / 180));
+const publishedAt = post.data.pubDate ? new Date(post.data.pubDate) : null;
+const publishedAtISO =
+	publishedAt && !Number.isNaN(publishedAt.getTime()) ? publishedAt.toISOString() : undefined;
+const authorName = post.data.author?.[0] || "Unity One";
+const currentTags = post.data.tags || [];
+
+const shareLinks = [
+	{
+		label: "Telegram",
+		href: `https://t.me/share/url?url=${encodedURL}&text=${encodedText}`,
+	},
+	{
+		label: "VK",
+		href: `https://vk.com/share.php?url=${encodedURL}&title=${encodedTitle}`,
+	},
+	{
+		label: "X",
+		href: `https://twitter.com/intent/tweet?url=${encodedURL}&text=${encodedText}`,
+	},
+	{
+		label: "WhatsApp",
+		href: `https://api.whatsapp.com/send?text=${encodedText}%20${encodedURL}`,
+	},
+];
+---
+
+<Layout
+	title={post.data.title}
+	description={post.data.description || ""}
+	keywords={post.data.keywords}
+	datePublished={publishedAtISO}
+	hidePageHeader
+	breadcrumbCurrentLabel={post.data.title}
+>
+	<main class="mx-auto w-full max-w-6xl">
+		<article class="grid grid-cols-1 gap-6 lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-8">
+			<aside class="hidden lg:block lg:sticky lg:top-28 lg:h-fit">
+				<div class="space-y-4">
+					<section class="rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] p-4">
+						<p class="text-xs uppercase tracking-wide text-[color:var(--muted)]">Автор</p>
+						<p class="mt-2 text-sm font-medium text-[color:var(--text)]">{authorName}</p>
+					</section>
+
+					<section class="rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] p-4">
+						<p class="text-xs uppercase tracking-wide text-[color:var(--muted)]">Поделиться</p>
+						<div class="mt-3 flex flex-wrap gap-2">
+							{shareLinks.map((share) => (
+								<a
+									href={share.href}
+									target="_blank"
+									rel="noopener noreferrer"
+									class="rounded-full border border-[color:var(--border)] px-3 py-1 text-xs"
+								>
+									{share.label}
+								</a>
+							))}
+						</div>
+					</section>
+				</div>
+			</aside>
+
+			<div class="min-w-0">
+				<header class="rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] p-4 md:p-7">
+					<div class="mb-4 flex flex-wrap items-center gap-3 text-sm text-[color:var(--muted)]">
+						{
+							publishedAtISO && (
+								<time datetime={publishedAtISO}>
+									{new Date(publishedAtISO).toLocaleDateString("ru-RU", {
+										year: "numeric",
+										month: "long",
+										day: "numeric",
+									})}
+								</time>
+							)
+						}
+						<span class="rounded-full border border-[color:var(--border)] px-2 py-1">
+							{readingMinutes} мин чтения
+						</span>
+					</div>
+
+					<h1 class="text-4xl font-black leading-tight tracking-tight md:text-5xl">{post.data.title}</h1>
+					{post.data.description && <p class="mt-3 text-[color:var(--muted)]">{post.data.description}</p>}
+				</header>
+
+				<section class="my-prose article-rich-content !mx-0 !mt-5 !max-w-none !p-5 md:!p-8">
+					<Content />
+				</section>
+			</div>
+		</article>
+	</main>
+
+	<MorePostsByAuthor
+		posts={archive}
+		href="/archive/static"
+		currentId={post.id}
+		author={authorName}
+		currentTags={currentTags}
+		limit={2}
+	/>
+	<RelatedPosts
+		posts={archive}
+		href="/archive/static"
+		currentId={post.id}
+		currentTags={currentTags}
+		currentAuthor={authorName}
+		currentTitle={post.data.title}
+		limit={3}
+	/>
+	<QuoteCopyEnhancer />
+</Layout>

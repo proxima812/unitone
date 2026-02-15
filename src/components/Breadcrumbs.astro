@@ -7,6 +7,12 @@ const { currentLabel } = Astro.props as Props
 const { pathname } = Astro.url
 const cleanPath = pathname.replace(/\/+$/, "") || "/"
 const parts = cleanPath.split("/").filter(Boolean)
+const hiddenArchiveParts = new Set(["users", "static"])
+const visibleParts = parts.filter((part, index) => {
+	const isArchiveScope = parts[0] === "archive"
+	const isHiddenRoutePart = index === 1 && hiddenArchiveParts.has(part)
+	return !(isArchiveScope && isHiddenRoutePart)
+})
 
 const labelMap: Record<string, { label: string }> = {
 	archive: { label: "Статьи" },
@@ -23,10 +29,10 @@ const labelMap: Record<string, { label: string }> = {
 	"editorial-policy": { label: "Редакционная политика" },
 }
 
-const crumbs = parts.map((part, index) => {
-	const href = `/${parts.slice(0, index + 1).join("/")}/`
+const crumbs = visibleParts.map((part, index) => {
+	const href = `/${visibleParts.slice(0, index + 1).join("/")}/`
 	const decoded = decodeURIComponent(part)
-	const isLast = index === parts.length - 1
+	const isLast = index === visibleParts.length - 1
 	const mapped = labelMap[decoded]
 	return {
 		href,
