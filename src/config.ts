@@ -16,9 +16,9 @@ export const config = {
 		// 30 -> 3.3
 		// ...
 		// после 3.5.5 -> 4.0.0
-		versionStep: 3,
+		versionStep: 4,
 		// Обновляется автоматически pre-push hook (время Астаны, UTC+5)
-		lastPushedAt: "2026-02-16T00:19:00+05:00",
+		lastPushedAt: "2026-02-24T15:08:00+05:00",
 		timeZone: "Asia/Almaty",
 		utcOffsetLabel: "UTC+5",
 		locale: "ru-RU",

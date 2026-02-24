@@ -12,11 +12,14 @@ export default function ArticleList({ items, selectedId, onSelect, onCreate, onD
   return (
     <aside className="rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] p-4">
       <div className="mb-3 flex items-center justify-between gap-2">
-        <h2 className="text-lg font-semibold text-[color:var(--text)]">Статьи</h2>
+        <h2 className="text-lg font-semibold text-[color:var(--text)]">Материалы</h2>
         <button type="button" className="rounded-lg bg-[var(--sk-button-background)] px-3 py-1.5 text-sm text-white" onClick={onCreate}>
-          Новый пост
+          Написать материал
         </button>
       </div>
+      <p className="mb-3 text-xs text-[color:var(--muted)]">
+        Пишите статьи, заметки и истории по теме шагов. Можно начать с черновика и вернуться к публикации позже.
+      </p>
       <div className="grid gap-2">
         {items.map((item) => (
           <div key={item.id} className={`rounded-xl border p-3 ${selectedId === item.id ? "border-[color:var(--primary)]" : "border-[color:var(--border)]"}`}>

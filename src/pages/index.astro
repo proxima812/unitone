@@ -151,6 +151,38 @@ import { blockData } from "@/data/links";
 			</p>
 		</section>
 
+		<section
+			class="relative overflow-hidden rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] p-6"
+		>
+			<div class="absolute inset-0 -z-0 bg-gradient-to-br from-[color:color-mix(in_srgb,var(--primary)_10%,transparent)] via-transparent to-[color:color-mix(in_srgb,var(--accent)_14%,transparent)]"></div>
+			<div class="relative z-10">
+				<p class="inline-flex rounded-full border border-[color:var(--border)] px-3 py-1 text-xs font-semibold uppercase tracking-wide text-[color:var(--muted)]">
+					Для авторов
+				</p>
+				<h2 class="mt-3 text-2xl font-bold text-[color:var(--text)] md:text-3xl">
+					Можно писать статьи прямо на сайте через Telegram
+				</h2>
+				<p class="mt-3 text-[color:var(--muted)]">
+					Мы открыли админку Unity One для авторов. Делитесь опытом, публикуйте истории,
+					разборы шагов, заметки, рекомендации и полезные материалы по теме 12 шагов.
+				</p>
+				<div class="mt-5 flex flex-wrap gap-3">
+					<a
+						href="/admin"
+						class="rounded-lg bg-[color:var(--primary)] px-4 py-2 text-sm font-semibold text-white hover:bg-[var(--sk-button-background-hover)] active:bg-[var(--sk-button-background-active)]"
+					>
+						Открыть админку
+					</a>
+					<a
+						href="/archive/static/admin-panel-open-posts/"
+						class="rounded-lg border border-[color:var(--border)] bg-[color:var(--surface)] px-4 py-2 text-sm font-semibold text-[color:var(--text)] hover:border-[color:var(--primary)] hover:text-[color:var(--primary)]"
+					>
+						Как писать материалы
+					</a>
+				</div>
+			</div>
+		</section>
+
 		<div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
 			{
 				blockData &&

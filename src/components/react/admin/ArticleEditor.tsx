@@ -378,11 +378,11 @@ export default function ArticleEditor({ value, onChange, onSave, saving }: Artic
         <div className="md:col-span-2">
           {value.status === "draft" ? (
             <p className="rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-amber-800">
-              Сейчас это черновик. На странице архива отображаются только статьи со статусом `published`.
+              Это черновик. Можно спокойно сохранить идею, личный опыт, заметки по шагам или набросок статьи и опубликовать позже.
             </p>
           ) : (
             <p className="rounded-lg border border-emerald-300 bg-emerald-50 px-3 py-2 text-sm text-emerald-800">
-              Статус `published`: статья доступна на публичной странице.
+              Статус `published`: материал станет доступен на публичной странице и его смогут читать посетители сайта.
             </p>
           )}
         </div>
@@ -394,7 +394,7 @@ export default function ArticleEditor({ value, onChange, onSave, saving }: Artic
           <div className="min-h-[260px] rounded-lg border border-[color:var(--border)] p-3 text-[color:var(--text)]">
             <RichTextPlugin
               contentEditable={<ContentEditable className="min-h-[220px] outline-none" />}
-              placeholder={<p className="pointer-events-none text-[color:var(--muted)]">Начните писать пост...</p>}
+              placeholder={<p className="pointer-events-none text-[color:var(--muted)]">Начните писать материал: опыт, историю, разбор шага, рекомендации или полезную заметку...</p>}
               ErrorBoundary={LexicalErrorBoundary}
             />
             <HistoryPlugin />

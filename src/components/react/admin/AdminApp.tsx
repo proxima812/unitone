@@ -171,6 +171,10 @@ export default function AdminApp() {
         </button>
       </div>
 
+      <div className="rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] px-4 py-3 text-sm text-[color:var(--muted)]">
+        Здесь можно публиковать материалы по теме 12 шагов: личный опыт, статьи, разборы, рекомендации, истории восстановления, заметки для новичков и полезные ресурсы.
+      </div>
+
       {notice && (
         <div
           className={`rounded-xl border px-4 py-3 text-sm ${
