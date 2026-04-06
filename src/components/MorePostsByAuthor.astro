@@ -1,5 +1,5 @@
 ---
-const { posts = [], href = "", currentId = "", author = "", currentTags = [], limit = 2 } = Astro.props
+const { posts = [], href = "/archive", currentId = "", author = "", currentTags = [], limit = 2 } = Astro.props
 
 type PostLike = {
 	id: string
@@ -56,7 +56,7 @@ if (byAuthor.length < limit) {
 }
 
 const finalPosts = byAuthor.slice(0, limit)
-const authorArchiveHref = `/archive?author=${encodeURIComponent(author)}`
+const authorArchiveHref = `/authors/${encodeURIComponent(author)}/`
 ---
 
 {

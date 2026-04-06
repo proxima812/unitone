@@ -2,7 +2,7 @@
 import Author from "./Author.astro"
 import BookmarkToggle from "@/components/BookmarkToggle.astro"
 
-const { data, id, hrefBase = "/archive/static" } = Astro.props
+const { data, id, hrefBase = "/archive" } = Astro.props
 const normalizedHrefBase = String(hrefBase).replace(/\/+$/, "")
 const articleHref = `${normalizedHrefBase}/${id}/`
 ---

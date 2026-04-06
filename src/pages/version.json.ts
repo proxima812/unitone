@@ -1,7 +1,7 @@
 import type { APIRoute } from "astro";
 import { getReleaseMeta } from "@/lib/release";
 
-export const prerender = false;
+export const prerender = true;
 
 export const GET: APIRoute = async () => {
 	const { version } = getReleaseMeta();
