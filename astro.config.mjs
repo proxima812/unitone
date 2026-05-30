@@ -4,7 +4,6 @@ import tailwindcss from "@tailwindcss/vite";
 import embeds from "astro-embed/integration";
 import icon from "astro-icon";
 import indexnow from "astro-indexnow";
-import metaTags from "astro-meta-tags";
 import astroNoEmail from "astro-noemail";
 import { defineConfig } from "astro/config";
 
@@ -28,7 +27,6 @@ export default defineConfig({
 		mdx(),
 		sitemap(),
 		icon(),
-		metaTags(),
 		astroNoEmail(),
 		...(enableIndexNow
 			? [

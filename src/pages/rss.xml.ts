@@ -1,7 +1,8 @@
 import rss from "@astrojs/rss";
 import { getCollection } from "astro:content";
+import type { APIContext } from "astro";
 
-export async function GET(context) {
+export async function GET(context: APIContext) {
 	const posts = (await getCollection("archive")).sort((a, b) => {
 		const aTime = a.data.pubDate ? new Date(a.data.pubDate).getTime() : 0;
 		const bTime = b.data.pubDate ? new Date(b.data.pubDate).getTime() : 0;
@@ -11,7 +12,7 @@ export async function GET(context) {
 	return rss({
 		title: "Unity One Archive",
 		description: "Локальные MDX-статьи проекта Unity One.",
-		site: context.site,
+		site: context.site || "https://unityone.space",
 		items: posts.map((post) => ({
 			title: post.data.title,
 			description: post.data.description || "",

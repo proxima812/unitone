@@ -3,26 +3,77 @@ import Container from "./Container.astro";
 import { getReleaseMeta } from "@/lib/release";
 import Logo from "./Logo.astro";
 import Menu from "./Menu.astro";
+import { Icon } from "astro-icon/components";
 
 const releaseMeta = getReleaseMeta();
 ---
 
 <header
 	id="header"
-	class="sticky top-0 z-50 mx-0 mt-0 w-full max-w-4xl rounded-none border-b border-[color:var(--border)] bg-[color:var(--surface)]/90 py-4 backdrop-blur transition-transform duration-300 will-change-transform md:top-5 md:mx-auto md:mt-5 md:rounded-2xl md:border"
+	class="sticky top-0 z-50 mx-0 mt-0 w-full max-w-5xl rounded-none border-b border-[color:var(--border)] bg-[color:var(--surface)]/88 py-3 shadow-[var(--shadow-card)] backdrop-blur-xl transition-transform duration-300 will-change-transform md:top-4 md:mx-auto md:mt-4 md:rounded-2xl md:border"
 >
 	<Container class="flex justify-between gap-x-3">
 		<div class="flex items-center gap-2">
 			<Logo />
-			<span class="hidden rounded-full border border-[color:var(--border)] bg-[color:var(--bg)] px-2 py-1 text-xs font-medium text-[color:var(--muted)] sm:inline">
+			<span class="hidden rounded-full border border-[color:var(--border)] bg-[color:var(--surface-soft)] px-2 py-1 text-xs font-semibold text-[color:var(--muted)] sm:inline">
 				v{releaseMeta.version}
 			</span>
 		</div>
-		<Menu />
+		<div class="flex items-center gap-2">
+			<button
+				type="button"
+				data-theme-toggle
+				aria-label="Тема: системная"
+				title="Тема: системная"
+				class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-[color:var(--border)] bg-[color:var(--surface-soft)] text-[color:var(--text)] hover:border-[color:var(--primary)] hover:text-[color:var(--primary)]"
+			>
+				<Icon data-theme-icon-system name="mdi:monitor" class="h-5 w-5" />
+				<Icon data-theme-icon-light name="mdi:white-balance-sunny" class="hidden h-5 w-5" />
+				<Icon data-theme-icon-dark name="mdi:weather-night" class="hidden h-5 w-5" />
+			</button>
+			<Menu />
+		</div>
 	</Container>
 </header>
 
 <script>
+	const THEME_STORAGE_KEY = "unityone_theme";
+	const themeToggle = document.querySelector("[data-theme-toggle]");
+	const themePreferences = ["system", "light", "dark"];
+	const themeLabels = {
+		system: "системная",
+		light: "светлая",
+		dark: "темная",
+	};
+	const getResolvedTheme = (preference) =>
+		preference === "system"
+			? window.matchMedia("(prefers-color-scheme: dark)").matches
+				? "dark"
+				: "light"
+			: preference;
+	const renderTheme = (preference) => {
+		const resolvedTheme = getResolvedTheme(preference);
+		document.documentElement.dataset.theme = resolvedTheme;
+		document.documentElement.dataset.themePreference = preference;
+		themeToggle?.querySelectorAll("[data-theme-icon-system], [data-theme-icon-light], [data-theme-icon-dark]").forEach((icon) => {
+			icon.classList.toggle("hidden", !icon.hasAttribute(`data-theme-icon-${preference}`));
+		});
+		const label = `Тема: ${themeLabels[preference]}`;
+		themeToggle?.setAttribute("aria-label", label);
+		themeToggle?.setAttribute("title", label);
+	};
+	const initialTheme = localStorage.getItem(THEME_STORAGE_KEY) || "system";
+	renderTheme(themePreferences.includes(initialTheme) ? initialTheme : "system");
+	themeToggle?.addEventListener("click", () => {
+		const currentTheme = document.documentElement.dataset.themePreference || "system";
+		const nextTheme = themePreferences[(themePreferences.indexOf(currentTheme) + 1) % themePreferences.length];
+		localStorage.setItem(THEME_STORAGE_KEY, nextTheme);
+		renderTheme(nextTheme);
+	});
+	window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
+		if ((document.documentElement.dataset.themePreference || "system") === "system") renderTheme("system");
+	});
+
 	const header = document.getElementById("header");
 	let lastY = window.scrollY;
 	let ticking = false;

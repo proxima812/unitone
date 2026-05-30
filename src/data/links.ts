@@ -62,37 +62,37 @@ export const links = [
 	{
 		label: "Сообщества",
 		href: "/communities",
-		icon: "solar:users-group-rounded-bold-duotone",
+		icon: "mdi:account-group",
 	},
 	{
 		label: "Методы шагов",
 		href: "/methods",
-		icon: "solar:lightbulb-bolt-bold-duotone",
+		icon: "mdi:lightbulb-on",
 	},
 	{
 		label: "Статьи",
 		href: "/archive",
-		icon: "solar:archive-check-bold-duotone",
+		icon: "mdi:archive-check",
 	},
 	{
 		label: "Авторы",
 		href: "/authors",
-		icon: "solar:user-circle-bold-duotone",
+		icon: "mdi:account-circle",
 	},
 	{
 		label: "FAQ",
 		href: "/faq",
-		icon: "solar:question-circle-bold-duotone",
+		icon: "mdi:help-circle",
 	},
 	{
 		label: "Подбор групп",
 		href: "/finder",
-		icon: "solar:magnifer-bold-duotone",
+		icon: "mdi:magnify",
 	},
 	// {
 	// 	label: "Закладки",
 	// 	href: "/bookmarks",
-	// 	icon: "solar:bookmark-bold-duotone",
+	// 	icon: "mdi:bookmark",
 	// },
 ]
 

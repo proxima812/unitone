@@ -76,7 +76,7 @@ const availableFilters = filterDefinitions
 	title="Подбор группы"
 	description={`Выберите подходящее сообщество из ${communities.length} вариантов: по теме, формату запроса и жизненной ситуации.`}
 >
-	<section class="rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] p-5 md:p-6">
+	<section class="rounded-3xl border border-[color:var(--border)] bg-[color:var(--surface-soft)] p-5 shadow-[var(--shadow-card)] md:p-7">
 		<h2 class="text-2xl font-bold text-[color:var(--text)] md:text-3xl">Как пользоваться подбором</h2>
 		<p class="mt-2 text-[color:var(--muted)]">
 			Введите ключевое слово и выберите детальную категорию. Карточки ниже сразу отфильтруются,
@@ -94,7 +94,7 @@ const availableFilters = filterDefinitions
 			<button
 				id="finder-reset"
 				type="button"
-				class="rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] px-4 py-2.5 text-sm text-black"
+				class="rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] px-4 py-2.5 text-sm text-[color:var(--text)]"
 			>
 				Сбросить фильтры
 			</button>
@@ -134,7 +134,7 @@ const availableFilters = filterDefinitions
 				<article
 					data-facets={item.facets.join(",")}
 					data-search={item.searchText}
-					class="flex h-full flex-col rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)]"
+					class="flex h-full flex-col rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] shadow-[var(--shadow-card)] transition hover:-translate-y-0.5 hover:border-[color:var(--primary)]"
 				>
 					<div class="p-5">
 						<div class="mb-2 flex flex-wrap gap-2">
@@ -169,24 +169,15 @@ const availableFilters = filterDefinitions
 						</div>
 
 						<div class="flex gap-2 md:flex-nowrap flex-wrap justify-between">
-							<a
-								href={item.tg_group_link_topic}
-								aria-label={item.title}
-								target="_blank"
-								class="md:w-auto w-full inline-flex items-center justify-center gap-1 rounded-lg bg-[#229ED9] px-3 py-2 text-sm font-medium text-white transition hover:bg-[#1D8FC3]"
-							>
-								<Icon name="solar:plain-2-bold-duotone" />
-								<span>Открыть в Telegram</span>
-							</a>
 							{
-								item.wikipedia ? (
+								item.wikipedia && !item.wikipedia.includes("t.me") ? (
 									<a
 										href={item.wikipedia}
 										aria-label={item.title}
 										target="_blank"
 										class="md:w-auto w-full inline-flex items-center justify-center gap-1 rounded-lg border border-[#A2A9B1] bg-[#F8F9FA] px-3 py-2 text-sm font-medium text-[#202122] transition hover:bg-[#EAECF0]"
 									>
-										<Icon name="solar:book-2-bold-duotone" />
+										<Icon name="mdi:book-open-page-variant" />
 										<span>Wikipedia</span>
 									</a>
 								) : (

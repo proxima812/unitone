@@ -39,7 +39,7 @@ function shortDescription(description?: string): string {
 }
 ---
 
-<section class="rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] p-5 md:p-6">
+<section class="rounded-3xl border border-[color:var(--border)] bg-[color:var(--surface-soft)] p-5 shadow-[var(--shadow-card)] md:p-7">
 	<h2 class="text-2xl font-bold text-[color:var(--text)] md:text-3xl">Подберите подходящий метод</h2>
 	<p class="mt-2 text-[color:var(--muted)]">
 		Используйте поиск и фильтр по сообществу. Каждая карточка показывает только главное: суть метода,
@@ -57,7 +57,7 @@ function shortDescription(description?: string): string {
 		<button
 			id="methods-reset"
 			type="button"
-			class="rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] px-4 py-2.5 text-sm text-black"
+			class="rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] px-4 py-2.5 text-sm text-[color:var(--text)]"
 		>
 			Сбросить
 		</button>
@@ -97,7 +97,7 @@ function shortDescription(description?: string): string {
 			<article
 				data-community={item.community.join(",")}
 				data-search={item.searchText}
-				class="flex h-full flex-col rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)]"
+				class="flex h-full flex-col rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] shadow-[var(--shadow-card)] transition hover:-translate-y-0.5 hover:border-[color:var(--primary)]"
 			>
 				<div class="p-5">
 					<h3 class="text-lg font-semibold leading-tight text-[color:var(--text)]">{item.title}</h3>

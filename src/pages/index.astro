@@ -11,16 +11,16 @@ import { blockData } from "@/data/links";
 	title="12 шагов: материалы, методы и сообщества"
 	description={`Единая база о 12 шагах: статьи, практики, методы и ${communities.length} сообществ.`}
 >
-	<main class="mx-auto flex max-w-4xl flex-col gap-12">
+	<main class="mx-auto flex max-w-5xl flex-col gap-8 md:gap-10">
 		<section
-			class="relative overflow-hidden rounded-3xl border border-[color:var(--border)] bg-[color:var(--surface)] p-8 md:p-10"
+			class="relative overflow-hidden rounded-[2rem] border border-[color:var(--border)] bg-[color:var(--surface)] p-7 shadow-[var(--shadow-soft)] md:p-12"
 		>
 			<div
-				class="absolute inset-0 -z-0 bg-gradient-to-br from-[color:color-mix(in_srgb,var(--primary)_16%,transparent)] via-transparent to-[color:color-mix(in_srgb,var(--secondary)_18%,transparent)]"
+				class="absolute inset-0 -z-0 bg-gradient-to-br from-[color:color-mix(in_srgb,var(--secondary)_22%,transparent)] via-transparent to-[color:color-mix(in_srgb,var(--primary)_16%,transparent)]"
 			>
 			</div>
 			<div
-				class="absolute -right-12 -top-12 -z-0 h-40 w-40 rounded-full bg-[color:color-mix(in_srgb,var(--accent)_24%,transparent)] blur-2xl"
+				class="absolute -right-10 -top-10 -z-0 h-52 w-52 rounded-full bg-[color:color-mix(in_srgb,var(--accent)_20%,transparent)] blur-3xl"
 			>
 			</div>
 			<div class="relative z-10">
@@ -30,11 +30,11 @@ import { blockData } from "@/data/links";
 					Unity One
 				</p>
 				<h1>
-					<span class="block text-5xl font-black md:text-7xl"
+					<span class="block text-5xl font-black tracking-[-0.06em] md:text-7xl"
 						>12 шагов</span
 					>
 					<span
-						class="mt-2 block text-xl text-[color:var(--muted)] md:text-3xl"
+						class="mt-3 block max-w-3xl text-xl font-semibold text-[color:var(--muted)] md:text-3xl"
 
 					>
 						Материалы, шаги и рабочие инструменты.
@@ -53,14 +53,14 @@ import { blockData } from "@/data/links";
 				<div class="mt-7 flex flex-wrap gap-3">
 					<a
 						href="/methods"
-						class="rounded-lg bg-[color:var(--primary)] px-4 py-2 text-sm font-semibold text-white hover:bg-[var(--sk-button-background-hover)] active:bg-[var(--sk-button-background-active)]"
+						class="rounded-xl bg-[color:var(--primary)] px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-[var(--sk-button-background-hover)] active:bg-[var(--sk-button-background-active)]"
 
 					>
 						Начать с методов
 					</a>
 					<a
 						href="/finder"
-						class="rounded-lg border border-[color:var(--border)] bg-[color:var(--surface)] px-4 py-2 text-sm font-semibold text-[color:var(--text)] hover:border-[color:var(--primary)] hover:text-[color:var(--primary)]"
+						class="rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] px-4 py-2.5 text-sm font-semibold text-[color:var(--text)] hover:border-[color:var(--primary)] hover:text-[color:var(--primary)]"
 
 					>
 						Подобрать сообщество
@@ -70,7 +70,7 @@ import { blockData } from "@/data/links";
 		</section>
 
 		<section
-			class="rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] p-6"
+			class="rounded-3xl border border-[color:var(--border)] bg-[color:var(--surface)] p-6 shadow-[var(--shadow-card)] md:p-8"
 		>
 			<h2 class="text-2xl font-bold text-[color:var(--text)] md:text-3xl">
 				Что такое 12 шагов
@@ -152,38 +152,38 @@ import { blockData } from "@/data/links";
 		</section>
 
 		<section
-			class="relative overflow-hidden rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] p-6"
+			class="relative overflow-hidden rounded-3xl border border-[color:var(--border)] bg-[color:var(--surface-tint)] p-6 shadow-[var(--shadow-card)] md:p-8"
 		>
 			<div class="absolute inset-0 -z-0 bg-gradient-to-br from-[color:color-mix(in_srgb,var(--primary)_10%,transparent)] via-transparent to-[color:color-mix(in_srgb,var(--accent)_14%,transparent)]"></div>
 			<div class="relative z-10">
 				<p class="inline-flex rounded-full border border-[color:var(--border)] px-3 py-1 text-xs font-semibold uppercase tracking-wide text-[color:var(--muted)]">
-					Для авторов
+					Исследования
 				</p>
 				<h2 class="mt-3 text-2xl font-bold text-[color:var(--text)] md:text-3xl">
-					Можно писать статьи прямо на сайте через Telegram
+					Статистика, документы и данные об эффективности
 				</h2>
 				<p class="mt-3 text-[color:var(--muted)]">
-					Мы открыли админку Unity One для авторов. Делитесь опытом, публикуйте истории,
-					разборы шагов, заметки, рекомендации и полезные материалы по теме 12 шагов.
+					Публикуем материалы Unity One о программе 12 шагов: систематические обзоры,
+					официальные отчеты, статистику и ссылки на первичные источники.
 				</p>
 				<div class="mt-5 flex flex-wrap gap-3">
 					<a
-						href="/admin"
-						class="rounded-lg bg-[color:var(--primary)] px-4 py-2 text-sm font-semibold text-white hover:bg-[var(--sk-button-background-hover)] active:bg-[var(--sk-button-background-active)]"
+						href="/archive/"
+						class="rounded-xl bg-[color:var(--primary)] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[var(--sk-button-background-hover)] active:bg-[var(--sk-button-background-active)]"
 					>
-						Открыть админку
+						Читать статьи
 					</a>
 					<a
-						href="/archive/static/admin-panel-open-posts/"
-						class="rounded-lg border border-[color:var(--border)] bg-[color:var(--surface)] px-4 py-2 text-sm font-semibold text-[color:var(--text)] hover:border-[color:var(--primary)] hover:text-[color:var(--primary)]"
+						href="/archive/"
+						class="rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] px-4 py-2.5 text-sm font-semibold text-[color:var(--text)] hover:border-[color:var(--primary)] hover:text-[color:var(--primary)]"
 					>
-						Как писать материалы
+						Смотреть источники
 					</a>
 				</div>
 			</div>
 		</section>
 
-		<div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+		<div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
 			{
 				blockData &&
 					blockData.map((block) => (
@@ -200,7 +200,7 @@ import { blockData } from "@/data/links";
 		</div>
 
 		<section
-			class="rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] p-6"
+			class="rounded-3xl border border-[color:var(--border)] bg-[color:var(--surface-soft)] p-6 shadow-[var(--shadow-card)] md:p-8"
 		>
 			<p class="text-2xl italic text-[color:var(--muted)] md:text-3xl">
 				Собираем знания о 12 шагах <b class="text-[color:var(--text)]">в одном месте</b>, чтобы

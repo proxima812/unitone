@@ -25,7 +25,7 @@ const canonicalURL = new URL(`/archive/${post.id}/`, Astro.site);
 const encodedURL = encodeURIComponent(canonicalURL.href);
 const encodedTitle = encodeURIComponent(post.data.title);
 const encodedText = encodeURIComponent(
-	`${post.data.title}${post.data.description ? ` — ${post.data.description}` : ""}`,
+	`${post.data.title}${post.data.description ? ` - ${post.data.description}` : ""}`,
 );
 const readingWords = (post.body || "").match(/[\p{L}\p{N}]+/gu) || [];
 const readingMinutes = Math.max(1, Math.ceil(readingWords.length / 180));

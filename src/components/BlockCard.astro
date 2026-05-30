@@ -6,12 +6,12 @@ const { style, title, textBtn, styleBtn, description, icon, link } = Astro.props
 
 <article
 	class={cn(
-		"flex flex-col justify-between gap-3 rounded-xl p-4 bg-[color:var(--surface)] border-[0.6px] border-[color:var(--border)]",
+		"group flex flex-col justify-between gap-4 rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] p-5 shadow-[var(--shadow-card)] transition hover:-translate-y-0.5 hover:border-[color:var(--primary)]",
 		style,
 	)}
 >
 	<div>
-		<h2 class="text-lg mb-3 font-bold flex gap-1 items-center">
+		<h2 class="mb-3 flex items-center gap-2 text-lg font-bold text-[color:var(--text)]">
 			{icon && <Icon name={icon} />}
 			<span>{title}</span>
 		</h2>
@@ -22,7 +22,7 @@ const { style, title, textBtn, styleBtn, description, icon, link } = Astro.props
 	<a
 		href={link}
 		class={cn(
-			"text-white mt-1.5 px-3 py-1.5 max-w-fit bg-[color:var(--primary)] rounded-md hover:bg-[var(--sk-button-background-hover)] active:bg-[var(--sk-button-background-active)]",
+			"mt-1.5 max-w-fit rounded-xl bg-[color:var(--primary)] px-3.5 py-2 text-sm font-semibold text-white hover:bg-[var(--sk-button-background-hover)] active:bg-[var(--sk-button-background-active)]",
 			styleBtn,
 		)}>{textBtn || "Подробнее"}</a
 	>
