@@ -3,7 +3,7 @@ import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 import embeds from "astro-embed/integration";
 import icon from "astro-icon";
-import indexnow from "astro-indexnow";
+import seoGraph from "@jdevalk/astro-seo-graph/integration";
 import astroNoEmail from "astro-noemail";
 import { defineConfig } from "astro/config";
 
@@ -28,13 +28,22 @@ export default defineConfig({
 		sitemap(),
 		icon(),
 		astroNoEmail(),
-		...(enableIndexNow
-			? [
-					indexnow({
-						key: "839ab5750df943cf871f6ecf8519e449",
-					}),
-				]
-			: []),
+		seoGraph({
+			validateH1: false,
+			validateUniqueMetadata: false,
+			validateImageAlt: false,
+			validateMetadataLength: false,
+			validateInternalLinks: false,
+			...(enableIndexNow
+				? {
+						indexNow: {
+							key: "839ab5750df943cf871f6ecf8519e449",
+							host: "unityone.space",
+							siteUrl: "https://unityone.space",
+						},
+					}
+				: {}),
+		}),
 	],
 	output: "static",
 });
