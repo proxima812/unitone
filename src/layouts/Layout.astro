@@ -3,7 +3,7 @@ import Container from "@/components/Container.astro";
 import Breadcrumbs from "@/components/Breadcrumbs.astro";
 import Footer from "@/components/Footer.astro";
 import Header from "@/components/Header.astro";
-import SEO from "@/components/SEO.astro";
+import SeoGraph from "@/components/SeoGraph.astro";
 import clientInitUrl from "../scripts/client-init.ts?url";
 import "@/styles/tailwind.css";
 
@@ -19,6 +19,7 @@ interface Props {
 	ogImage?: any;
 	hidePageHeader?: boolean;
 	breadcrumbCurrentLabel?: string;
+	faq?: Array<{ question: string; answer: string }>;
 }
 
 const {
@@ -33,12 +34,49 @@ const {
 	ogImage,
 	hidePageHeader,
 	breadcrumbCurrentLabel,
+	faq,
 } = Astro.props;
+const cleanPath = Astro.url.pathname.replace(/\/+$/, "") || "/";
+const breadcrumbParts = cleanPath.split("/").filter(Boolean);
+const hiddenArchiveParts = new Set(["users", "static"]);
+const visibleBreadcrumbParts = breadcrumbParts.filter((part, index) => {
+	const isArchiveScope = breadcrumbParts[0] === "archive";
+	const isHiddenRoutePart = index === 1 && hiddenArchiveParts.has(part);
+	return !(isArchiveScope && isHiddenRoutePart);
+});
+const breadcrumbLabels: Record<string, string> = {
+	archive: "Статьи",
+	methods: "Методы",
+	communities: "Сообщества",
+	authors: "Авторы",
+	faq: "FAQ",
+	finder: "Подбор групп",
+	bookmarks: "Закладки",
+	about: "О проекте",
+	privacy: "Конфиденциальность",
+	terms: "Условия",
+	disclaimer: "Дисклеймер",
+	"editorial-policy": "Редакционная политика",
+	"12-shagov": "12 шагов",
+};
+const breadcrumbs = [
+	{ name: "Главная", url: new URL("/", Astro.site).href },
+	...visibleBreadcrumbParts.map((part, index) => {
+		const decoded = decodeURIComponent(part);
+		const isLast = index === visibleBreadcrumbParts.length - 1;
+		return {
+			name: isLast && breadcrumbCurrentLabel
+				? breadcrumbCurrentLabel
+				: (breadcrumbLabels[decoded] || decoded.replace(/-/g, " ")),
+			url: new URL(`/${visibleBreadcrumbParts.slice(0, index + 1).join("/")}/`, Astro.site).href,
+		};
+	}),
+];
 ---
 
 <html lang="ru" class="scroll-smooth subpixel-antialiased">
 	<head>
-		<SEO
+		<SeoGraph
 			title={title}
 			description={description}
 			keywords={keywords}
@@ -47,6 +85,8 @@ const {
 			type={type}
 			datePublished={datePublished}
 			dateModified={dateModified}
+			breadcrumbs={breadcrumbs}
+			faq={faq}
 		/>
 		<script is:inline>
 			(() => {

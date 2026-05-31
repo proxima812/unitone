@@ -2,19 +2,6 @@
 import Layout from "@/layouts/Layout.astro"
 import { faq } from "@/data/links"
 
-const faqSchema = {
-	"@context": "https://schema.org",
-	"@type": "FAQPage",
-	mainEntity: faq.map((item) => ({
-		"@type": "Question",
-		name: item.question,
-		acceptedAnswer: {
-			"@type": "Answer",
-			text: item.answer,
-		},
-	})),
-}
-
 const faqSections = [
 	{ id: "start", title: "Начало и выбор группы", items: faq.slice(0, 7) },
 	{ id: "meetings", title: "Как проходят встречи", items: faq.slice(7, 31) },
@@ -26,6 +13,7 @@ const faqSections = [
 <Layout
 	title="FAQ"
 	description="Частые вопросы о 12 шагах, выборе сообщества и старте практики."
+	faq={faq}
 >
 	<section class="mx-auto flex w-full max-w-4xl flex-col gap-4">
 		<nav class="mb-3 rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] p-5" aria-label="Разделы FAQ">
@@ -48,6 +36,4 @@ const faqSections = [
 			))
 		}
 	</section>
-
-	<script is:inline type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 </Layout>

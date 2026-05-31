@@ -41,24 +41,10 @@ const crumbs = visibleParts.map((part, index) => {
 		isLast,
 	}
 })
-const breadcrumbSchema = {
-	"@context": "https://schema.org",
-	"@type": "BreadcrumbList",
-	itemListElement: [
-		{ "@type": "ListItem", position: 1, name: "Главная", item: new URL("/", Astro.site).href },
-		...crumbs.map((crumb, index) => ({
-			"@type": "ListItem",
-			position: index + 2,
-			name: crumb.label,
-			item: new URL(crumb.href, Astro.site).href,
-		})),
-	],
-}
 ---
 
 {
 	cleanPath !== "/" && (
-		<>
 		<nav aria-label="Хлебные крошки" class="w-full overflow-x-auto">
 			<ol class="flex max-w-fit items-center gap-2 rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)]/85 px-3 py-2 text-sm">
 				<li>
@@ -92,7 +78,5 @@ const breadcrumbSchema = {
 				}
 			</ol>
 		</nav>
-		<script is:inline type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
-		</>
 	)
 }

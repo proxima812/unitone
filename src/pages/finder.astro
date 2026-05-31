@@ -62,6 +62,12 @@ const prepared = communities.map((item) => ({
 	...item,
 	facets: buildFacets(item),
 	searchText: `${item.title} ${item.description} ${item.category}`.toLowerCase(),
+	searchUrls: {
+		google: `https://www.google.com/search?q=${encodeURIComponent(item.title)}`,
+		yandex: `https://yandex.ru/search/?text=${encodeURIComponent(item.title)}`,
+		bing: `https://www.bing.com/search?q=${encodeURIComponent(item.title)}`,
+		duckDuckGo: `https://duckduckgo.com/?q=${encodeURIComponent(item.title)}`,
+	},
 }))
 
 const availableFilters = filterDefinitions
@@ -185,6 +191,25 @@ const availableFilters = filterDefinitions
 										Wikipedia нет
 									</span>
 								)
+							}
+						</div>
+						<div class="mt-3 grid grid-cols-2 gap-2">
+							{
+								[
+									["Google", item.searchUrls.google],
+									["Яндекс", item.searchUrls.yandex],
+									["Bing", item.searchUrls.bing],
+									["DuckDuckGo", item.searchUrls.duckDuckGo],
+								].map(([label, href]) => (
+									<a
+										href={href}
+										target="_blank"
+										rel="noreferrer"
+										class="inline-flex items-center justify-center rounded-lg border border-[color:var(--border)] bg-[color:var(--bg)] px-2 py-2 text-xs font-medium text-[color:var(--text)] transition hover:border-[color:var(--primary)]"
+									>
+										{label}
+									</a>
+								))
 							}
 						</div>
 					</div>
