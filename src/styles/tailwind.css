@@ -39,20 +39,20 @@
     --color-my-palette-secondary: #a1a1aa;
     --color-my-palette-accent: #ededed;
     --color-my-palette-foreground: #ededed;
-    --color-my-palette-background: #000000;
-    --surface: #0a0a0a;
-    --surface-soft: #111111;
-    --surface-tint: #18181b;
+    --color-my-palette-background: #101012;
+    --surface: #18181b;
+    --surface-soft: #202024;
+    --surface-tint: #29292e;
     --muted: #a1a1aa;
-    --border: #27272a;
+    --border: #34343a;
     --sk-button-background: #ededed;
     --sk-button-background-hover: #ffffff;
     --sk-button-background-active: #d4d4d8;
     --button-text: #09090b;
     --sk-blocklink-color: #ededed;
     --ring: #71717a;
-    --shadow-soft: none;
-    --shadow-card: none;
+    --shadow-soft: 0 8px 24px rgb(0 0 0 / 0.14);
+    --shadow-card: 0 4px 14px rgb(0 0 0 / 0.12);
   }
 
   html,
