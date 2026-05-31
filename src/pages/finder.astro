@@ -170,7 +170,7 @@ const availableFilters = filterDefinitions
 
 						<div class="flex gap-2 md:flex-nowrap flex-wrap justify-between">
 							{
-								item.wikipedia && !item.wikipedia.includes("t.me") ? (
+								item.wikipedia ? (
 									<a
 										href={item.wikipedia}
 										aria-label={item.title}

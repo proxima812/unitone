@@ -29,7 +29,7 @@ function computeVersion(step: number) {
 
 export function getReleaseMeta(now = new Date()) {
 	const release = config.release;
-	const version = computeVersion(release.versionStep ?? 0);
+	const version = release.version || computeVersion(release.versionStep ?? 0);
 	const pushedAt = release.lastPushedAt ? new Date(release.lastPushedAt) : now;
 	const sourceDate = Number.isNaN(pushedAt.getTime()) ? now : pushedAt;
 	const date = new Intl.DateTimeFormat(release.locale || "ru-RU", {

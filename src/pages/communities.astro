@@ -1,5 +1,4 @@
 ---
-import { config } from "@/config";
 import { communities } from "@/data/communities";
 import Layout from "@/layouts/Layout.astro";
 import { Icon } from "astro-icon/components";
@@ -9,16 +8,6 @@ import { Icon } from "astro-icon/components";
 	title="Список анонимных сообществ"
 	description={`Каталог ${communities.length} 12‑шаговых анонимных сообществ: описание, контакты и ссылки.`}
 >
-	<div class="flex flex-wrap items-center justify-center gap-3 rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface-soft)] p-3 shadow-[var(--shadow-card)]">
-		<p class="text-[color:var(--muted)] text-sm font-medium">
-			<span> {config.info_group.date}</span>
-		</p>
-		<a
-			href="https://t.me/all12_contacts"
-			class="bg-[color:var(--surface)] border border-[color:var(--border)] hover:bg-[color:var(--bg)] transition-colors duration-75 ease-in flex items-center gap-1 text-[color:var(--text)] px-2 py-1 rounded-md"
-			target="_blank"><Icon name="mdi:send" /><span class="font-medium">Telegram</span></a
-		>
-	</div>
 	<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 items-start gap-4">
 		{
 			communities &&
@@ -53,7 +42,7 @@ import { Icon } from "astro-icon/components";
 								</span>
 							</div>
 
-							{item.wikipedia && !item.wikipedia.includes("t.me") && (
+							{item.wikipedia && (
 								<a
 									href={item.wikipedia}
 									aria-label={item.title}
