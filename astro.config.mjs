@@ -31,7 +31,7 @@ export default defineConfig({
 		...(enableIndexNow
 			? [
 					indexnow({
-						key: "768bcd3539c74c6198b5f8a42ef7a64c",
+						key: "839ab5750df943cf871f6ecf8519e449",
 					}),
 				]
 			: []),
