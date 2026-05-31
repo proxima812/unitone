@@ -1,4 +1,6 @@
 ---
+import { formatTag } from "@/lib/tags";
+
 const { tags = [] } = Astro.props as { tags: string[] };
 ---
 
@@ -36,7 +38,7 @@ const { tags = [] } = Astro.props as { tags: string[] };
 								data-active="false"
 								class="rounded-full border border-[color:var(--border)] bg-[color:var(--surface)] px-3 py-1.5 text-sm text-[color:var(--text)] transition hover:border-[color:var(--accent)]"
 							>
-								{tag}
+								{formatTag(tag)}
 							</button>
 						))
 					}
@@ -50,7 +52,7 @@ const { tags = [] } = Astro.props as { tags: string[] };
 </section>
 
 <script is:inline>
-	(() => {
+	const initArchiveFilter = () => {
 		const searchInput = document.getElementById("archive-search");
 		const resetBtn = document.getElementById("archive-reset");
 		const countNode = document.getElementById("archive-count");
@@ -90,7 +92,7 @@ const { tags = [] } = Astro.props as { tags: string[] };
 				button.setAttribute("data-active", active ? "true" : "false");
 				button.classList.toggle("border-[color:var(--accent)]", active);
 				button.classList.toggle("bg-[color:var(--accent)]", active);
-				button.classList.toggle("text-white", active);
+				button.classList.toggle("text-[color:var(--button-text)]", active);
 				button.classList.toggle("bg-[color:var(--surface)]", !active);
 				button.classList.toggle("text-[color:var(--text)]", !active);
 				applyFilters();
@@ -103,12 +105,18 @@ const { tags = [] } = Astro.props as { tags: string[] };
 			if (searchInput) searchInput.value = "";
 			tagButtons.forEach((button) => {
 				button.setAttribute("data-active", "false");
-				button.classList.remove("border-[color:var(--accent)]", "bg-[color:var(--accent)]", "text-white");
+				button.classList.remove("border-[color:var(--accent)]", "bg-[color:var(--accent)]", "text-[color:var(--button-text)]");
 				button.classList.add("bg-[color:var(--surface)]", "text-[color:var(--text)]");
 			});
 			applyFilters();
 		});
 
 		applyFilters();
-	})();
+	};
+
+	if (document.readyState === "loading") {
+		document.addEventListener("DOMContentLoaded", initArchiveFilter, { once: true });
+	} else {
+		initArchiveFilter();
+	}
 </script>

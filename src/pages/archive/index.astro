@@ -1,6 +1,8 @@
 ---
 import Article from "@/components/Article.astro";
+import ArchiveFilter from "@/components/ArchiveFilter.astro";
 import Layout from "@/layouts/Layout.astro";
+import { formatTag } from "@/lib/tags";
 import { getCollection } from "astro:content";
 
 export const prerender = true;
@@ -88,7 +90,7 @@ const tags = Array.from(new Set(posts.flatMap((item) => item.data.tags || []).fi
 						<div class="mt-3 flex flex-wrap gap-2">
 							{tags.slice(0, 8).map((tag) => (
 								<span class="rounded-full border border-[color:var(--border)] px-3 py-1 text-sm text-[color:var(--muted)]">
-									{tag}
+									{formatTag(tag)}
 								</span>
 							))}
 						</div>
@@ -109,7 +111,9 @@ const tags = Array.from(new Set(posts.flatMap((item) => item.data.tags || []).fi
 				<p class="text-sm text-[color:var(--muted)]">Сортировка: сначала новые</p>
 			</div>
 
-			<div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+			<ArchiveFilter tags={tags} />
+
+			<div data-posts class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
 				{
 					restPosts.map((article) => (
 						<Article data={article.data} id={article.id} hrefBase="/archive" />

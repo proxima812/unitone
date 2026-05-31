@@ -58,38 +58,11 @@ const {
 			})();
 		</script>
 		<link rel="manifest" href="/manifest.webmanifest" />
-		<meta name="theme-color" content="#10a8ff" />
+		<meta name="theme-color" content="#000000" />
 	</head>
 	<body
 		class={`${bodyStyle || ""} flex min-h-screen flex-col bg-[color:var(--bg)] text-[color:var(--text)]`}
 	>
-		<div id="pwa-install" class="mx-auto hidden w-full max-w-4xl pt-0 md:pt-3 px-0">
-			<div class="rounded-px md:rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] px-4 py-3">
-				<div class="flex flex-col gap-3 justify-between sm:flex-row sm:items-center sm:gap-4">
-					<div class="flex items-center gap-3">
-						<img
-							src="/favicon.svg"
-							alt="Иконка приложения Unity One"
-							class="h-12 w-12 shrink-0 rounded-xl border border-[color:var(--border)] bg-[color:var(--bg)] p-2 sm:h-14 sm:w-14"
-							loading="lazy"
-							decoding="async"
-						/>
-						<div class="min-w-0 flex-1">
-							<p class="text-sm font-semibold text-[color:var(--text)]">Установите Unity One как приложение</p>
-							<p class="mt-1 text-sm text-[color:var(--muted)]">
-								Будет быстрее открываться и работать как отдельное приложение.
-							</p>
-						</div>
-					</div>
-					<button
-						id="pwa-install-btn"
-						class="w-full rounded-full bg-[var(--sk-button-background)] px-4 py-2 text-sm text-white hover:bg-[var(--sk-button-background-hover)] active:bg-[var(--sk-button-background-active)] sm:w-auto sm:shrink-0"
-					>
-						<span>Установить</span>
-					</button>
-				</div>
-			</div>
-		</div>
 		<Header />
 		<div
 			id="cookie-banner"
@@ -102,7 +75,7 @@ const {
 				<div class="mt-3 flex flex-wrap gap-2">
 					<button
 						id="cookie-accept-all"
-						class="rounded-full bg-[var(--sk-button-background)] px-3 py-1.5 text-sm text-white hover:bg-[var(--sk-button-background-hover)] active:bg-[var(--sk-button-background-active)]"
+						class="rounded-full bg-[var(--sk-button-background)] px-3 py-1.5 text-sm text-[color:var(--button-text)] hover:bg-[var(--sk-button-background-hover)] active:bg-[var(--sk-button-background-active)]"
 					>
 						Принять все
 					</button>
@@ -136,7 +109,7 @@ const {
 					<div class="mt-3 flex flex-wrap gap-2">
 						<button
 							id="cookie-save-settings"
-							class="rounded-full bg-[var(--sk-button-background)] px-3 py-1.5 text-sm text-white hover:bg-[var(--sk-button-background-hover)] active:bg-[var(--sk-button-background-active)]"
+							class="rounded-full bg-[var(--sk-button-background)] px-3 py-1.5 text-sm text-[color:var(--button-text)] hover:bg-[var(--sk-button-background-hover)] active:bg-[var(--sk-button-background-active)]"
 						>
 							Сохранить
 						</button>

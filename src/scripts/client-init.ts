@@ -7,46 +7,6 @@ function initServiceWorker() {
 	});
 }
 
-function initPwaInstallBanner() {
-	const installBanner = document.getElementById("pwa-install");
-	const installBtn = document.getElementById("pwa-install-btn");
-	if (!installBanner || !installBtn) return;
-
-	const PWA_SHOW_DELAY_MS = 8_000;
-	let deferredPrompt: BeforeInstallPromptEvent | null = null;
-
-	const showPwaBanner = () => installBanner.classList.remove("hidden");
-	const updateInstallBtnState = () => {
-		installBtn.toggleAttribute("disabled", !deferredPrompt);
-		installBtn.classList.toggle("opacity-60", !deferredPrompt);
-		installBtn.classList.toggle("cursor-not-allowed", !deferredPrompt);
-		installBtn.setAttribute(
-			"title",
-			deferredPrompt ? "Установить приложение" : "Установка пока недоступна в этом браузере",
-		);
-	};
-
-	setTimeout(() => {
-		showPwaBanner();
-		updateInstallBtnState();
-	}, PWA_SHOW_DELAY_MS);
-
-	window.addEventListener("beforeinstallprompt", (event) => {
-		event.preventDefault();
-		deferredPrompt = event as BeforeInstallPromptEvent;
-		updateInstallBtnState();
-	});
-
-	installBtn.addEventListener("click", async () => {
-		if (!deferredPrompt) return;
-		deferredPrompt.prompt();
-		await deferredPrompt.userChoice;
-		deferredPrompt = null;
-		updateInstallBtnState();
-		installBanner.classList.add("hidden");
-	});
-}
-
 function initCookieBanner() {
 	const COOKIE_CONSENT_KEY = "cookieConsent_v1";
 	const cookieBanner = document.getElementById("cookie-banner");
@@ -211,14 +171,8 @@ function escapeAttr(value: string): string {
 	return escapeHtml(value).replace(/"/g, "&quot;");
 }
 
-type BeforeInstallPromptEvent = Event & {
-	prompt: () => Promise<void>;
-	userChoice: Promise<{ outcome: string; platform: string }>;
-};
-
 function initClient() {
 	initServiceWorker();
-	initPwaInstallBanner();
 	initCookieBanner();
 	initBookmarkToggles();
 	initBookmarksLists();

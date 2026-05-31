@@ -4,6 +4,8 @@ import BookmarkToggle from "@/components/BookmarkToggle.astro";
 import MorePostsByAuthor from "@/components/MorePostsByAuthor.astro";
 import QuoteCopyEnhancer from "@/components/QuoteCopyEnhancer.astro";
 import RelatedPosts from "@/components/RelatedPosts.astro";
+import { formatTag } from "@/lib/tags";
+import { Icon } from "astro-icon/components";
 import { getCollection, render } from "astro:content";
 
 type ArchivePost = Awaited<ReturnType<typeof getCollection<"archive">>>[number];
@@ -37,19 +39,18 @@ const currentTags = post.data.tags || [];
 
 const shareLinks = [
 	{
-		label: "Telegram",
-		href: `https://t.me/share/url?url=${encodedURL}&text=${encodedText}`,
-	},
-	{
 		label: "VK",
+		icon: "mdi:vk",
 		href: `https://vk.com/share.php?url=${encodedURL}&title=${encodedTitle}`,
 	},
 	{
 		label: "X",
+		icon: "mdi:twitter",
 		href: `https://twitter.com/intent/tweet?url=${encodedURL}&text=${encodedText}`,
 	},
 	{
 		label: "WhatsApp",
+		icon: "mdi:whatsapp",
 		href: `https://api.whatsapp.com/send?text=${encodedText}%20${encodedURL}`,
 	},
 ];
@@ -69,7 +70,12 @@ const shareLinks = [
 				<div class="space-y-4">
 					<section class="rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] p-4">
 						<p class="text-xs uppercase tracking-wide text-[color:var(--muted)]">Автор</p>
-						<p class="mt-2 text-sm font-medium text-[color:var(--text)]">{authorName}</p>
+						<div class="mt-3 flex items-center gap-3">
+							{authorName === "Unity One" && (
+								<div class="h-9 w-9 rounded-full bg-gradient-to-br from-blue-500 via-violet-500 to-pink-400 ring-1 ring-white/80 shadow-sm" aria-hidden="true" />
+							)}
+							<p class="text-sm font-medium text-[color:var(--text)]">{authorName}</p>
+						</div>
 					</section>
 
 					<section class="rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] p-4">
@@ -80,9 +86,11 @@ const shareLinks = [
 									href={share.href}
 									target="_blank"
 									rel="noopener noreferrer"
-									class="rounded-full border border-[color:var(--border)] px-3 py-1 text-xs"
+									aria-label={`Поделиться в ${share.label}`}
+									title={`Поделиться в ${share.label}`}
+									class="inline-flex h-9 w-9 items-center justify-center rounded-md border border-[color:var(--border)] bg-[color:var(--surface)] text-[color:var(--muted)] hover:text-[color:var(--text)]"
 								>
-									{share.label}
+									<Icon name={share.icon} class="h-4 w-4" />
 								</a>
 							))}
 						</div>
@@ -111,6 +119,15 @@ const shareLinks = [
 
 					<h1 class="text-4xl font-black leading-tight tracking-tight md:text-5xl">{post.data.title}</h1>
 					{post.data.description && <p class="mt-3 text-[color:var(--muted)]">{post.data.description}</p>}
+					{currentTags.length > 0 && (
+						<div class="mt-4 flex flex-wrap gap-2">
+							{currentTags.map((tag) => (
+								<span class="rounded-full border border-[color:var(--border)] bg-[color:var(--surface-soft)] px-2.5 py-1 text-xs text-[color:var(--muted)]">
+									{formatTag(tag)}
+								</span>
+							))}
+						</div>
+					)}
 					<div class="mt-4">
 						<BookmarkToggle
 							id={`archive-${post.id}`}
@@ -126,6 +143,14 @@ const shareLinks = [
 				<section class="my-prose article-rich-content !mx-0 !mt-5 !max-w-none !p-5 md:!p-8">
 					<Content />
 				</section>
+
+				<aside class="mt-5 rounded-2xl border border-dashed border-[color:var(--border)] bg-[color:var(--surface-soft)] p-5 md:p-6">
+					<p class="text-xs font-semibold uppercase tracking-wide text-[color:var(--muted)]">Реклама</p>
+					<h2 class="mt-2 text-xl font-semibold text-[color:var(--text)]">Здесь может быть ваш полезный проект</h2>
+					<p class="mt-2 max-w-2xl text-sm leading-relaxed text-[color:var(--muted)]">
+						Хотите разместить рекламу или рассказать о тематическом сервисе? Свяжитесь с нами, чтобы обсудить формат размещения.
+					</p>
+				</aside>
 			</div>
 		</article>
 	</main>

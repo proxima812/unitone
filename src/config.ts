@@ -1,11 +1,6 @@
 export const config = {
-  info_group: {
-    name: '',
-    link: '',
-    description: '',
-    date: 'Последнее обновление (13.02.2026)'
-  },
 	release: {
+		version: "3.0.1",
 		// Увеличивай на +1 при каждом commit/push:
 		// 0 -> 2.4.0
 		// 1..5 -> 2.4.1..2.4.5
@@ -18,14 +13,14 @@ export const config = {
 		// после 3.5.5 -> 4.0.0
 		versionStep: 4,
 		// Обновляется автоматически pre-push hook (время Астаны, UTC+5)
-		lastPushedAt: "2026-02-24T15:08:00+05:00",
+		lastPushedAt: "2026-05-31T12:00:00+05:00",
 		timeZone: "Asia/Almaty",
 		utcOffsetLabel: "UTC+5",
 		locale: "ru-RU",
 	},
 	site: {
 		OG: {
-			title: "Unity One — мы о 12 шагов восстановления/выздоровления и программе 12 шагов. Меняемся к лучшему!",
+			title: "Unity One — о программе 12 шагов, восстановлении и сообществах взаимопомощи",
 			description:
 				"Единое пространство о программе 12 шагов: статьи, методы, сообщества и практики для личных изменений.",
 			author: "OneMan",

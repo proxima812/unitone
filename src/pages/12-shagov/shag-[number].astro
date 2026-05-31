@@ -1,0 +1,20 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { twelveSteps } from "@/data/twelveSteps";
+export function getStaticPaths() { return twelveSteps.map((step) => ({ params: { number: String(step.number) }, props: { step } })); }
+const { step } = Astro.props;
+const previous = twelveSteps[step.number - 2];
+const next = twelveSteps[step.number];
+---
+<Layout title={`Шаг ${step.number} программы 12 шагов: ${step.title}`} description={`${step.summary} Смысл шага ${step.number}, вопросы для размышления и безопасная практика.`}>
+	<article class="mx-auto w-full max-w-4xl rounded-3xl border border-[color:var(--border)] bg-[color:var(--surface)] p-6 md:p-8">
+		<p class="text-sm font-semibold text-[color:var(--primary)]">Программа 12 шагов</p>
+		<h2 class="mt-2 text-3xl font-bold">Шаг {step.number}: {step.title}</h2>
+		<p class="mt-4 text-lg leading-relaxed text-[color:var(--muted)]">{step.summary}</p>
+		<h3 class="mt-7 text-xl font-semibold">Как работать с этим шагом</h3>
+		<p class="mt-2 leading-relaxed text-[color:var(--muted)]">Не торопитесь и не используйте страницу как замену наставнику или специалисту. Зафиксируйте один конкретный вопрос, обсудите его с доверенным человеком и выберите небольшое действие, которое можно проверить на практике.</p>
+		<h3 class="mt-7 text-xl font-semibold">Вопросы для размышления</h3>
+		<ul class="mt-2 list-disc space-y-2 pl-5 text-[color:var(--muted)]"><li>Как этот принцип проявляется в моей текущей ситуации?</li><li>Где мне нужна поддержка, а не попытка справиться в одиночку?</li><li>Какое безопасное действие я могу сделать сегодня?</li></ul>
+		<nav class="mt-8 flex flex-wrap gap-3 border-t border-[color:var(--border)] pt-5">{previous && <a class="underline" href={`/12-shagov/shag-${previous.number}/`}>← Шаг {previous.number}</a>}<a class="underline" href="/12-shagov/">Все шаги</a>{next && <a class="underline" href={`/12-shagov/shag-${next.number}/`}>Шаг {next.number} →</a>}</nav>
+	</article>
+</Layout>

@@ -15,14 +15,6 @@ import { blockData } from "@/data/links";
 		<section
 			class="relative overflow-hidden rounded-[2rem] border border-[color:var(--border)] bg-[color:var(--surface)] p-7 shadow-[var(--shadow-soft)] md:p-12"
 		>
-			<div
-				class="absolute inset-0 -z-0 bg-gradient-to-br from-[color:color-mix(in_srgb,var(--secondary)_22%,transparent)] via-transparent to-[color:color-mix(in_srgb,var(--primary)_16%,transparent)]"
-			>
-			</div>
-			<div
-				class="absolute -right-10 -top-10 -z-0 h-52 w-52 rounded-full bg-[color:color-mix(in_srgb,var(--accent)_20%,transparent)] blur-3xl"
-			>
-			</div>
 			<div class="relative z-10">
 				<p
 					class="mb-3 inline-flex rounded-full border border-[color:var(--border)] bg-[color:var(--surface)] px-3 py-1 text-xs font-semibold uppercase tracking-wide text-[color:var(--muted)]"
@@ -52,8 +44,14 @@ import { blockData } from "@/data/links";
 				</p>
 				<div class="mt-7 flex flex-wrap gap-3">
 					<a
+						href="/12-shagov/"
+						class="rounded-xl bg-[color:var(--primary)] px-4 py-2.5 text-sm font-semibold text-[color:var(--button-text)] shadow-sm hover:bg-[var(--sk-button-background-hover)] active:bg-[var(--sk-button-background-active)]"
+					>
+						Изучить 12 шагов
+					</a>
+					<a
 						href="/methods"
-						class="rounded-xl bg-[color:var(--primary)] px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-[var(--sk-button-background-hover)] active:bg-[var(--sk-button-background-active)]"
+						class="rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] px-4 py-2.5 text-sm font-semibold text-[color:var(--text)] hover:border-[color:var(--primary)] hover:text-[color:var(--primary)]"
 
 					>
 						Начать с методов
@@ -79,6 +77,7 @@ import { blockData } from "@/data/links";
 				12 шагов - это структурированная практика личных изменений: честный самоанализ,
 				принятие ответственности, восстановление отношений и регулярная поддержка в сообществе.
 			</p>
+			<a class="mt-4 inline-flex underline" href="/12-shagov/">Читать полный список 12 шагов и пояснения</a>
 
 			<h3 class="mt-6 text-xl font-semibold text-[color:var(--text)]">
 				Краткие факты и история
@@ -154,7 +153,6 @@ import { blockData } from "@/data/links";
 		<section
 			class="relative overflow-hidden rounded-3xl border border-[color:var(--border)] bg-[color:var(--surface-tint)] p-6 shadow-[var(--shadow-card)] md:p-8"
 		>
-			<div class="absolute inset-0 -z-0 bg-gradient-to-br from-[color:color-mix(in_srgb,var(--primary)_10%,transparent)] via-transparent to-[color:color-mix(in_srgb,var(--accent)_14%,transparent)]"></div>
 			<div class="relative z-10">
 				<p class="inline-flex rounded-full border border-[color:var(--border)] px-3 py-1 text-xs font-semibold uppercase tracking-wide text-[color:var(--muted)]">
 					Исследования
@@ -169,7 +167,7 @@ import { blockData } from "@/data/links";
 				<div class="mt-5 flex flex-wrap gap-3">
 					<a
 						href="/archive/"
-						class="rounded-xl bg-[color:var(--primary)] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[var(--sk-button-background-hover)] active:bg-[var(--sk-button-background-active)]"
+						class="rounded-xl bg-[color:var(--primary)] px-4 py-2.5 text-sm font-semibold text-[color:var(--button-text)] hover:bg-[var(--sk-button-background-hover)] active:bg-[var(--sk-button-background-active)]"
 					>
 						Читать статьи
 					</a>

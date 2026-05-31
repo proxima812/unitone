@@ -8,40 +8,51 @@
 @layer base {
   :root {
     color-scheme: light;
-    --color-my-palette-primary: #087fda;
-    --color-my-palette-secondary: #63d7c6;
-    --color-my-palette-accent: #087fda;
-    --color-my-palette-foreground: #17324d;
-    --color-my-palette-background: #f5f9fc;
+    --color-my-palette-primary: #18181b;
+    --color-my-palette-secondary: #71717a;
+    --color-my-palette-accent: #18181b;
+    --color-my-palette-foreground: #09090b;
+    --color-my-palette-background: #ffffff;
     --bg: var(--color-my-palette-background);
     --surface: #ffffff;
-    --surface-soft: #eef7fb;
-    --surface-tint: #e8f6f4;
+    --surface-soft: #fafafa;
+    --surface-tint: #f4f4f5;
     --text: var(--color-my-palette-foreground);
-    --muted: #60758a;
-    --border: #d8e6ee;
+    --muted: #71717a;
+    --border: #e4e4e7;
     --accent: var(--color-my-palette-accent);
     --primary: var(--color-my-palette-primary);
     --secondary: var(--color-my-palette-secondary);
     --sk-button-background: var(--color-my-palette-primary);
-    --sk-button-background-hover: #0871c2;
-    --sk-button-background-active: #0665ae;
+    --sk-button-background-hover: #27272a;
+    --sk-button-background-active: #3f3f46;
+    --button-text: #ffffff;
     --sk-blocklink-color: var(--color-my-palette-primary);
-    --ring: color-mix(in srgb, var(--primary) 54%, white);
-    --shadow-soft: 0 18px 55px color-mix(in srgb, #17466b 10%, transparent);
-    --shadow-card: 0 8px 26px color-mix(in srgb, #17466b 8%, transparent);
+    --ring: #a1a1aa;
+    --shadow-soft: 0 1px 2px rgb(0 0 0 / 0.04);
+    --shadow-card: 0 1px 2px rgb(0 0 0 / 0.04);
   }
 
   :root[data-theme="dark"] {
     color-scheme: dark;
-    --color-my-palette-foreground: #e4f0f5;
-    --color-my-palette-background: #0d1c28;
-    --surface: #142938;
-    --surface-soft: #183445;
-    --surface-tint: #173c40;
-    --muted: #a7bdc9;
-    --border: #294858;
-    --ring: color-mix(in srgb, var(--primary) 68%, white);
+    --color-my-palette-primary: #ededed;
+    --color-my-palette-secondary: #a1a1aa;
+    --color-my-palette-accent: #ededed;
+    --color-my-palette-foreground: #ededed;
+    --color-my-palette-background: #000000;
+    --surface: #0a0a0a;
+    --surface-soft: #111111;
+    --surface-tint: #18181b;
+    --muted: #a1a1aa;
+    --border: #27272a;
+    --sk-button-background: #ededed;
+    --sk-button-background-hover: #ffffff;
+    --sk-button-background-active: #d4d4d8;
+    --button-text: #09090b;
+    --sk-blocklink-color: #ededed;
+    --ring: #71717a;
+    --shadow-soft: none;
+    --shadow-card: none;
   }
 
   html,
@@ -51,10 +62,6 @@
 
   body {
     color: var(--text);
-    background-image:
-      radial-gradient(circle at 8% 3%, color-mix(in srgb, var(--secondary) 15%, transparent), transparent 25rem),
-      radial-gradient(circle at 92% 8%, color-mix(in srgb, var(--primary) 11%, transparent), transparent 27rem);
-    background-attachment: fixed;
   }
 
   a {
@@ -139,6 +146,13 @@
     color: var(--text);
   }
 
+  :root[data-theme="dark"] button[class*="bg-[var(--sk-button-background)]"],
+  :root[data-theme="dark"] button[class*="bg-[color:var(--primary)]"],
+  :root[data-theme="dark"] a[class*="bg-[var(--sk-button-background)]"],
+  :root[data-theme="dark"] a[class*="bg-[color:var(--primary)]"] {
+    color: #09090b;
+  }
+
   .my-prose {
     @apply prose prose-lg xl:prose-xl prose-headings:first:mt-0 prose-p:first:mt-0 prose-p:text-pretty prose-headings:text-balance max-w-6xl rounded-2xl p-6 md:p-12 sm:mx-auto -mx-[20px];
     --tw-prose-links: var(--sk-blocklink-color);
@@ -165,11 +179,7 @@
     border: 1px solid color-mix(in srgb, var(--accent) 24%, var(--border));
     border-left: 4px solid color-mix(in srgb, var(--accent) 80%, white);
     border-radius: 1rem;
-    background: linear-gradient(
-      135deg,
-      color-mix(in srgb, var(--accent) 10%, white),
-      color-mix(in srgb, var(--surface) 94%, var(--accent))
-    );
+    background: var(--surface-soft);
     color: var(--text);
     font-style: normal;
   }
