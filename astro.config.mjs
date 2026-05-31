@@ -1,6 +1,7 @@
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
+import dualmark from "@dualmark/astro";
 import embeds from "astro-embed/integration";
 import icon from "astro-icon";
 import seoGraph from "@jdevalk/astro-seo-graph/integration";
@@ -14,6 +15,11 @@ export default defineConfig({
 	compressHTML: true,
 	vite: {
 		plugins: [tailwindcss()],
+		resolve: {
+			alias: {
+				fs: "node:fs",
+			},
+		},
 	},
 	devToolbar: {
 		enabled: true,
@@ -43,6 +49,38 @@ export default defineConfig({
 						},
 					}
 				: {}),
+		}),
+		dualmark({
+			siteUrl: "https://unityone.space",
+			collections: {
+				archive: {
+					converter: "blog",
+					route: "archive",
+					slugStrategy: "single",
+				},
+			},
+			llmsTxt: {
+				enabled: true,
+				brandName: "Unity One",
+				description:
+					"Единое пространство о программе 12 шагов: статьи, методы, сообщества и практики для личных изменений.",
+				sections: [
+					{
+						title: "Основные разделы",
+						links: [
+							{ title: "Архив статей", href: "https://unityone.space/archive.md" },
+							{ title: "Программа 12 шагов", href: "https://unityone.space/12-shagov/" },
+							{ title: "Методы", href: "https://unityone.space/methods/" },
+							{ title: "Сообщества", href: "https://unityone.space/communities/" },
+							{ title: "Подбор группы", href: "https://unityone.space/finder/" },
+							{ title: "FAQ", href: "https://unityone.space/faq/" },
+						],
+					},
+				],
+			},
+			middleware: {
+				injectLinkHeader: false,
+			},
 		}),
 	],
 	output: "static",

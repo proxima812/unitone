@@ -13,6 +13,7 @@
 		"@astrojs/rss": "4.0.18",
 		"@astrojs/sitemap": "3.7.3",
 		"@astrojs/tailwind": "6.0.2",
+		"@dualmark/astro": "^0.8.0",
 		"@iconify-json/mdi": "^1.2.3",
 		"@jdevalk/astro-seo-graph": "^2.0.0",
 		"@jdevalk/seo-graph-core": "^0.6.2",
