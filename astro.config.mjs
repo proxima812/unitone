@@ -1,8 +1,11 @@
 import mdx from "@astrojs/mdx";
+import { satteri } from "@astrojs/markdown-satteri";
 import sitemap from "@astrojs/sitemap";
+import compress from "@playform/compress";
 import tailwindcss from "@tailwindcss/vite";
 import dualmark from "@dualmark/astro";
 import embeds from "astro-embed/integration";
+import feedKit from "astro-feed-kit";
 import icon from "astro-icon";
 import seoGraph from "@jdevalk/astro-seo-graph/integration";
 import astroNoEmail from "astro-noemail";
@@ -13,6 +16,9 @@ const enableIndexNow = process.env.INDEXNOW_ENABLED === "true";
 export default defineConfig({
 	site: "https://unityone.space",
 	compressHTML: true,
+	markdown: {
+		processor: satteri(),
+	},
 	vite: {
 		plugins: [tailwindcss()],
 		resolve: {
@@ -81,6 +87,17 @@ export default defineConfig({
 			middleware: {
 				injectLinkHeader: false,
 			},
+		}),
+		feedKit({
+			sources: ["archive"],
+			feedOptions: {
+				title: "Unity One Archive",
+				description: "Статьи проекта Unity One о программе 12 шагов.",
+				link: "https://unityone.space",
+			},
+		}),
+		compress({
+			Exclude: (file) => file.endsWith(".ts"),
 		}),
 	],
 	output: "static",

@@ -17,6 +17,7 @@ const archive = defineCollection({
 		})
 		.transform((data) => ({
 			...data,
+			date: new Date(data.pubDate),
 			publishedDate: new Date(data.pubDate),
 		})),
 });

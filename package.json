@@ -10,7 +10,6 @@
 	},
 	"dependencies": {
 		"@astrojs/mdx": "6.0.1",
-		"@astrojs/rss": "4.0.18",
 		"@astrojs/sitemap": "3.7.3",
 		"@astrojs/tailwind": "6.0.2",
 		"@dualmark/astro": "^0.8.0",
@@ -32,7 +31,10 @@
 		"typescript": "^5.7.3"
 	},
 	"devDependencies": {
+		"@astrojs/markdown-satteri": "^0.2.1",
 		"@iconify-json/solar": "^1.2.5",
-		"@tailwindcss/typography": "^0.5.16"
+		"@playform/compress": "^0.2.3",
+		"@tailwindcss/typography": "^0.5.16",
+		"astro-feed-kit": "^0.2.4"
 	}
 }
