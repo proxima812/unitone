@@ -98,6 +98,7 @@ export default defineConfig({
 		}),
 		compress({
 			Exclude: (file) => file.endsWith(".ts"),
+			CSS: false,
 		}),
 	],
 	output: "static",
