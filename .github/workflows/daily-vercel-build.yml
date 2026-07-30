@@ -1,0 +1,46 @@
+name: Daily Vercel Build
+
+on:
+  schedule:
+    # 01:15 Asia/Almaty. Rebuilds the static site so date-gated posts can appear daily.
+    - cron: "15 20 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: daily-vercel-build
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Build and deploy to Vercel
+    runs-on: ubuntu-latest
+    env:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Install Vercel CLI
+        run: bun add --global vercel@latest
+
+      - name: Pull Vercel environment
+        run: vercel pull --yes --environment=production
+
+      - name: Generate scheduled posts
+        run: node scripts/generate-scheduled-posts.mjs
+
+      - name: Build
+        run: vercel build --prod --yes
+
+      - name: Deploy
+        run: vercel deploy --prebuilt --prod --yes

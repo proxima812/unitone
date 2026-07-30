@@ -4,16 +4,17 @@ import BookmarkToggle from "@/components/BookmarkToggle.astro";
 import MorePostsByAuthor from "@/components/MorePostsByAuthor.astro";
 import QuoteCopyEnhancer from "@/components/QuoteCopyEnhancer.astro";
 import RelatedPosts from "@/components/RelatedPosts.astro";
+import { filterPublishedArchiveEntries } from "@/lib/archivePublish.mjs";
 import { formatTag } from "@/lib/tags";
 import { Icon } from "astro-icon/components";
 import { getCollection, render } from "astro:content";
 
 type ArchivePost = Awaited<ReturnType<typeof getCollection<"archive">>>[number];
 
-const archive = await getCollection("archive");
+const archive = filterPublishedArchiveEntries(await getCollection("archive"));
 
 export async function getStaticPaths() {
-	const posts = await getCollection("archive");
+	const posts = filterPublishedArchiveEntries(await getCollection("archive"));
 	return posts.map((post) => ({
 		params: { slug: post.id },
 		props: { post },

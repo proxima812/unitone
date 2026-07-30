@@ -2,12 +2,13 @@
 import Article from "@/components/Article.astro";
 import ArchiveFilter from "@/components/ArchiveFilter.astro";
 import Layout from "@/layouts/Layout.astro";
+import { filterPublishedArchiveEntries } from "@/lib/archivePublish.mjs";
 import { formatTag } from "@/lib/tags";
 import { getCollection } from "astro:content";
 
 export const prerender = true;
 
-const posts = (await getCollection("archive")).sort((a, b) => {
+const posts = filterPublishedArchiveEntries(await getCollection("archive")).sort((a, b) => {
 	const aTime = a.data.pubDate ? new Date(a.data.pubDate).getTime() : 0;
 	const bTime = b.data.pubDate ? new Date(b.data.pubDate).getTime() : 0;
 	return bTime - aTime;

@@ -10,6 +10,7 @@ import icon from "astro-icon";
 import seoGraph from "@jdevalk/astro-seo-graph/integration";
 import astroNoEmail from "astro-noemail";
 import { defineConfig } from "astro/config";
+import { isArchiveEntryPublished } from "./src/lib/archivePublish.mjs";
 
 const enableIndexNow = process.env.INDEXNOW_ENABLED === "true";
 
@@ -63,6 +64,7 @@ export default defineConfig({
 					converter: "blog",
 					route: "archive",
 					slugStrategy: "single",
+					filter: isArchiveEntryPublished,
 				},
 			},
 			llmsTxt: {
@@ -89,7 +91,15 @@ export default defineConfig({
 			},
 		}),
 		feedKit({
-			sources: ["archive"],
+			sources: [
+				{
+					collection: "archive",
+					filter: isArchiveEntryPublished,
+					resolveItem: ({ entry, siteUrl }) => ({
+						link: new URL(`/archive/${entry.id}/`, siteUrl).toString(),
+					}),
+				},
+			],
 			feedOptions: {
 				title: "Unity One Archive",
 				description: "Статьи проекта Unity One о программе 12 шагов.",

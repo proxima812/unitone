@@ -1,8 +1,9 @@
 ---
 import Layout from "@/layouts/Layout.astro"
+import { filterPublishedArchiveEntries } from "@/lib/archivePublish.mjs"
 import { getCollection } from "astro:content"
 
-const archive = await getCollection("archive")
+const archive = filterPublishedArchiveEntries(await getCollection("archive"))
 const authorsMap = new Map<
 	string,
 	{

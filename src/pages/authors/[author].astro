@@ -1,12 +1,13 @@
 ---
 import Article from "@/components/Article.astro"
 import Layout from "@/layouts/Layout.astro"
+import { filterPublishedArchiveEntries } from "@/lib/archivePublish.mjs"
 import { getCollection } from "astro:content"
 
 type ArchivePost = Awaited<ReturnType<typeof getCollection<"archive">>>[number]
 
 export async function getStaticPaths() {
-	const posts = await getCollection("archive")
+	const posts = filterPublishedArchiveEntries(await getCollection("archive"))
 	const byAuthor = new Map<string, ArchivePost[]>()
 
 	for (const post of posts) {
