@@ -16,110 +16,51 @@ const posts = filterPublishedArchiveEntries(await getCollection("archive")).sort
 
 const featuredPost = posts[0] || null;
 const restPosts = posts.slice(1);
-const tags = Array.from(new Set(posts.flatMap((item) => item.data.tags || []).filter(Boolean))).sort((a, b) =>
-	a.localeCompare(b),
-);
+const tags = Array.from(new Set(posts.flatMap((item) => item.data.tags || []).filter(Boolean))).sort((a, b) => a.localeCompare(b));
 ---
 
-<Layout
-	title="Архив статей"
-	description="Статьи Unity One о программе 12 шагов: исследования, статистика, документы и практические пояснения."
->
-	<main class="mx-auto flex w-full max-w-6xl flex-col gap-8">
-		<section class="overflow-hidden rounded-[2rem] border border-[color:var(--border)] bg-[color:var(--surface-soft)] p-6 shadow-[var(--shadow-soft)] md:p-8">
-			<div class="grid gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(280px,0.8fr)] lg:items-end">
-				<div>
-					<p class="inline-flex rounded-full border border-[color:var(--border)] px-3 py-1 text-xs font-semibold uppercase tracking-wide text-[color:var(--muted)]">
-						Исследования и документы
-					</p>
-					<h1 class="mt-4 text-4xl font-black leading-tight tracking-tight md:text-6xl">
-						Архив статей
-					</h1>
-					<p class="mt-4 max-w-3xl text-base text-[color:var(--muted)] md:text-lg">
-						Материалы Unity One о статистике, эффективности и исследованиях программы 12 шагов.
-						В каждой статье указаны источники и ссылки на документы.
-					</p>
-				</div>
-
-				<div class="grid gap-3 rounded-2xl border border-[color:var(--border)] bg-[color:var(--bg)] p-4 text-sm text-[color:var(--muted)]">
-					<div class="flex items-center justify-between gap-4">
-						<span>Статей</span>
-						<strong class="text-[color:var(--text)]">{posts.length}</strong>
-					</div>
-					<div class="flex items-center justify-between gap-4">
-						<span>Тегов</span>
-						<strong class="text-[color:var(--text)]">{tags.length}</strong>
-					</div>
-					<div class="flex items-center justify-between gap-4">
-						<span>Формат</span>
-						<strong class="text-[color:var(--text)]">Статьи</strong>
-					</div>
-				</div>
+<Layout title="Статьи и посты" description="Исследования, руководства и заметки о 12 шагах, сообществах и практике." hidePageHeader>
+	<main class="mx-auto w-full max-w-6xl">
+		<header class="grid gap-8 border-b border-[color:var(--border)] pb-12 pt-4 md:grid-cols-[1fr_auto] md:items-end md:pb-16">
+			<div>
+				<p class="editorial-label">Библиотека Unity One</p>
+				<h1 class="mt-4 text-5xl font-black leading-[0.94] tracking-[-0.075em] md:text-7xl">Статьи<br />и посты</h1>
+				<p class="mt-5 max-w-xl text-base leading-relaxed text-[color:var(--muted)] md:text-lg">Материалы о программе 12 шагов: понятные объяснения, практические руководства, история и исследования.</p>
 			</div>
-		</section>
+			<div class="grid grid-cols-2 gap-x-8 gap-y-4 border-t-[3px] border-[color:var(--text)] pt-3 text-sm md:min-w-[15rem]">
+				<div><strong class="block text-2xl tracking-tight">{posts.length}</strong><span class="text-[color:var(--muted)]">материалов</span></div>
+				<div><strong class="block text-2xl tracking-tight">{tags.length}</strong><span class="text-[color:var(--muted)]">тем</span></div>
+			</div>
+		</header>
 
-		{
-			featuredPost && (
-				<section class="grid gap-4 lg:grid-cols-[minmax(0,1.4fr)_minmax(280px,0.6fr)]">
-					<a
-						href={`/archive/${featuredPost.id}/`}
-						class="group rounded-3xl border border-[color:var(--border)] bg-[color:var(--surface)] p-6 shadow-[var(--shadow-card)] transition hover:-translate-y-0.5 hover:border-[color:var(--primary)]"
-					>
-						<p class="text-xs font-semibold uppercase tracking-wide text-[color:var(--muted)]">Рекомендуемая статья</p>
-						<h2 class="mt-3 text-3xl font-black leading-tight md:text-4xl">{featuredPost.data.title}</h2>
-						{featuredPost.data.description && (
-							<p class="mt-3 max-w-2xl text-[color:var(--muted)]">{featuredPost.data.description}</p>
-						)}
-						<div class="mt-5 flex flex-wrap items-center gap-3 text-sm text-[color:var(--muted)]">
-							{featuredPost.data.pubDate && (
-								<time datetime={String(featuredPost.data.pubDate)}>
-									{new Date(featuredPost.data.pubDate).toLocaleDateString("ru-RU", {
-										year: "numeric",
-										month: "long",
-										day: "numeric",
-									})}
-								</time>
-							)}
-							<span class="rounded-full border border-[color:var(--border)] px-2 py-1">
-								{featuredPost.data.tags?.length || 0} тегов
-							</span>
-						</div>
+		{featuredPost && (
+			<section class="grid gap-8 border-b border-[color:var(--border)] py-10 md:grid-cols-[1.2fr_0.8fr] md:py-14">
+				<div>
+					<p class="editorial-label">Рекомендуемая статья</p>
+					<a href={`/archive/${featuredPost.id}/`} class="group block">
+						<h2 class="mt-4 max-w-4xl font-[var(--font-reading)] text-4xl font-medium leading-[0.98] tracking-[-0.045em] md:text-6xl">{featuredPost.data.title}</h2>
+						{featuredPost.data.description && <p class="mt-5 max-w-2xl text-base leading-relaxed text-[color:var(--muted)] md:text-lg">{featuredPost.data.description}</p>}
+						<span class="mt-6 inline-flex border-b border-[color:var(--accent)] pb-1 text-sm font-bold text-[color:var(--text)] group-hover:text-[color:var(--accent)]">Читать статью →</span>
 					</a>
-
-					<div class="rounded-3xl border border-[color:var(--border)] bg-[color:var(--surface-tint)] p-6 shadow-[var(--shadow-card)]">
-						<p class="text-xs font-semibold uppercase tracking-wide text-[color:var(--muted)]">Что внутри</p>
-						<div class="mt-3 flex flex-wrap gap-2">
-							{tags.slice(0, 8).map((tag) => (
-								<span class="rounded-full border border-[color:var(--border)] px-3 py-1 text-sm text-[color:var(--muted)]">
-									{formatTag(tag)}
-								</span>
-							))}
-						</div>
-						<p class="mt-4 text-sm text-[color:var(--muted)]">
-							Открывайте материалы напрямую из каталога и переходите к первичным источникам.
-						</p>
-					</div>
-				</section>
-			)
-		}
-
-		<section class="space-y-4">
-			<div class="flex flex-wrap items-end justify-between gap-3">
-				<div>
-					<p class="text-xs font-semibold uppercase tracking-wide text-[color:var(--muted)]">Каталог</p>
-					<h2 class="text-2xl font-bold md:text-3xl">Все статьи</h2>
 				</div>
-				<p class="text-sm text-[color:var(--muted)]">Сортировка: сначала новые</p>
+				<div class="self-end border-t-[3px] border-[color:var(--text)] pt-4 text-sm leading-relaxed text-[color:var(--muted)]">
+					<p class="font-semibold text-[color:var(--text)]">Что внутри</p>
+					<div class="mt-4 flex flex-wrap gap-x-4 gap-y-2">
+						{tags.slice(0, 8).map((tag) => <span class="border-b border-[color:var(--border)] pb-1">{formatTag(tag)}</span>)}
+					</div>
+					<p class="mt-6">Открывайте материалы напрямую из каталога и переходите к первичным источникам.</p>
+				</div>
+			</section>
+		)}
+
+		<section class="py-10 md:py-14">
+			<div class="mb-7 flex flex-wrap items-end justify-between gap-4">
+				<div><p class="editorial-label">Каталог</p><h2 class="mt-3 text-3xl font-bold tracking-[-0.055em] md:text-4xl">Все материалы</h2></div>
+				<p class="text-sm text-[color:var(--muted)]">Сначала новые</p>
 			</div>
-
 			<ArchiveFilter tags={tags} />
-
-			<div data-posts class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-				{
-					restPosts.map((article) => (
-						<Article data={article.data} id={article.id} hrefBase="/archive" />
-					))
-				}
+			<div data-posts class="mt-9 grid grid-cols-1 gap-0">
+				{restPosts.map((article) => <Article data={article.data} id={article.id} hrefBase="/archive" />)}
 			</div>
 		</section>
 	</main>

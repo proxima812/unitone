@@ -25,12 +25,12 @@ const facts = [
 ]
 ---
 
-<section class="mt-4 rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] p-5 md:p-6">
+<section class="mt-4 max-w-4xl border-t-[3px] border-[color:var(--text)] p-5 md:p-6">
 	<h2 class="text-2xl font-bold text-[color:var(--text)] md:text-3xl">Краткие факты</h2>
 	<div class="mt-4 grid grid-cols-1 gap-3 md:grid-cols-3">
 		{
 			facts.map((fact) => (
-				<div class="rounded-xl border border-[color:var(--border)] bg-[color:var(--bg)] p-4">
+				<div class="border-t border-[color:var(--border)] py-4">
 					<p class="text-xs uppercase tracking-wide text-[color:var(--muted)]">{fact.label}</p>
 					<p class="mt-2 text-sm font-medium text-[color:var(--text)]">{fact.value}</p>
 				</div>

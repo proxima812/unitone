@@ -4,24 +4,25 @@ import { formatTag } from "@/lib/tags";
 const { tags = [] } = Astro.props as { tags: string[] };
 ---
 
-<section class="flex flex-col gap-4" data-filter>
-	<div class="flex flex-col gap-2 text-center">
+
+<section class="border-y border-[color:var(--border)] py-4" data-filter>
+	<div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
 		<p class="text-sm text-[color:var(--muted)]">
 			Выберите теги или введите слово, результат обновится автоматически.
 		</p>
 	</div>
-	<div class="flex flex-wrap items-center justify-center gap-2">
+	<div class="mt-3 flex flex-wrap items-center gap-2">
 		<input
 			id="archive-search"
 			type="search"
 			placeholder="Поиск по заголовку и описанию"
 			aria-label="Поиск по статьям"
-			class="w-full rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] px-4 py-2 text-sm md:w-96 focus:border-[color:var(--accent)] focus:outline-none"
+			class="w-full border border-[color:var(--border)] bg-transparent px-3 py-2 text-sm md:w-80 focus:border-[color:var(--accent)] focus:outline-none"
 		/>
 		<button
 			id="archive-reset"
 			type="button"
-			class="rounded-full border border-[color:var(--border)] bg-[color:var(--surface)] px-4 py-2 text-sm text-[color:var(--muted)] transition hover:text-[color:var(--text)]"
+			class="border border-[color:var(--border)] bg-transparent px-3 py-2 text-sm text-[color:var(--muted)] transition hover:border-[color:var(--accent)] hover:text-[color:var(--text)]"
 		>
 			Сбросить
 		</button>
@@ -29,14 +30,14 @@ const { tags = [] } = Astro.props as { tags: string[] };
 	{
 		tags.length > 0 && (
 			<div class="w-full overflow-x-auto pb-1">
-				<div id="archive-tags" class="flex w-max min-w-full items-center gap-2 whitespace-nowrap">
+		<div id="archive-tags" class="flex w-max min-w-full items-center gap-3 whitespace-nowrap">
 					{
 						tags.map((tag) => (
 							<button
 								type="button"
 								data-tag={tag}
 								data-active="false"
-								class="rounded-full border border-[color:var(--border)] bg-[color:var(--surface)] px-3 py-1.5 text-sm text-[color:var(--text)] transition hover:border-[color:var(--accent)]"
+								class="border-b border-[color:var(--border)] bg-transparent px-0 py-1.5 text-sm text-[color:var(--muted)] transition hover:border-[color:var(--accent)] hover:text-[color:var(--text)]"
 							>
 								{formatTag(tag)}
 							</button>
@@ -46,7 +47,7 @@ const { tags = [] } = Astro.props as { tags: string[] };
 			</div>
 		)
 	}
-	<div class="text-center text-sm text-[color:var(--muted)]">
+	<div class="mt-3 text-xs uppercase tracking-[0.08em] text-[color:var(--muted)]">
 		Найдено: <span id="archive-count"></span>
 	</div>
 </section>
@@ -91,10 +92,9 @@ const { tags = [] } = Astro.props as { tags: string[] };
 				const active = activeTags.has(tag);
 				button.setAttribute("data-active", active ? "true" : "false");
 				button.classList.toggle("border-[color:var(--accent)]", active);
-				button.classList.toggle("bg-[color:var(--accent)]", active);
-				button.classList.toggle("text-[color:var(--button-text)]", active);
-				button.classList.toggle("bg-[color:var(--surface)]", !active);
-				button.classList.toggle("text-[color:var(--text)]", !active);
+				button.classList.toggle("font-semibold", active);
+				button.classList.toggle("text-[color:var(--text)]", active);
+				button.classList.toggle("text-[color:var(--muted)]", !active);
 				applyFilters();
 			});
 		});
@@ -105,8 +105,8 @@ const { tags = [] } = Astro.props as { tags: string[] };
 			if (searchInput) searchInput.value = "";
 			tagButtons.forEach((button) => {
 				button.setAttribute("data-active", "false");
-				button.classList.remove("border-[color:var(--accent)]", "bg-[color:var(--accent)]", "text-[color:var(--button-text)]");
-				button.classList.add("bg-[color:var(--surface)]", "text-[color:var(--text)]");
+				button.classList.remove("border-[color:var(--accent)]", "font-semibold", "text-[color:var(--text)]");
+				button.classList.add("text-[color:var(--muted)]");
 			});
 			applyFilters();
 		});

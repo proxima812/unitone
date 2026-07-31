@@ -102,9 +102,7 @@ const breadcrumbs = [
 		<FeedKit />
 		<meta name="theme-color" content="#000000" />
 	</head>
-	<body
-		class={`${bodyStyle || ""} flex min-h-screen flex-col bg-[color:var(--bg)] text-[color:var(--text)]`}
-	>
+	<body class={`${bodyStyle || ""} flex min-h-screen flex-col bg-[color:var(--bg)] text-[color:var(--text)]`}>
 		<Header />
 		<div
 			id="cookie-banner"
@@ -165,20 +163,20 @@ const breadcrumbs = [
 				</div>
 			</div>
 		</div>
-		<Container class="py-14 md:py-20">
-			<div class="flex flex-col gap-9 md:gap-12">
+		<Container class="py-10 md:py-16">
+			<div class="flex flex-col gap-8 md:gap-12">
         {
           Astro.url.pathname === "/" ||
 					new URL(Astro.url, Astro.site).pathname === "/" ||
 					hidePageHeader ? null : (
-            <section class="max-w-4xl">
+					<section class="max-w-4xl border-t border-[color:var(--border)] pt-5">
 							{title && (
-                <h1 class="mb-3 text-4xl font-black tracking-tight md:text-6xl xl:text-7xl">
+	                <h1 class="mb-3 text-4xl font-black leading-[0.96] tracking-[-0.065em] md:text-6xl xl:text-7xl">
 									{title}
 								</h1>
 							)}
 							{description && (
-                <p class="max-w-3xl text-base leading-relaxed text-[color:var(--muted)] md:text-lg lg:text-xl">
+	                <p class="max-w-3xl text-base leading-relaxed text-[color:var(--muted)] md:text-lg">
 									{description}
 								</p>
 							)}

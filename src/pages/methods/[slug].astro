@@ -21,7 +21,7 @@ const { item } = Astro.props;
 >
 	<a
 		href="/methods"
-		class="inline-flex items-center gap-1 rounded-lg border border-[color:var(--border)] bg-[color:var(--surface)] px-3 py-2 text-sm text-[color:var(--text)]"
+		class="editorial-link inline-flex items-center gap-1 text-sm font-semibold text-[color:var(--text)]"
 	>
 		<Icon name="mdi:arrow-left" />
 		<span>Назад к методам</span>
@@ -43,7 +43,7 @@ const { item } = Astro.props;
 		communities={item.community || []}
 	/>
 
-	<section class="mt-6 rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] p-5 md:p-6">
+	<section class="mt-6 max-w-3xl border-t-[3px] border-[color:var(--text)] p-5 md:p-6">
 		<h3 class="text-xl font-semibold text-[color:var(--text)]">Что дальше</h3>
 		<p class="mt-2 text-[color:var(--muted)]">
 			Если метод вам откликается, зафиксируйте план на первую неделю и добавьте поддержку: группа,
@@ -51,7 +51,7 @@ const { item } = Astro.props;
 		</p>
 		<a
 			href="/communities"
-			class="mt-4 inline-flex items-center rounded-lg bg-[color:var(--primary)] px-4 py-2 text-sm font-semibold text-[color:var(--button-text)] transition hover:bg-[var(--sk-button-background-hover)]"
+			class="editorial-link mt-4 inline-flex items-center text-sm font-semibold text-[color:var(--text)] hover:text-[color:var(--accent)]"
 		>
 			Перейти к сообществам
 		</a>

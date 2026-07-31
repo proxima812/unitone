@@ -81,8 +81,11 @@ const availableFilters = filterDefinitions
 <Layout
 	title="Подбор группы"
 	description={`Выберите подходящее сообщество из ${communities.length} вариантов: по теме, формату запроса и жизненной ситуации.`}
+	hidePageHeader
 >
-	<section class="rounded-3xl border border-[color:var(--border)] bg-[color:var(--surface-soft)] p-5 shadow-[var(--shadow-card)] md:p-7">
+	<main class="mx-auto w-full max-w-6xl">
+	<header class="border-b border-[color:var(--border)] pb-12 pt-4 md:pb-16"><p class="editorial-label">Навигатор</p><h1 class="mt-4 text-5xl font-black leading-[0.94] tracking-[-0.075em] md:text-7xl">Подобрать<br />сообщество</h1><p class="mt-5 max-w-xl text-base leading-relaxed text-[color:var(--muted)] md:text-lg">Выберите тему, задайте слово для поиска и сравните доступные направления без лишнего давления.</p></header>
+	<section class="border-b border-[color:var(--border)] py-8 md:py-10">
 		<h2 class="text-2xl font-bold text-[color:var(--text)] md:text-3xl">Как пользоваться подбором</h2>
 		<p class="mt-2 text-[color:var(--muted)]">
 			Введите ключевое слово и выберите детальную категорию. Карточки ниже сразу отфильтруются,
@@ -95,12 +98,12 @@ const availableFilters = filterDefinitions
 				type="search"
 				placeholder="Например: долги, никотин, семья, тревога, интернет..."
 				aria-label="Поиск по сообществам"
-				class="w-full rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] px-4 py-2.5 text-sm text-[color:var(--text)]"
+				class="w-full border border-[color:var(--border)] bg-transparent px-4 py-2.5 text-sm text-[color:var(--text)]"
 			/>
 			<button
 				id="finder-reset"
 				type="button"
-				class="rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] px-4 py-2.5 text-sm text-[color:var(--text)]"
+				class="border border-[color:var(--border)] bg-transparent px-4 py-2.5 text-sm text-[color:var(--text)]"
 			>
 				Сбросить фильтры
 			</button>
@@ -111,7 +114,7 @@ const availableFilters = filterDefinitions
 				type="button"
 				data-filter="all"
 				data-active="true"
-				class="finder-filter rounded-full border border-[color:var(--border)] bg-[color:var(--text)] px-3 py-1.5 text-sm text-[color:var(--bg)]"
+				class="finder-filter border-b border-[color:var(--text)] bg-transparent px-0 py-1.5 text-sm font-semibold text-[color:var(--text)]"
 			>
 				Все категории ({prepared.length})
 			</button>
@@ -122,7 +125,7 @@ const availableFilters = filterDefinitions
 						data-filter={filter.id}
 						data-active="false"
 						title={filter.hint}
-						class="finder-filter rounded-full border border-[color:var(--border)] bg-[color:var(--surface)] px-3 py-1.5 text-sm text-[color:var(--text)]"
+						class="finder-filter border-b border-[color:var(--border)] bg-transparent px-0 py-1.5 text-sm text-[color:var(--muted)]"
 					>
 						{filter.label} ({filter.count})
 					</button>
@@ -134,24 +137,24 @@ const availableFilters = filterDefinitions
 		</p>
 	</section>
 
-	<section id="community-list" class="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+	<section id="community-list" class="mt-8 grid grid-cols-1 gap-x-8 md:grid-cols-2 lg:grid-cols-3">
 		{
 			prepared.map((item) => (
 				<article
 					data-facets={item.facets.join(",")}
 					data-search={item.searchText}
-					class="flex h-full flex-col rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] shadow-[var(--shadow-card)] transition hover:-translate-y-0.5 hover:border-[color:var(--primary)]"
+					class="flex h-full flex-col border-t-[3px] border-[color:var(--text)] py-5 transition-colors hover:border-[color:var(--accent)]"
 				>
 					<div class="p-5">
 						<div class="mb-2 flex flex-wrap gap-2">
-							<span class="rounded-full border border-[color:var(--border)] bg-[color:var(--bg)] px-2 py-1 text-xs text-[color:var(--muted)]">
+							<span class="border-b border-[color:var(--border)] pb-1 text-xs text-[color:var(--muted)]">
 								{item.category}
 							</span>
 							{
 								item.facets.slice(0, 2).map((facetId) => {
 									const facet = availableFilters.find((x) => x.id === facetId)
 									return facet ? (
-										<span class="rounded-full border border-[color:var(--border)] px-2 py-1 text-xs text-[color:var(--muted)]">
+										<span class="border-b border-[color:var(--border)] pb-1 text-xs text-[color:var(--muted)]">
 											{facet.label}
 										</span>
 									) : null
@@ -162,7 +165,7 @@ const availableFilters = filterDefinitions
 						<p class="mt-2 line-clamp-3 text-sm text-[color:var(--muted)]">{item.description}</p>
 					</div>
 
-					<div class="mt-auto border-t border-[color:var(--border)] p-4">
+					<div class="mt-auto border-t border-[color:var(--border)] pt-4">
 						<div class="mb-3 flex items-center justify-between text-sm">
 							<span>
 								Информация:{" "}
@@ -181,13 +184,13 @@ const availableFilters = filterDefinitions
 										href={item.wikipedia}
 										aria-label={item.title}
 										target="_blank"
-										class="md:w-auto w-full inline-flex items-center justify-center gap-1 rounded-lg border border-[#A2A9B1] bg-[#F8F9FA] px-3 py-2 text-sm font-medium text-[#202122] transition hover:bg-[#EAECF0]"
+										class="md:w-auto w-full inline-flex items-center justify-center gap-1 text-sm font-semibold text-[color:var(--text)] transition hover:text-[color:var(--accent)]"
 									>
 										<Icon name="mdi:book-open-page-variant" />
 										<span>Wikipedia</span>
 									</a>
 								) : (
-									<span class="md:w-auto w-full inline-flex items-center justify-center rounded-lg border border-[color:var(--border)] bg-[color:var(--bg)] px-3 py-2 text-sm text-[color:var(--muted)]">
+									<span class="md:w-auto w-full inline-flex items-center justify-center border-b border-[color:var(--border)] px-1 py-2 text-sm text-[color:var(--muted)]">
 										Wikipedia нет
 									</span>
 								)
@@ -205,7 +208,7 @@ const availableFilters = filterDefinitions
 										href={href}
 										target="_blank"
 										rel="noreferrer"
-										class="inline-flex items-center justify-center rounded-lg border border-[color:var(--border)] bg-[color:var(--bg)] px-2 py-2 text-xs font-medium text-[color:var(--text)] transition hover:border-[color:var(--primary)]"
+										class="inline-flex items-center justify-center border-b border-[color:var(--border)] px-2 py-2 text-xs font-medium text-[color:var(--text)] transition hover:border-[color:var(--accent)]"
 									>
 										{label}
 									</a>
@@ -218,9 +221,10 @@ const availableFilters = filterDefinitions
 		}
 	</section>
 
-	<div id="finder-empty" class="mt-6 hidden rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] p-4 text-center text-[color:var(--muted)]">
+	<div id="finder-empty" class="mt-6 hidden border-t border-[color:var(--border)] py-5 text-center text-[color:var(--muted)]">
 		Ничего не найдено. Попробуйте убрать фильтр или изменить поисковый запрос.
 	</div>
+	</main>
 
 	<script>
 		document.addEventListener("DOMContentLoaded", () => {
@@ -257,10 +261,10 @@ const availableFilters = filterDefinitions
 					filters.forEach((btn) => {
 						const active = (btn.dataset.filter || "all") === activeFilter
 						btn.dataset.active = active ? "true" : "false"
-						btn.classList.toggle("bg-[color:var(--text)]", active)
-						btn.classList.toggle("text-[color:var(--bg)]", active)
-						btn.classList.toggle("bg-[color:var(--surface)]", !active)
-						btn.classList.toggle("text-[color:var(--text)]", !active)
+						btn.classList.toggle("border-[color:var(--text)]", active)
+						btn.classList.toggle("font-semibold", active)
+						btn.classList.toggle("text-[color:var(--text)]", active)
+						btn.classList.toggle("text-[color:var(--muted)]", !active)
 					})
 					applyFilters()
 				})
@@ -274,10 +278,10 @@ const availableFilters = filterDefinitions
 				filters.forEach((btn) => {
 					const active = (btn.dataset.filter || "all") === "all"
 					btn.dataset.active = active ? "true" : "false"
-					btn.classList.toggle("bg-[color:var(--text)]", active)
-					btn.classList.toggle("text-[color:var(--bg)]", active)
-					btn.classList.toggle("bg-[color:var(--surface)]", !active)
-					btn.classList.toggle("text-[color:var(--text)]", !active)
+					btn.classList.toggle("border-[color:var(--text)]", active)
+					btn.classList.toggle("font-semibold", active)
+					btn.classList.toggle("text-[color:var(--text)]", active)
+					btn.classList.toggle("text-[color:var(--muted)]", !active)
 				})
 				applyFilters()
 			})

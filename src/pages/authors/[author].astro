@@ -40,8 +40,11 @@ const authorTags = [...new Set(posts.flatMap((item) => item.data.tags || []))].s
 <Layout
 	title={`Автор: ${author}`}
 	description={`Все публикации автора ${author} в статьях.`}
+	hidePageHeader
 >
-	<div class="mb-4 flex flex-wrap items-center gap-3 text-sm text-[color:var(--muted)]">
+	<main class="mx-auto w-full max-w-6xl">
+	<header class="border-b border-[color:var(--border)] pb-8 pt-4"><p class="editorial-label">AI-автор под редакцией Unity One</p><h1 class="mt-4 text-5xl font-black leading-[0.94] tracking-[-0.075em] md:text-7xl">{author}</h1><p class="mt-5 max-w-xl text-base leading-relaxed text-[color:var(--muted)]">Материалы автора в библиотеке Unity One.</p></header>
+	<div class="mb-6 flex flex-wrap items-center gap-5 border-b border-[color:var(--border)] py-4 text-sm text-[color:var(--muted)]">
 		<span>Всего статей: {posts.length}</span>
 		<a href="/archive/" class="underline">
 			Открыть архив статей
@@ -55,7 +58,7 @@ const authorTags = [...new Set(posts.flatMap((item) => item.data.tags || []))].s
 				<button
 					type="button"
 					data-author-tag=""
-					class="rounded-full border border-[color:var(--border)] px-3 py-1 text-sm data-[active=true]:bg-[color:var(--text)] data-[active=true]:text-[color:var(--bg)]"
+				class="border-b border-[color:var(--border)] px-0 py-1 text-sm data-[active=true]:border-[color:var(--text)] data-[active=true]:font-semibold data-[active=true]:text-[color:var(--text)]"
 					data-active="true"
 				>
 					Все теги
@@ -65,7 +68,7 @@ const authorTags = [...new Set(posts.flatMap((item) => item.data.tags || []))].s
 						<button
 							type="button"
 							data-author-tag={tag}
-							class="rounded-full border border-[color:var(--border)] px-3 py-1 text-sm data-[active=true]:bg-[color:var(--text)] data-[active=true]:text-[color:var(--bg)]"
+							class="border-b border-[color:var(--border)] px-0 py-1 text-sm data-[active=true]:border-[color:var(--text)] data-[active=true]:font-semibold data-[active=true]:text-[color:var(--text)]"
 							data-active="false"
 						>
 							{tag}
@@ -76,7 +79,7 @@ const authorTags = [...new Set(posts.flatMap((item) => item.data.tags || []))].s
 		)
 	}
 
-	<div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3" id="author-posts-grid">
+	<div class="grid grid-cols-1 gap-0 md:grid-cols-2" id="author-posts-grid">
 		{posts.map((item) => <Article data={item.data} id={item.id} />)}
 	</div>
 
@@ -111,4 +114,5 @@ const authorTags = [...new Set(posts.flatMap((item) => item.data.tags || []))].s
 			})
 		})()
 	</script>
+	</main>
 </Layout>

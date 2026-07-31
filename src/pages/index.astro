@@ -1,8 +1,5 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-
-import BlockCard from "@/components/BlockCard.astro";
-
 import { communities } from "@/data/communities";
 import { blockData } from "@/data/links";
 ---
@@ -10,204 +7,68 @@ import { blockData } from "@/data/links";
 <Layout
 	title="12 шагов: материалы, методы и сообщества"
 	description={`Единая база о 12 шагах: статьи, практики, методы и ${communities.length} сообществ.`}
+	hidePageHeader
 >
-	<main class="mx-auto flex max-w-5xl flex-col gap-8 md:gap-10">
-		<section
-			class="relative overflow-hidden rounded-[2rem] border border-[color:var(--border)] bg-[color:var(--surface)] p-7 shadow-[var(--shadow-soft)] md:p-12"
-		>
-			<div class="relative z-10">
-				<p
-					class="mb-3 inline-flex rounded-full border border-[color:var(--border)] bg-[color:var(--surface)] px-3 py-1 text-xs font-semibold uppercase tracking-wide text-[color:var(--muted)]"
-				>
-					Unity One
-				</p>
-				<h1>
-					<span class="block text-5xl font-black tracking-[-0.06em] md:text-7xl"
-						>12 шагов</span
-					>
-					<span
-						class="mt-3 block max-w-3xl text-xl font-semibold text-[color:var(--muted)] md:text-3xl"
-
-					>
-						Материалы, шаги и рабочие инструменты.
-					</span>
+	<main class="mx-auto w-full max-w-6xl">
+		<section class="grid gap-12 border-b border-[color:var(--border)] pb-14 pt-4 lg:grid-cols-[1.15fr_0.85fr] lg:gap-20 lg:pb-20">
+			<div>
+				<p class="editorial-label">Единая база о 12 шагах</p>
+				<h1 class="mt-4 max-w-3xl text-5xl font-black leading-[0.92] tracking-[-0.075em] md:text-7xl lg:text-[6.8rem]">
+					Знания,<br />к которым<br />можно вернуться.
 				</h1>
-				<p
-					class="mt-5 max-w-3xl text-lg text-[color:var(--muted)] md:text-2xl"
-
-
-				>
-					<b class="text-[color:var(--text)]">Полезная</b> информация, материалы,
-					<b class="text-[color:var(--text)]"> методы прохождения</b> двенадцати шагов,
-					<b class="text-[color:var(--text)]"> {`${communities.length}`}</b> видов сообществ и
-					<b class="text-[color:var(--text)]"> многое другое</b>.
+				<p class="mt-7 max-w-xl text-lg leading-relaxed text-[color:var(--muted)] md:text-xl">
+					Понятные материалы о программе, сообществах и практиках личных изменений. Выберите маршрут или начните с любой темы.
 				</p>
-				<div class="mt-7 flex flex-wrap gap-3">
-					<a
-						href="/12-shagov/"
-						class="rounded-xl bg-[color:var(--primary)] px-4 py-2.5 text-sm font-semibold text-[color:var(--button-text)] shadow-sm hover:bg-[var(--sk-button-background-hover)] active:bg-[var(--sk-button-background-active)]"
-					>
-						Изучить 12 шагов
-					</a>
-					<a
-						href="/methods"
-						class="rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] px-4 py-2.5 text-sm font-semibold text-[color:var(--text)] hover:border-[color:var(--primary)] hover:text-[color:var(--primary)]"
+				<div class="mt-8 flex flex-wrap gap-4 text-sm font-bold">
+					<a href="/12-shagov/" class="inline-flex items-center border-b-2 border-[color:var(--accent)] pb-1 text-[color:var(--text)] hover:text-[color:var(--accent)]">Начать с 12 шагов <span class="ml-2">→</span></a>
+					<a href="/archive/" class="inline-flex items-center border-b border-[color:var(--border)] pb-1 text-[color:var(--muted)] hover:border-[color:var(--accent)] hover:text-[color:var(--accent)]">Смотреть статьи <span class="ml-2">→</span></a>
+				</div>
+			</div>
 
-					>
-						Начать с методов
-					</a>
-					<a
-						href="/finder"
-						class="rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] px-4 py-2.5 text-sm font-semibold text-[color:var(--text)] hover:border-[color:var(--primary)] hover:text-[color:var(--primary)]"
-
-					>
-						Подобрать сообщество
-					</a>
+			<div class="self-end border-t-[3px] border-[color:var(--text)]">
+				<a href="/12-shagov/" class="flex items-center justify-between gap-4 border-b border-[color:var(--border)] py-4 text-base font-semibold hover:text-[color:var(--accent)]"><span>Начать с 12 шагов</span><span class="text-xs text-[color:var(--muted)]">01 →</span></a>
+				<a href="/finder/" class="flex items-center justify-between gap-4 border-b border-[color:var(--border)] py-4 text-base font-semibold hover:text-[color:var(--accent)]"><span>Подобрать сообщество</span><span class="text-xs text-[color:var(--muted)]">02 →</span></a>
+				<a href="/archive/" class="flex items-center justify-between gap-4 border-b border-[color:var(--border)] py-4 text-base font-semibold hover:text-[color:var(--accent)]"><span>Открыть библиотеку статей</span><span class="text-xs text-[color:var(--muted)]">03 →</span></a>
+				<div class="mt-8 grid grid-cols-2 gap-6 text-sm">
+					<div><strong class="block text-2xl tracking-tight">{communities.length}</strong><span class="text-[color:var(--muted)]">сообществ</span></div>
+					<div><strong class="block text-2xl tracking-tight">12</strong><span class="text-[color:var(--muted)]">шагов</span></div>
 				</div>
 			</div>
 		</section>
 
-		<section
-			class="rounded-3xl border border-[color:var(--border)] bg-[color:var(--surface)] p-6 shadow-[var(--shadow-card)] md:p-8"
-		>
-			<h2 class="text-2xl font-bold text-[color:var(--text)] md:text-3xl">
-				Что такое 12 шагов
-			</h2>
-			<p class="mt-3 text-base text-[color:var(--muted)] md:text-lg">
-				12 шагов - это структурированная практика личных изменений: честный самоанализ,
-				принятие ответственности, восстановление отношений и регулярная поддержка в сообществе.
-			</p>
-			<a class="mt-4 inline-flex underline" href="/12-shagov/">Читать полный список 12 шагов и пояснения</a>
-
-			<h3 class="mt-6 text-xl font-semibold text-[color:var(--text)]">
-				Краткие факты и история
-			</h3>
-			<ul class="mt-3 list-disc space-y-2 pl-5 text-[color:var(--muted)]">
-				<li>
-					Современная 12-шаговая модель начала формироваться в 1935 году в Акроне (Огайо)
-					вокруг работы Билла Уилсона и доктора Боба Смита.
-				</li>
-				<li>
-					В 1939 году была опубликована книга <i>Alcoholics Anonymous</i>, где 12 шагов были
-					описаны как последовательная программа действий.
-				</li>
-				<li>
-					Подход вышел далеко за пределы одной темы: сегодня существуют десятки 12-шаговых
-					сообществ и форматов взаимопомощи, а в нашем каталоге уже <b>{communities.length}</b
-					>{" "}
-					направлений.
-				</li>
-			</ul>
-
-			<h3 class="mt-6 text-xl font-semibold text-[color:var(--text)]">
-				Чем это полезно здоровым людям
-			</h3>
-			<p class="mt-3 text-[color:var(--muted)]">
-				Даже без зависимостей практики 12 шагов можно использовать как систему личной гигиены:
-				регулярная самооценка поведения, признание ошибок, исправление ущерба в отношениях,
-				дисциплина и поддержка сообщества. Такие элементы связаны с ростом психологической
-				устойчивости, снижением изоляции и более стабильными изменениями привычек.
-			</p>
-
-			<p class="mt-4 text-sm text-[color:var(--muted)]">
-				Источники:{" "}
-				<a
-					class="underline"
-					href="https://www.history.com/articles/founding-alcoholics-anonymous"
-					target="_blank"
-					rel="noopener noreferrer">History.com</a
-				>,{" "}
-				<a
-					class="underline"
-					href="https://www.britannica.com/topic/Alcoholics-Anonymous"
-					target="_blank"
-					rel="noopener noreferrer">Britannica</a
-				>,{" "}
-				<a
-					class="underline"
-					href="https://www.appguktwelve.steps.org/news-events-1/2024/2/20/which-twelve-step-fellowships-are-there-in-the-uk"
-					target="_blank"
-					rel="noopener noreferrer">APPG UK Twelve Steps</a
-				>,{" "}
-				<a
-					class="underline"
-					href="https://www.cochrane.org/CD012880/ADDICTN_alcoholics-anonymous-and-other-12-step-programs-alcohol-use-disorder"
-					target="_blank"
-					rel="noopener noreferrer">Cochrane Review</a
-				>,{" "}
-				<a
-					class="underline"
-					href="https://www.cdc.gov/social-connectedness/risk-factors/index.html"
-					target="_blank"
-					rel="noopener noreferrer">CDC (social connectedness)</a
-				>,{" "}
-				<a
-					class="underline"
-					href="https://lektsii.com/3-105313.html"
-					target="_blank"
-					rel="noopener noreferrer">лекционный текст (Том П. младший)</a
-				>.
-			</p>
-		</section>
-
-		<section
-			class="relative overflow-hidden rounded-3xl border border-[color:var(--border)] bg-[color:var(--surface-tint)] p-6 shadow-[var(--shadow-card)] md:p-8"
-		>
-			<div class="relative z-10">
-				<p class="inline-flex rounded-full border border-[color:var(--border)] px-3 py-1 text-xs font-semibold uppercase tracking-wide text-[color:var(--muted)]">
-					Исследования
-				</p>
-				<h2 class="mt-3 text-2xl font-bold text-[color:var(--text)] md:text-3xl">
-					Статистика, документы и данные об эффективности
-				</h2>
-				<p class="mt-3 text-[color:var(--muted)]">
-					Публикуем материалы Unity One о программе 12 шагов: систематические обзоры,
-					официальные отчеты, статистику и ссылки на первичные источники.
-				</p>
-				<div class="mt-5 flex flex-wrap gap-3">
-					<a
-						href="/archive/"
-						class="rounded-xl bg-[color:var(--primary)] px-4 py-2.5 text-sm font-semibold text-[color:var(--button-text)] hover:bg-[var(--sk-button-background-hover)] active:bg-[var(--sk-button-background-active)]"
-					>
-						Читать статьи
-					</a>
-					<a
-						href="/archive/"
-						class="rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] px-4 py-2.5 text-sm font-semibold text-[color:var(--text)] hover:border-[color:var(--primary)] hover:text-[color:var(--primary)]"
-					>
-						Смотреть источники
-					</a>
-				</div>
+		<section class="grid gap-10 border-b border-[color:var(--border)] py-12 md:py-16 lg:grid-cols-[0.7fr_1.3fr]">
+			<div>
+				<p class="editorial-label">Контекст</p>
+				<h2 class="mt-3 max-w-xs text-3xl font-bold leading-tight tracking-[-0.055em] md:text-4xl">Что такое 12 шагов</h2>
+			</div>
+			<div class="max-w-3xl text-base leading-relaxed text-[color:var(--muted)] md:text-lg">
+				<p>12 шагов - это структурированная практика личных изменений: честный самоанализ, принятие ответственности, восстановление отношений и регулярная поддержка в сообществе.</p>
+				<p class="mt-5">Современная модель начала формироваться в 1935 году в Акроне (Огайо), а в 1939 году была описана в книге <i>Alcoholics Anonymous</i>. Сегодня существуют десятки 12-шаговых сообществ и форматов взаимопомощи.</p>
+				<p class="mt-5">Даже без зависимостей отдельные практики можно использовать как систему личной гигиены: регулярную самооценку, признание ошибок, исправление ущерба в отношениях, дисциплину и поддержку сообщества.</p>
+				<a class="editorial-link mt-6 inline-flex font-semibold text-[color:var(--text)]" href="/12-shagov/">Читать полный список 12 шагов и пояснения</a>
+				<p class="mt-6 text-xs leading-relaxed text-[color:var(--muted)]">Источники: <a class="editorial-link" href="https://www.history.com/articles/founding-alcoholics-anonymous" target="_blank" rel="noopener noreferrer">History.com</a>, <a class="editorial-link" href="https://www.britannica.com/topic/Alcoholics-Anonymous" target="_blank" rel="noopener noreferrer">Britannica</a>, <a class="editorial-link" href="https://www.cochrane.org/CD012880/ADDICTN_alcoholics-anonymous-and-other-12-step-programs-alcohol-use-disorder" target="_blank" rel="noopener noreferrer">Cochrane Review</a>.</p>
 			</div>
 		</section>
 
-		<div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-			{
-				blockData &&
-					blockData.map((block) => (
-						<BlockCard
-							key={block.link}
-							link={block.link}
-							title={block.title}
-							icon={block.icon}
-							textBtn={block.textBtn}
-							description={block.description}
-						/>
-					))
-			}
-		</div>
+		<section class="border-b border-[color:var(--border)] py-12 md:py-16">
+			<div class="flex flex-wrap items-end justify-between gap-5">
+				<div><p class="editorial-label">Навигация</p><h2 class="mt-3 text-3xl font-bold tracking-[-0.055em] md:text-4xl">Выберите свой маршрут</h2></div>
+				<p class="max-w-md text-sm leading-relaxed text-[color:var(--muted)]">Разделы проекта собраны так, чтобы можно было быстро перейти от общего понимания к конкретному действию.</p>
+			</div>
+			<div class="mt-8 grid gap-x-8 md:grid-cols-2">
+				{blockData.map((block, index) => (
+					<a href={block.link} class="group border-t-[3px] border-[color:var(--text)] py-5 hover:text-[color:var(--accent)]">
+						<div class="flex items-center justify-between gap-4"><span class="text-xs font-bold text-[color:var(--muted)]">0{index + 1}</span><span class="text-lg transition-transform group-hover:translate-x-1">→</span></div>
+						<h3 class="mt-8 text-2xl font-bold tracking-[-0.045em]">{block.title}</h3>
+						<p class="mt-2 max-w-md text-sm leading-relaxed text-[color:var(--muted)]">{block.description}</p>
+					</a>
+				))}
+			</div>
+		</section>
 
-		<section
-			class="rounded-3xl border border-[color:var(--border)] bg-[color:var(--surface-soft)] p-6 shadow-[var(--shadow-card)] md:p-8"
-		>
-			<p class="text-2xl italic text-[color:var(--muted)] md:text-3xl">
-				Собираем знания о 12 шагах <b class="text-[color:var(--text)]">в одном месте</b>, чтобы
-				каждый нашёл путь к ясности и поддержке. Это карта для тех, кто выбирает перемены и
-				действия.
-			</p>
-			<span class="mt-3 block text-base text-[color:var(--muted)]"
-				>Редакция Unity One</span
-			>
+		<section class="grid gap-8 py-12 md:grid-cols-[1fr_auto] md:items-end md:py-16">
+			<div><p class="editorial-label">Редакция Unity One</p><p class="mt-4 max-w-3xl text-3xl font-medium leading-tight tracking-[-0.05em] md:text-5xl">Собираем знания о 12 шагах в одном месте, чтобы каждый нашёл путь к ясности и поддержке.</p></div>
+			<a class="editorial-link font-semibold" href="/about/">О проекте →</a>
 		</section>
 	</main>
 </Layout>

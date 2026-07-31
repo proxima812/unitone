@@ -39,8 +39,8 @@ function shortDescription(description?: string): string {
 }
 ---
 
-<section class="rounded-3xl border border-[color:var(--border)] bg-[color:var(--surface-soft)] p-5 shadow-[var(--shadow-card)] md:p-7">
-	<h2 class="text-2xl font-bold text-[color:var(--text)] md:text-3xl">Подберите подходящий метод</h2>
+<section class="border-b border-[color:var(--border)] py-8 md:py-10">
+	<h2 class="text-2xl font-bold tracking-[-0.045em] text-[color:var(--text)] md:text-3xl">Подберите подходящий метод</h2>
 	<p class="mt-2 text-[color:var(--muted)]">
 		Используйте поиск и фильтр по сообществу. Каждая карточка показывает только главное: суть метода,
 		сроки и для кого он чаще подходит.
@@ -52,12 +52,12 @@ function shortDescription(description?: string): string {
 			type="search"
 			placeholder="Поиск по названию или описанию метода"
 			aria-label="Поиск по методам"
-			class="w-full rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] px-4 py-2.5 text-sm text-[color:var(--text)]"
+			class="w-full border border-[color:var(--border)] bg-transparent px-4 py-2.5 text-sm text-[color:var(--text)]"
 		/>
 		<button
 			id="methods-reset"
 			type="button"
-			class="rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] px-4 py-2.5 text-sm text-[color:var(--text)]"
+			class="border border-[color:var(--border)] bg-transparent px-4 py-2.5 text-sm text-[color:var(--text)]"
 		>
 			Сбросить
 		</button>
@@ -68,7 +68,7 @@ function shortDescription(description?: string): string {
 			type="button"
 			data-community="all"
 			data-active="true"
-			class="rounded-full border border-[color:var(--border)] bg-[color:var(--text)] px-3 py-1.5 text-sm text-[color:var(--bg)]"
+			class="border-b border-[color:var(--text)] bg-transparent px-0 py-1.5 text-sm font-semibold text-[color:var(--text)]"
 		>
 			Все ({normalizedMethods.length})
 		</button>
@@ -78,7 +78,7 @@ function shortDescription(description?: string): string {
 					type="button"
 					data-community={community}
 					data-active="false"
-					class="rounded-full border border-[color:var(--border)] bg-[color:var(--surface)] px-3 py-1.5 text-sm text-[color:var(--text)]"
+					class="border-b border-[color:var(--border)] bg-transparent px-0 py-1.5 text-sm text-[color:var(--muted)]"
 				>
 					{community} ({counts[community] || 0})
 				</button>
@@ -91,13 +91,13 @@ function shortDescription(description?: string): string {
 	</p>
 </section>
 
-<section id="methods-grid" class="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+<section id="methods-grid" class="mt-8 grid grid-cols-1 gap-x-8 md:grid-cols-2">
 	{
 		normalizedMethods.map((item) => (
 			<article
 				data-community={item.community.join(",")}
 				data-search={item.searchText}
-				class="flex h-full flex-col rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] shadow-[var(--shadow-card)] transition hover:-translate-y-0.5 hover:border-[color:var(--primary)]"
+				class="flex h-full flex-col border-t-[3px] border-[color:var(--text)] py-5 transition-colors hover:border-[color:var(--accent)]"
 			>
 				<div class="p-5">
 					<h3 class="text-lg font-semibold leading-tight text-[color:var(--text)]">{item.title}</h3>
@@ -113,10 +113,10 @@ function shortDescription(description?: string): string {
 					</div>
 				</div>
 
-				<div class="mt-auto border-t border-[color:var(--border)] p-4">
+				<div class="mt-auto pt-4">
 					<a
 						href={`/methods/${item.slug}/`}
-						class="inline-flex w-full items-center justify-center rounded-lg bg-[color:var(--primary)] px-4 py-2 text-sm font-semibold text-[color:var(--button-text)] transition hover:bg-[var(--sk-button-background-hover)]"
+						class="editorial-link inline-flex items-center justify-center text-sm font-semibold text-[color:var(--text)] hover:text-[color:var(--accent)]"
 					>
 						Смотреть
 					</a>
@@ -126,7 +126,7 @@ function shortDescription(description?: string): string {
 	}
 </section>
 
-<div id="methods-empty" class="mt-6 hidden rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] p-4 text-center text-[color:var(--muted)]">
+<div id="methods-empty" class="mt-6 hidden border-t border-[color:var(--border)] py-5 text-center text-[color:var(--muted)]">
 	Ничего не найдено. Попробуйте убрать фильтр или изменить поисковый запрос.
 </div>
 
@@ -168,10 +168,10 @@ function shortDescription(description?: string): string {
 				buttons.forEach((btn) => {
 					const active = (btn.getAttribute("data-community") || "all") === activeCommunity;
 					btn.setAttribute("data-active", active ? "true" : "false");
-					btn.classList.toggle("bg-[color:var(--text)]", active);
-					btn.classList.toggle("text-[color:var(--bg)]", active);
-					btn.classList.toggle("bg-[color:var(--surface)]", !active);
-					btn.classList.toggle("text-[color:var(--text)]", !active);
+					btn.classList.toggle("border-[color:var(--text)]", active);
+					btn.classList.toggle("font-semibold", active);
+					btn.classList.toggle("text-[color:var(--text)]", active);
+					btn.classList.toggle("text-[color:var(--muted)]", !active);
 				});
 				applyFilters();
 			});
@@ -184,10 +184,10 @@ function shortDescription(description?: string): string {
 			buttons.forEach((btn) => {
 				const active = (btn.getAttribute("data-community") || "all") === "all";
 				btn.setAttribute("data-active", active ? "true" : "false");
-				btn.classList.toggle("bg-[color:var(--text)]", active);
-				btn.classList.toggle("text-[color:var(--bg)]", active);
-				btn.classList.toggle("bg-[color:var(--surface)]", !active);
-				btn.classList.toggle("text-[color:var(--text)]", !active);
+				btn.classList.toggle("border-[color:var(--text)]", active);
+				btn.classList.toggle("font-semibold", active);
+				btn.classList.toggle("text-[color:var(--text)]", active);
+				btn.classList.toggle("text-[color:var(--muted)]", !active);
 			});
 			applyFilters();
 		});

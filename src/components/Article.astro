@@ -1,54 +1,34 @@
 ---
 import Author from "./Author.astro"
-import BookmarkToggle from "@/components/BookmarkToggle.astro"
 
 const { data, id, hrefBase = "/archive" } = Astro.props
 const normalizedHrefBase = String(hrefBase).replace(/\/+$/, "")
 const articleHref = `${normalizedHrefBase}/${id}/`
+const publishedAt = data.pubDate
+
+const formattedDate = publishedAt
+	? new Date(publishedAt).toLocaleDateString("ru-RU", { year: "numeric", month: "short", day: "numeric" })
+	: ""
 ---
 
 <a
 	data-tag={data.tags?.join(",") ?? ""}
 	data-author={Array.isArray(data.author) ? data.author.join(",") : data.author ?? ""}
 	href={articleHref}
-	class="block relative"
+	class="group block"
 >
-	<div class="rounded-2xl p-2">
-		<article
-			class="flex h-full flex-col gap-3 rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] p-5 shadow-[var(--shadow-card)] transition hover:-translate-y-0.5 hover:border-[color:var(--primary)]"
-		>
-			<h2 class="h-auto text-xl font-semibold leading-tight text-[color:var(--text)]">
-				{data.title}
-			</h2>
-			<p class="h-[72px] line-clamp-3 text-[color:var(--muted)]">
-				{data.description}
-			</p>
-
-			<div class="mt-auto flex items-center justify-between gap-2">
-				<Author data={data} link={false} />
-				{
-					data.pubDate && (
-						<time datetime={data.pubDate} class="text-sm text-[color:var(--muted)]">
-							{new Date(data.pubDate).toLocaleDateString("ru-RU", {
-								year: "numeric",
-								month: "short",
-								day: "numeric",
-							})}
-						</time>
-					)
-				}
+	<article class="grid gap-4 border-t-[3px] border-[color:var(--text)] py-5 transition-colors hover:border-[color:var(--accent)] md:grid-cols-[minmax(0,1fr)_10rem] md:gap-8">
+		<div>
+			<div class="mb-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-[0.68rem] font-bold uppercase tracking-[0.08em] text-[color:var(--muted)]">
+				{publishedAt && <time datetime={String(publishedAt)}>{formattedDate}</time>}
+				{data.tags?.[0] && <span>{data.tags[0]}</span>}
 			</div>
-
-			<!-- <div class="pt-2">
-				<BookmarkToggle
-					id={id}
-					title={data.title}
-					description={data.description || ""}
-					date={String(data.pubDate || "")}
-					href={articleHref}
-					variant="card"
-				/>
-			</div> -->
-		</article>
-	</div>
+			<h2 class="max-w-3xl font-[var(--font-reading)] text-2xl font-medium leading-tight tracking-[-0.025em] text-[color:var(--text)] md:text-3xl">{data.title}</h2>
+			{data.description && <p class="mt-3 max-w-2xl text-sm leading-relaxed text-[color:var(--muted)] md:text-base">{data.description}</p>}
+		</div>
+		<div class="flex items-end justify-between gap-4 text-xs text-[color:var(--muted)] md:flex-col md:items-end md:justify-between">
+			<Author data={data} link={false} />
+			<span class="font-semibold text-[color:var(--text)] transition-colors group-hover:text-[color:var(--accent)]">Читать →</span>
+		</div>
+	</article>
 </a>

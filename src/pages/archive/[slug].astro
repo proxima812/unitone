@@ -66,21 +66,16 @@ const shareLinks = [
 	breadcrumbCurrentLabel={post.data.title}
 >
 	<main class="mx-auto w-full max-w-6xl">
-		<article class="grid grid-cols-1 gap-6 lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-8">
-			<aside class="hidden lg:block lg:sticky lg:top-28 lg:h-fit">
-				<div class="space-y-4">
-					<section class="rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] p-4">
-						<p class="text-xs uppercase tracking-wide text-[color:var(--muted)]">Автор</p>
-						<div class="mt-3 flex items-center gap-3">
-							{authorName === "Unity One" && (
-								<div class="h-9 w-9 rounded-full bg-gradient-to-br from-blue-500 via-violet-500 to-pink-400 ring-1 ring-white/80 shadow-sm" aria-hidden="true" />
-							)}
-							<p class="text-sm font-medium text-[color:var(--text)]">{authorName}</p>
-						</div>
+		<article class="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1fr)_12rem] lg:gap-16">
+			<aside class="order-2 lg:order-1 lg:sticky lg:top-28 lg:h-fit">
+				<div class="grid gap-6 border-t border-[color:var(--border)] pt-4 lg:gap-8">
+					<section>
+						<p class="editorial-label">Автор</p>
+						<div class="mt-3 flex items-center gap-3"><p class="text-sm font-semibold text-[color:var(--text)]">{authorName}</p><span class="text-xs text-[color:var(--muted)]">AI-автор</span></div>
 					</section>
 
-					<section class="rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] p-4">
-						<p class="text-xs uppercase tracking-wide text-[color:var(--muted)]">Поделиться</p>
+					<section>
+						<p class="editorial-label">Поделиться</p>
 						<div class="mt-3 flex flex-wrap gap-2">
 							{shareLinks.map((share) => (
 								<a
@@ -89,7 +84,7 @@ const shareLinks = [
 									rel="noopener noreferrer"
 									aria-label={`Поделиться в ${share.label}`}
 									title={`Поделиться в ${share.label}`}
-									class="inline-flex h-9 w-9 items-center justify-center rounded-md border border-[color:var(--border)] bg-[color:var(--surface)] text-[color:var(--muted)] hover:text-[color:var(--text)]"
+									class="inline-flex h-8 w-8 items-center justify-center border border-[color:var(--border)] bg-transparent text-[color:var(--muted)] hover:border-[color:var(--accent)] hover:text-[color:var(--accent)]"
 								>
 									<Icon name={share.icon} class="h-4 w-4" />
 								</a>
@@ -99,9 +94,9 @@ const shareLinks = [
 				</div>
 			</aside>
 
-			<div class="min-w-0">
-				<header class="rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] p-4 md:p-7">
-					<div class="mb-4 flex flex-wrap items-center gap-3 text-sm text-[color:var(--muted)]">
+			<div class="order-1 min-w-0 lg:order-2">
+				<header class="border-t-[3px] border-[color:var(--text)] pb-7 pt-4">
+					<div class="mb-5 flex flex-wrap items-center gap-x-3 gap-y-1 text-[0.68rem] font-bold uppercase tracking-[0.08em] text-[color:var(--muted)]">
 						{
 							publishedAtISO && (
 								<time datetime={publishedAtISO}>
@@ -113,17 +108,17 @@ const shareLinks = [
 								</time>
 							)
 						}
-						<span class="rounded-full border border-[color:var(--border)] px-2 py-1">
+						<span>
 							{readingMinutes} мин чтения
 						</span>
 					</div>
 
-					<h1 class="text-4xl font-black leading-tight tracking-tight md:text-5xl">{post.data.title}</h1>
-					{post.data.description && <p class="mt-3 text-[color:var(--muted)]">{post.data.description}</p>}
+					<h1 class="max-w-4xl font-[var(--font-reading)] text-5xl font-medium leading-[0.96] tracking-[-0.055em] md:text-7xl">{post.data.title}</h1>
+					{post.data.description && <p class="mt-5 max-w-2xl text-base leading-relaxed text-[color:var(--muted)] md:text-lg">{post.data.description}</p>}
 					{currentTags.length > 0 && (
-						<div class="mt-4 flex flex-wrap gap-2">
+						<div class="mt-5 flex flex-wrap gap-x-4 gap-y-2 text-xs text-[color:var(--muted)]">
 							{currentTags.map((tag) => (
-								<span class="rounded-full border border-[color:var(--border)] bg-[color:var(--surface-soft)] px-2.5 py-1 text-xs text-[color:var(--muted)]">
+								<span class="border-b border-[color:var(--border)] pb-1">
 									{formatTag(tag)}
 								</span>
 							))}
@@ -141,13 +136,13 @@ const shareLinks = [
 					</div>
 				</header>
 
-				<section class="my-prose article-rich-content !mx-0 !mt-5 !max-w-none !p-5 md:!p-8">
+				<section class="my-prose article-rich-content !mx-0 !mt-3 !p-0 md:!mt-5">
 					<Content />
 				</section>
 
-				<aside class="archive-ad mt-5 rounded-2xl border border-dashed border-emerald-300 bg-emerald-50 p-5 md:p-6">
-					<p class="archive-ad-label text-xs font-semibold uppercase tracking-wide text-emerald-700">Реклама</p>
-					<h2 class="mt-2 text-xl font-semibold text-[color:var(--text)]">Здесь может быть ваш полезный проект</h2>
+				<aside class="archive-ad mt-8 border-t border-[color:var(--border)] py-5">
+					<p class="archive-ad-label editorial-label">Реклама</p>
+					<h2 class="mt-3 text-xl font-semibold tracking-[-0.035em] text-[color:var(--text)]">Здесь может быть ваш полезный проект</h2>
 					<p class="mt-2 max-w-2xl text-sm leading-relaxed text-[color:var(--muted)]">
 						Хотите разместить рекламу или рассказать о тематическом сервисе? Напишите на{" "}
 						<a class="font-medium underline hover:text-[color:var(--text)]" href="mailto:ads@unityone.space">

@@ -16,7 +16,7 @@ const menuLinks = links.filter((link) => !hiddenMenuHrefs.has(link.href));
 					title={link.label}
 					target={link.target}
 					class={cn(
-						"flex items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-semibold text-[color:var(--muted)] hover:bg-[color:var(--surface-soft)] hover:text-[color:var(--primary)]",
+						"flex items-center gap-1.5 border-b border-transparent px-2 py-1.5 text-[0.72rem] font-bold uppercase tracking-[0.08em] text-[color:var(--muted)] hover:border-[color:var(--accent)] hover:bg-transparent hover:text-[color:var(--text)]",
 						link.style,
 					)}
 				>
@@ -38,13 +38,13 @@ const menuLinks = links.filter((link) => !hiddenMenuHrefs.has(link.href));
 <button
 	title="Мобильное меню"
 	id="open"
-	class="flex items-center gap-1 rounded-xl bg-[color:var(--primary)] px-3.5 py-2 text-[color:var(--button-text)] shadow-sm hover:bg-[var(--sk-button-background-hover)] active:bg-[var(--sk-button-background-active)] md:hidden"
+					class="flex items-center gap-1 rounded-xl bg-[color:var(--primary)] px-3.5 py-2 text-[color:var(--button-text)] shadow-sm hover:bg-[var(--sk-button-background-hover)] active:bg-[var(--sk-button-background-active)] md:hidden"
 	><Icon name="mdi:menu" /><span class="font-medium">меню</span></button
 >
 
 <div
 	id="menu"
-	class="absolute left-0 top-[72px] z-50 hidden min-h-full w-full items-start rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] p-5 shadow-[var(--shadow-soft)]"
+	class="absolute left-0 top-full z-50 hidden min-h-full w-full items-start border-b border-[color:var(--border)] bg-[color:var(--bg)] p-5 shadow-[var(--shadow-soft)]"
 >
 	<nav class="flex gap-5 flex-col">
 		{
@@ -55,7 +55,7 @@ const menuLinks = links.filter((link) => !hiddenMenuHrefs.has(link.href));
 						title={link.label}
 						target={link.target}
 						class={cn(
-							"flex items-center gap-2 rounded-xl px-3 py-2 text-xl font-semibold text-[color:var(--text)] hover:bg-[color:var(--surface-soft)] hover:text-[color:var(--primary)]",
+						"flex items-center gap-2 border-b border-[color:var(--border)] px-1 py-3 text-xl font-semibold text-[color:var(--text)] hover:bg-transparent hover:text-[color:var(--accent)]",
 							link.style,
 						)}
 					>

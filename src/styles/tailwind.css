@@ -2,264 +2,394 @@
 @plugin "@tailwindcss/typography";
 
 @theme {
-  --font-display: "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+	--font-display: "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+	--font-reading: Georgia, "Times New Roman", serif;
 }
 
 @layer base {
-  :root {
-    color-scheme: light;
-    --color-my-palette-primary: #18181b;
-    --color-my-palette-secondary: #71717a;
-    --color-my-palette-accent: #18181b;
-    --color-my-palette-foreground: #09090b;
-    --color-my-palette-background: #ffffff;
-    --bg: var(--color-my-palette-background);
-    --surface: #ffffff;
-    --surface-soft: #fafafa;
-    --surface-tint: #f4f4f5;
-    --text: var(--color-my-palette-foreground);
-    --muted: #71717a;
-    --border: #e4e4e7;
-    --accent: var(--color-my-palette-accent);
-    --primary: var(--color-my-palette-primary);
-    --secondary: var(--color-my-palette-secondary);
-    --sk-button-background: var(--color-my-palette-primary);
-    --sk-button-background-hover: #27272a;
-    --sk-button-background-active: #3f3f46;
-    --button-text: #ffffff;
-    --sk-blocklink-color: var(--color-my-palette-primary);
-    --ring: #a1a1aa;
-    --shadow-soft: 0 1px 2px rgb(0 0 0 / 0.04);
-    --shadow-card: 0 1px 2px rgb(0 0 0 / 0.04);
-  }
+	:root {
+		color-scheme: light;
+		--color-my-palette-primary: #1c211e;
+		--color-my-palette-secondary: #73776f;
+		--color-my-palette-accent: #c95735;
+		--color-my-palette-foreground: #1c211e;
+		--color-my-palette-background: #f4f3ee;
+		--bg: var(--color-my-palette-background);
+		--surface: #f8f7f2;
+		--surface-soft: #eeede7;
+		--surface-tint: #e7e8e1;
+		--text: var(--color-my-palette-foreground);
+		--muted: #73776f;
+		--border: #d7d7d0;
+		--accent: var(--color-my-palette-accent);
+		--primary: var(--color-my-palette-primary);
+		--secondary: var(--color-my-palette-secondary);
+		--sk-button-background: var(--color-my-palette-primary);
+		--sk-button-background-hover: #303831;
+		--sk-button-background-active: #4b554c;
+		--button-text: #f8f7f2;
+		--sk-blocklink-color: var(--color-my-palette-accent);
+		--ring: #8e563f;
+		--shadow-soft: 0 16px 36px rgb(46 48 41 / 0.07);
+		--shadow-card: 0 4px 16px rgb(46 48 41 / 0.045);
+		--radius-card: 0.35rem;
+	}
 
-  :root[data-theme="dark"] {
-    color-scheme: dark;
-    --color-my-palette-primary: #ededed;
-    --color-my-palette-secondary: #a1a1aa;
-    --color-my-palette-accent: #ededed;
-    --color-my-palette-foreground: #ededed;
-    --color-my-palette-background: #101012;
-    --surface: #18181b;
-    --surface-soft: #202024;
-    --surface-tint: #29292e;
-    --muted: #a1a1aa;
-    --border: #34343a;
-    --sk-button-background: #ededed;
-    --sk-button-background-hover: #ffffff;
-    --sk-button-background-active: #d4d4d8;
-    --button-text: #09090b;
-    --sk-blocklink-color: #ededed;
-    --ring: #71717a;
-    --shadow-soft: 0 8px 24px rgb(0 0 0 / 0.14);
-    --shadow-card: 0 4px 14px rgb(0 0 0 / 0.12);
-  }
+	:root[data-theme="dark"] {
+		color-scheme: dark;
+		--color-my-palette-primary: #f1f0e9;
+		--color-my-palette-secondary: #a7aaa0;
+		--color-my-palette-accent: #e17a55;
+		--color-my-palette-foreground: #f1f0e9;
+		--color-my-palette-background: #171a18;
+		--surface: #1d211e;
+		--surface-soft: #242925;
+		--surface-tint: #2a302b;
+		--muted: #a7aaa0;
+		--border: #3a423b;
+		--sk-button-background: #f1f0e9;
+		--sk-button-background-hover: #ffffff;
+		--sk-button-background-active: #d6d5ce;
+		--button-text: #171a18;
+		--sk-blocklink-color: #e17a55;
+		--ring: #e17a55;
+		--shadow-soft: 0 18px 44px rgb(0 0 0 / 0.22);
+		--shadow-card: 0 8px 22px rgb(0 0 0 / 0.18);
+	}
 
-  html,
-  body {
-    background: var(--bg);
-  }
+	html,
+	body {
+		background: var(--bg);
+	}
 
-  body {
-    color: var(--text);
-  }
+	html {
+		font-family: var(--font-display);
+		text-rendering: optimizeLegibility;
+	}
 
-  a {
-    color: var(--text);
-    transition: color 0.18s ease, background-color 0.18s ease, border-color 0.18s ease;
-  }
+	body {
+		color: var(--text);
+	}
 
-  a:hover {
-    color: var(--primary);
-  }
+	a {
+		color: var(--text);
+		transition: color 0.18s ease, background-color 0.18s ease, border-color 0.18s ease, opacity 0.18s ease;
+	}
 
-  button,
-  input,
-  select,
-  textarea {
-    font: inherit;
-    transition:
-      color 0.18s ease,
-      background-color 0.18s ease,
-      border-color 0.18s ease,
-      opacity 0.18s ease;
-  }
+	a:hover {
+		color: var(--accent);
+	}
 
-  button {
-    @apply cursor-pointer;
-    border: 1px solid var(--border);
-    border-radius: 0.75rem;
-    background: var(--surface);
-    color: #111111;
-  }
+	button,
+	input,
+	select,
+	textarea {
+		font: inherit;
+		transition: color 0.18s ease, background-color 0.18s ease, border-color 0.18s ease, opacity 0.18s ease, transform 0.18s ease;
+	}
 
-  button:hover {
-    border-color: color-mix(in srgb, var(--primary) 28%, var(--border));
-  }
+	button {
+		@apply cursor-pointer;
+		border: 1px solid var(--border);
+		border-radius: var(--radius-card);
+		background: var(--surface);
+		color: var(--text);
+	}
 
-  button:active,
-  a:active {
-    opacity: 0.88;
-  }
+	button:hover {
+		border-color: color-mix(in srgb, var(--accent) 52%, var(--border));
+	}
 
-  input,
-  select,
-  textarea {
-    background-color: var(--surface);
-    color: var(--text);
-    border: 1px solid var(--border);
-  }
+	button:active,
+	a:active {
+		transform: translateY(1px);
+		opacity: 0.84;
+	}
 
-  :focus-visible {
-    outline: 2px solid var(--ring);
-    outline-offset: 2px;
-  }
+	input,
+	select,
+	textarea {
+		background-color: var(--surface);
+		color: var(--text);
+		border: 1px solid var(--border);
+		border-radius: var(--radius-card);
+	}
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    @apply text-balance;
-    color: var(--text);
-  }
+	input::placeholder,
+	textarea::placeholder {
+		color: color-mix(in srgb, var(--muted) 72%, var(--bg));
+	}
 
-  p,
-  li,
-  figcaption,
-  blockquote {
-    @apply text-pretty;
-    color: var(--muted);
-  }
+	:focus-visible {
+		outline: 2px solid var(--ring);
+		outline-offset: 3px;
+	}
 
-  button[class*="bg-[var(--sk-button-background)]"],
-  button[class*="bg-[color:var(--primary)]"],
-  a[class*="bg-[var(--sk-button-background)]"],
-  a[class*="bg-[color:var(--primary)]"] {
-    color: #ffffff;
-    border-color: transparent;
-  }
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		@apply text-balance;
+		color: var(--text);
+	}
 
-  button[class*="border"][class*="bg-[color:var(--surface)]"],
-  a[class*="border"][class*="bg-[color:var(--surface)]"] {
-    color: var(--text);
-  }
+	p,
+	li,
+	figcaption,
+	blockquote {
+		@apply text-pretty;
+		color: var(--muted);
+	}
 
-  :root[data-theme="dark"] button[class*="bg-[var(--sk-button-background)]"],
-  :root[data-theme="dark"] button[class*="bg-[color:var(--primary)]"],
-  :root[data-theme="dark"] a[class*="bg-[var(--sk-button-background)]"],
-  :root[data-theme="dark"] a[class*="bg-[color:var(--primary)]"] {
-    color: #09090b;
-  }
+	::selection {
+		background: color-mix(in srgb, var(--accent) 22%, transparent);
+	}
 
-  .my-prose {
-    @apply prose prose-lg xl:prose-xl prose-headings:first:mt-0 prose-p:first:mt-0 prose-p:text-pretty prose-headings:text-balance max-w-6xl rounded-2xl p-6 md:p-12 sm:mx-auto -mx-[20px];
-    --tw-prose-links: var(--sk-blocklink-color);
-    --tw-prose-headings: var(--text);
-    --tw-prose-body: var(--muted);
-    --tw-prose-bold: var(--text);
-    --tw-prose-counters: var(--muted);
-    --tw-prose-bullets: var(--muted);
-    --tw-prose-quotes: var(--text);
-    --tw-prose-quote-borders: var(--border);
-    --tw-prose-captions: var(--muted);
-    --tw-prose-code: var(--text);
-    --tw-prose-pre-bg: color-mix(in srgb, var(--primary) 8%, var(--surface));
-    background-color: var(--surface);
-    color: var(--text);
-    border: 1px solid var(--border);
-    box-shadow: var(--shadow-card);
-  }
+	button[class*="bg-[var(--sk-button-background)]"],
+	button[class*="bg-[color:var(--primary)]"],
+	a[class*="bg-[var(--sk-button-background)]"],
+	a[class*="bg-[color:var(--primary)]"] {
+		color: var(--button-text);
+		border-color: transparent;
+	}
 
-  .article-rich-content blockquote {
-    position: relative;
-    margin: 1.4rem 0;
-    padding: 1rem 4.8rem 1rem 1rem;
-    border: 1px solid color-mix(in srgb, var(--accent) 24%, var(--border));
-    border-left: 4px solid color-mix(in srgb, var(--accent) 80%, white);
-    border-radius: 1rem;
-    background: var(--surface-soft);
-    color: var(--text);
-    font-style: normal;
-  }
+	button[class*="border"][class*="bg-[color:var(--surface)]"],
+	a[class*="border"][class*="bg-[color:var(--surface)]"] {
+		color: var(--text);
+	}
 
-  .article-rich-content blockquote p {
-    margin: 0.55rem 0;
-    color: color-mix(in srgb, var(--text) 84%, #ffffff);
-  }
+	:root[data-theme="dark"] button[class*="bg-[var(--sk-button-background)]"],
+	:root[data-theme="dark"] button[class*="bg-[color:var(--primary)]"],
+	:root[data-theme="dark"] a[class*="bg-[var(--sk-button-background)]"],
+	:root[data-theme="dark"] a[class*="bg-[color:var(--primary)]"] {
+		color: #171a18;
+	}
+}
 
-  .article-rich-content blockquote p:first-of-type::before,
-  .article-rich-content blockquote p:last-of-type::after {
-    content: none !important;
-  }
+@layer components {
+	.editorial-shell {
+		border-top: 1px solid var(--border);
+		border-bottom: 1px solid var(--border);
+		background: var(--surface);
+	}
 
-  .article-rich-content .quote-copy-btn {
-    position: absolute;
-    top: 0.7rem;
-    right: 0.7rem;
-    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--border));
-    border-radius: 999px;
-    background: color-mix(in srgb, var(--surface) 88%, var(--accent));
-    color: color-mix(in srgb, var(--text) 90%, black);
-    font-size: 0.72rem;
-    font-weight: 600;
-    line-height: 1;
-    padding: 0.5rem 0.75rem;
-    white-space: nowrap;
-  }
+	.editorial-rule {
+		border-top: 1px solid var(--border);
+	}
 
-  .article-rich-content .quote-copy-btn[data-state="done"] {
-    border-color: transparent;
-    background: var(--sk-button-background);
-    color: #ffffff;
-  }
+	.editorial-label {
+		font-size: 0.7rem;
+		font-weight: 700;
+		letter-spacing: 0.14em;
+		line-height: 1.2;
+		text-transform: uppercase;
+		color: var(--muted);
+	}
 
-  .my-prose pre {
-    overflow-x: auto;
-    border: 1px solid color-mix(in srgb, var(--primary) 22%, white);
-    border-radius: 14px 14px 14px 6px;
-    background: color-mix(in srgb, var(--primary) 7%, var(--surface));
-  }
+	.editorial-link {
+		text-decoration-line: underline;
+		text-decoration-thickness: 1px;
+		text-underline-offset: 0.22em;
+		text-decoration-color: color-mix(in srgb, var(--accent) 62%, transparent);
+	}
 
-  .my-prose pre code {
-    display: block;
-    margin-top: 0;
-    color: #253a58;
-    font-size: 0.9em;
-    font-weight: 500;
-    line-height: 1.7;
-    letter-spacing: 0.005em;
-    font-family: Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  }
+	.editorial-link:hover {
+		text-decoration-color: var(--accent);
+	}
 
-  .my-prose :not(pre) > code {
-    border: 1px solid color-mix(in srgb, var(--primary) 25%, white);
-    border-radius: 8px;
-    background: color-mix(in srgb, var(--accent) 20%, white);
-    color: #284564;
-    padding: 0.12rem 0.4rem;
-    font-size: 0.9em;
-    font-weight: 500;
-  }
+	.my-prose {
+		@apply prose prose-lg prose-headings:first:mt-0 prose-p:first:mt-0 prose-p:text-pretty prose-headings:text-balance;
+		max-width: 72ch;
+		margin-inline: auto;
+		padding: clamp(1.25rem, 4vw, 3.8rem) clamp(0.25rem, 3vw, 1rem);
+		--tw-prose-links: var(--sk-blocklink-color);
+		--tw-prose-headings: var(--text);
+		--tw-prose-body: var(--muted);
+		--tw-prose-bold: var(--text);
+		--tw-prose-counters: var(--accent);
+		--tw-prose-bullets: var(--accent);
+		--tw-prose-quotes: var(--text);
+		--tw-prose-quote-borders: var(--accent);
+		--tw-prose-captions: var(--muted);
+		--tw-prose-code: var(--text);
+		--tw-prose-pre-bg: color-mix(in srgb, var(--primary) 8%, var(--surface));
+		color: var(--text);
+	}
 
-  .my-prose :not(pre) > code::before,
-  .my-prose :not(pre) > code::after {
-    content: "";
-  }
+	.my-prose > :first-child:not(h1, h2, h3, h4) {
+		font-size: 1.12em;
+		line-height: 1.65;
+		color: var(--text);
+	}
 
+	.my-prose h2,
+	.my-prose h3,
+	.my-prose h4 {
+		letter-spacing: -0.035em;
+	}
 
-  .article-rich-content .article-link-inner {
-    display: inline-flex;
-    align-items: center; 
-    gap: 10px;
-    font-size: 16px;
-    line-height: 1.4;
-  }
+	.my-prose h2 {
+		margin-top: 2.8em;
+		padding-top: 0.8em;
+		border-top: 1px solid var(--border);
+		font-size: clamp(1.6rem, 3vw, 2.15rem);
+	}
 
-  .article-rich-content .article-link-icon {
-    width: 16px;
-    height: 16px;
-    border-radius: 999px;
-  }
+	.my-prose h3 {
+		margin-top: 2.2em;
+		font-size: clamp(1.25rem, 2.5vw, 1.65rem);
+	}
+
+	.my-prose p,
+	.my-prose li {
+		line-height: 1.75;
+	}
+
+	.my-prose a {
+		text-decoration-thickness: 1px;
+		text-underline-offset: 0.2em;
+		text-decoration-color: color-mix(in srgb, var(--accent) 65%, transparent);
+	}
+
+	.my-prose a:hover {
+		text-decoration-color: var(--accent);
+	}
+
+	.my-prose ul,
+	.my-prose ol {
+		padding-inline-start: 1.4em;
+	}
+
+	.my-prose li::marker {
+		color: var(--accent);
+		font-weight: 700;
+	}
+
+	.my-prose blockquote,
+	.article-rich-content blockquote {
+		position: relative;
+		margin: 2rem 0;
+		padding: 1.15rem 3.8rem 1.15rem 1.25rem;
+		border: 0;
+		border-left: 3px solid var(--accent);
+		border-radius: 0;
+		background: color-mix(in srgb, var(--accent) 7%, var(--surface));
+		color: var(--text);
+		font-style: normal;
+	}
+
+	.article-rich-content blockquote p {
+		margin: 0.55rem 0;
+		color: var(--text);
+	}
+
+	.article-rich-content blockquote p:first-of-type::before,
+	.article-rich-content blockquote p:last-of-type::after {
+		content: none !important;
+	}
+
+	.article-rich-content .quote-copy-btn {
+		position: absolute;
+		top: 0.75rem;
+		right: 0.75rem;
+		border: 1px solid var(--border);
+		border-radius: var(--radius-card);
+		background: var(--surface);
+		color: var(--muted);
+		font-size: 0.7rem;
+		font-weight: 700;
+		line-height: 1;
+		padding: 0.48rem 0.65rem;
+		white-space: nowrap;
+	}
+
+	.article-rich-content .quote-copy-btn[data-state="done"] {
+		border-color: transparent;
+		background: var(--accent);
+		color: #fff;
+	}
+
+	.my-prose pre {
+		overflow-x: auto;
+		border: 1px solid var(--border);
+		border-radius: var(--radius-card);
+		background: color-mix(in srgb, var(--primary) 7%, var(--surface));
+	}
+
+	.my-prose pre code {
+		display: block;
+		margin-top: 0;
+		color: var(--text);
+		font-size: 0.88em;
+		font-weight: 500;
+		line-height: 1.7;
+		letter-spacing: 0.005em;
+		font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+	}
+
+	.my-prose :not(pre) > code {
+		border: 1px solid color-mix(in srgb, var(--accent) 26%, var(--border));
+		border-radius: 0.25rem;
+		background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+		color: var(--text);
+		padding: 0.12rem 0.35rem;
+		font-size: 0.86em;
+	}
+
+	.my-prose :not(pre) > code::before,
+	.my-prose :not(pre) > code::after {
+		content: "";
+	}
+
+	.my-prose table {
+		display: block;
+		overflow-x: auto;
+		white-space: nowrap;
+		border-collapse: collapse;
+	}
+
+	.my-prose th {
+		color: var(--text);
+		font-size: 0.76em;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+	}
+
+	.my-prose img,
+	.my-prose figure {
+		border: 1px solid var(--border);
+		border-radius: var(--radius-card);
+	}
+
+	.my-prose figcaption {
+		font-size: 0.75em;
+		font-style: normal;
+	}
+
+	.article-rich-content .article-link-inner {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.6rem;
+		font-size: 1rem;
+		line-height: 1.4;
+	}
+
+	.article-rich-content .article-link-icon {
+		width: 1rem;
+		height: 1rem;
+		border-radius: 999px;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		scroll-behavior: auto !important;
+		transition-duration: 0.01ms !important;
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+	}
 }

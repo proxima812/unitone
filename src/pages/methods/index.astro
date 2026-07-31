@@ -14,6 +14,10 @@ const methodsCatalog = methodsByTitle.map((item) => ({
 <Layout
 	title="Методы"
 	description={`Понятный каталог методов: ${methodsCatalog.length} вариантов с краткими фактами и отдельной подробной страницей по каждому методу.`}
+	hidePageHeader
 >
-	<MethodsCatalog methods={methodsCatalog} />
+	<main class="mx-auto w-full max-w-6xl">
+		<header class="border-b border-[color:var(--border)] pb-12 pt-4 md:pb-16"><p class="editorial-label">Практика</p><h1 class="mt-4 text-5xl font-black leading-[0.94] tracking-[-0.075em] md:text-7xl">Методы<br />работы по шагам</h1><p class="mt-5 max-w-xl text-base leading-relaxed text-[color:var(--muted)] md:text-lg">Подберите формат под свою задачу: воркбуки, гайды, группы и учебные материалы.</p></header>
+		<MethodsCatalog methods={methodsCatalog} />
+	</main>
 </Layout>
