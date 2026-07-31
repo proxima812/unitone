@@ -2,7 +2,6 @@ import fs from "node:fs";
 import path from "node:path";
 
 const archiveDir = path.join(process.cwd(), "src/content/archive");
-const authorSlugs = {"Маяк":"mayak","Шаг":"shag","Фокус":"focus","Архив":"arhiv","Диалог":"dialog","Круг":"krug"};
 const rows = String.raw`Маяк|first-meeting|Как проходит первое собрание|Спокойный ориентир для человека, который впервые собирается на встречу 12 шагов.|новичкам,собрания,поддержка|первый визит часто пугает из-за неизвестности, а не из-за самой встречи|найдите одну открытую встречу и заранее уточните её время, формат и возможность просто послушать|/finder/||
 Маяк|choose-community|Как выбрать подходящее сообщество|На что обратить внимание при выборе группы и почему первая встреча не обязана быть окончательным выбором.|новичкам,сообщество,выбор|разные группы могут заметно отличаться по теме, языку, формату и атмосфере|составьте короткий список из двух или трёх групп и сравните их правила до визита|/communities/||
 Маяк|online-meeting|Как подготовиться к онлайн-встрече|Понятная инструкция для первого знакомства с онлайн-группой без лишнего напряжения.|новичкам,онлайн,собрания|онлайн-формат снимает часть организационных барьеров, но оставляет вопросы о правилах и приватности|проверьте ссылку, наушники, имя в профиле и возможность войти без камеры|/finder/||
@@ -95,6 +94,8 @@ const q = (value) => JSON.stringify(value);
 const decode = (value) => String(value).replace(/\\u([0-9a-fA-F]{4})/g, (_, code) => String.fromCharCode(parseInt(code, 16)));
 const sentence = (value) => value ? value.charAt(0).toLocaleUpperCase("ru-RU") + value.slice(1) : value;
 const note = (author, variant) => notes[author][variant];
+const transliteration = { а:"a", б:"b", в:"v", г:"g", д:"d", е:"e", ё:"e", ж:"zh", з:"z", и:"i", й:"y", к:"k", л:"l", м:"m", н:"n", о:"o", п:"p", р:"r", с:"s", т:"t", у:"u", ф:"f", х:"h", ц:"ts", ч:"ch", ш:"sh", щ:"shch", ъ:"", ы:"y", ь:"", э:"e", ю:"yu", я:"ya" };
+const slugify = (value) => value.toLowerCase().split("").map((character) => transliteration[character] ?? character).join("").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 const dateFor = (index) => {
   const start = new Date(Date.UTC(2026, 4, 31));
   const end = new Date(Date.UTC(2026, 6, 31));
@@ -129,10 +130,10 @@ const jobs = topics.flatMap((topic) => [0,1,2,3,4].map((variant) => ({topic,vari
 if (jobs.length !== 200) throw new Error("Expected 200 posts, got " + jobs.length);
 for (let index = 0; index < jobs.length; index += 1) {
   const {topic,variant} = jobs[index];
-  const file = "ai-" + authorSlugs[topic.author] + "-" + topic.key + "-" + String(variant + 1).padStart(2,"0") + ".mdx";
+  const title = topic.title + ": " + suffixes[variant];
+  const file = slugify(title) + ".mdx";
   const filePath = path.join(archiveDir,file);
   if (fs.existsSync(filePath)) throw new Error("Refusing to overwrite " + file);
-  const title = topic.title + ": " + suffixes[variant];
   const fm = ["---","title: " + q(title),"description: " + q(topic.description),"keywords: " + q(topic.tags.concat([topic.title,"Unity One"]).join(", ")),"tags: [" + topic.tags.concat([topic.author]).map(q).join(", ") + "]","author: [" + q(topic.author) + "]","pubDate: " + dateFor(index),"---",""].join("\n");
   fs.writeFileSync(filePath, fm + body(topic,variant) + "\n","utf8");
 }
