@@ -3,9 +3,17 @@ import Layout from "@/layouts/Layout.astro"
 ---
 
 <Layout
-	title="Ошибка 404 - такой страницы не существует"
-	mainTitlePresent="Ошибка 404"
+	title="Страница не найдена"
 	description="Страница не найдена. Возможно, она была удалена или перемещена."
+	indexRobots={false}
 >
-	<h1></h1>
+	<main class="mx-auto w-full max-w-2xl">
+		<section class="card space-y-5">
+			<p class="editorial-label">Ошибка 404</p>
+			<p class="max-w-xl text-lg leading-relaxed text-[color:var(--text-secondary)]">
+				Проверьте адрес или вернитесь к материалам о 12 шагах.
+			</p>
+			<a class="btn btn-primary" href="/">На главную</a>
+		</section>
+	</main>
 </Layout>

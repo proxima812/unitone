@@ -16,13 +16,15 @@ self.addEventListener("activate", (event) => {
 })
 
 self.addEventListener("fetch", (event) => {
-	if (event.request.method !== "GET") return
+	if (event.request.method !== "GET" || event.request.url.startsWith(self.location.origin) === false) return
 
 	event.respondWith(
 		fetch(event.request).catch(async () => {
 			const cache = await caches.open(CACHE_NAME)
 			const cached = await cache.match(event.request)
-			return cached || cache.match("/offline.html")
+			if (cached) return cached
+			if (event.request.mode === "navigate") return cache.match("/offline.html")
+			return Response.error()
 		}),
 	)
 })

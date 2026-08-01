@@ -63,7 +63,7 @@ const extraMeta = [
 	graph={graph}
 	extraLinks={[
 		{ rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
-		{ rel: "author", type: "text/plain", href: `${Astro.site}humans.txt` },
+		{ rel: "author", type: "text/plain", href: new URL("/humans.txt", Astro.site).href },
 		{ rel: "sitemap", href: "/sitemap-index.xml" },
 	]}
 	extraMeta={extraMeta}

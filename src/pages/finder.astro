@@ -4,20 +4,20 @@ import Layout from "@/layouts/Layout.astro"
 import { Icon } from "astro-icon/components"
 
 const filterDefinitions = [
-	{ id: "alcohol", label: "🍷 Алкоголь", hint: "Группы по алкоголю" },
-	{ id: "drugs", label: "💊 Наркотики", hint: "ПАВ и химические зависимости" },
-	{ id: "nicotine", label: "🚭 Никотин", hint: "Курение и никотин" },
-	{ id: "food", label: "🍽️ Пищевое поведение", hint: "Переедание и РПП" },
-	{ id: "gambling", label: "🎰 Игры и ставки", hint: "Азартные игры" },
-	{ id: "sex_love", label: "❤️ Секс и отношения", hint: "Любовная/сексуальная компульсивность" },
-	{ id: "digital", label: "📱 Интернет и медиа", hint: "Диджитал-зависимости" },
-	{ id: "mind", label: "🧠 Психика и эмоции", hint: "Эмоциональные и психические трудности" },
-	{ id: "family", label: "👪 Для близких", hint: "Родные и семьи зависимых" },
-	{ id: "finance", label: "💰 Деньги и долги", hint: "Долги, работа, заработок" },
-	{ id: "social", label: "🌍 Социальные сложности", hint: "Социальная поддержка" },
-	{ id: "creative", label: "🎨 Творческие группы", hint: "Творческие направления" },
-	{ id: "spiritual", label: "🕊️ Светские и духовные", hint: "Альтернативные модели выздоровления" },
-	{ id: "general", label: "♻ Универсальные", hint: "Общие сообщества" },
+	{ id: "alcohol", label: "Алкоголь", icon: "mdi:glass-wine", hint: "Группы по алкоголю" },
+	{ id: "drugs", label: "Наркотики", icon: "mdi:pill", hint: "ПАВ и химические зависимости" },
+	{ id: "nicotine", label: "Никотин", icon: "mdi:smoking-off", hint: "Курение и никотин" },
+	{ id: "food", label: "Пищевое поведение", icon: "mdi:food", hint: "Переедание и РПП" },
+	{ id: "gambling", label: "Игры и ставки", icon: "mdi:cards-playing", hint: "Азартные игры" },
+	{ id: "sex_love", label: "Секс и отношения", icon: "mdi:heart", hint: "Любовная/сексуальная компульсивность" },
+	{ id: "digital", label: "Интернет и медиа", icon: "mdi:cellphone", hint: "Диджитал-зависимости" },
+	{ id: "mind", label: "Психика и эмоции", icon: "mdi:head-cog", hint: "Эмоциональные и психические трудности" },
+	{ id: "family", label: "Для близких", icon: "mdi:account-group", hint: "Родные и семьи зависимых" },
+	{ id: "finance", label: "Деньги и долги", icon: "mdi:cash", hint: "Долги, работа, заработок" },
+	{ id: "social", label: "Социальные сложности", icon: "mdi:earth", hint: "Социальная поддержка" },
+	{ id: "creative", label: "Творческие группы", icon: "mdi:palette", hint: "Творческие направления" },
+	{ id: "spiritual", label: "Светские и духовные", icon: "mdi:meditation", hint: "Альтернативные модели выздоровления" },
+	{ id: "general", label: "Универсальные", icon: "mdi:infinity", hint: "Общие сообщества" },
 ]
 
 function includesAny(text: string, words: string[]) {
@@ -65,8 +65,6 @@ const prepared = communities.map((item) => ({
 	searchUrls: {
 		google: `https://www.google.com/search?q=${encodeURIComponent(item.title)}`,
 		yandex: `https://yandex.ru/search/?text=${encodeURIComponent(item.title)}`,
-		bing: `https://www.bing.com/search?q=${encodeURIComponent(item.title)}`,
-		duckDuckGo: `https://duckduckgo.com/?q=${encodeURIComponent(item.title)}`,
 	},
 }))
 
@@ -84,153 +82,159 @@ const availableFilters = filterDefinitions
 	hidePageHeader
 >
 	<main class="mx-auto w-full max-w-6xl">
-	<header class="border-b border-[color:var(--border)] pb-12 pt-4 md:pb-16"><p class="editorial-label">Навигатор</p><h1 class="mt-4 text-5xl font-black leading-[0.94] tracking-[-0.075em] md:text-7xl">Подобрать<br />сообщество</h1><p class="mt-5 max-w-xl text-base leading-relaxed text-[color:var(--muted)] md:text-lg">Выберите тему, задайте слово для поиска и сравните доступные направления без лишнего давления.</p></header>
-	<section class="border-b border-[color:var(--border)] py-8 md:py-10">
-		<h2 class="text-2xl font-bold text-[color:var(--text)] md:text-3xl">Как пользоваться подбором</h2>
-		<p class="mt-2 text-[color:var(--muted)]">
-			Введите ключевое слово и выберите детальную категорию. Карточки ниже сразу отфильтруются,
-			чтобы вы быстрее нашли подходящую группу.
-		</p>
+		<!-- Hero -->
+		<header class="pb-12 pt-6">
+			<span class="badge mb-5">Навигатор</span>
+			<h1 class="text-[clamp(2.5rem,7vw,5rem)] font-black leading-[0.92] tracking-[-0.04em]">
+				Подобрать<br />сообщество
+			</h1>
+			<p class="mt-5 max-w-xl text-base leading-relaxed text-[color:var(--text-secondary)] md:text-lg">
+				Выберите тему, задайте слово для поиска и сравните доступные направления без лишнего давления.
+			</p>
+		</header>
 
-		<div class="mt-4 grid grid-cols-1 gap-3 md:grid-cols-[1fr_auto]">
-			<input
-				id="finder-search"
-				type="search"
-				placeholder="Например: долги, никотин, семья, тревога, интернет..."
-				aria-label="Поиск по сообществам"
-				class="w-full border border-[color:var(--border)] bg-transparent px-4 py-2.5 text-sm text-[color:var(--text)]"
-			/>
-			<button
-				id="finder-reset"
-				type="button"
-				class="border border-[color:var(--border)] bg-transparent px-4 py-2.5 text-sm text-[color:var(--text)]"
-			>
-				Сбросить фильтры
-			</button>
-		</div>
+		<!-- How to use -->
+		<section class="card mb-8">
+			<h2 class="flex items-center gap-2 text-lg font-bold">
+				<Icon name="mdi:information-outline" class="h-5 w-5 text-[color:var(--accent)]" />
+				<span>Как пользоваться</span>
+			</h2>
+			<p class="mt-2 text-sm text-[color:var(--muted)]">
+				Введите ключевое слово и выберите категорию. Карточки сразу отфильтруются для быстрого поиска подходящей группы.
+			</p>
+		</section>
 
-		<div id="finder-filters" class="mt-4 flex flex-wrap gap-2">
-			<button
-				type="button"
-				data-filter="all"
-				data-active="true"
-				class="finder-filter border-b border-[color:var(--text)] bg-transparent px-0 py-1.5 text-sm font-semibold text-[color:var(--text)]"
-			>
-				Все категории ({prepared.length})
-			</button>
-			{
-				availableFilters.map((filter) => (
+		<!-- Search & Filters -->
+		<section class="border-t border-[color:var(--border)] py-8">
+			<div class="flex flex-col gap-4 md:flex-row md:items-center">
+				<div class="relative flex-1">
+					<Icon name="mdi:magnify" class="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[color:var(--muted)]" />
+					<input
+						id="finder-search"
+						type="search"
+						placeholder="Поиск: долги, никотин, семья, тревога..."
+						aria-label="Поиск по сообществам"
+						class="w-full rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] py-3 pl-12 pr-4 text-sm focus:border-[color:var(--accent)] focus:outline-none focus:ring-2 focus:ring-[color:var(--accent-soft)]"
+					/>
+				</div>
+				<button
+					id="finder-reset"
+					type="button"
+					class="btn btn-secondary"
+				>
+					<Icon name="mdi:refresh" class="h-4 w-4" />
+					<span>Сбросить</span>
+				</button>
+			</div>
+
+			<!-- Filter chips -->
+			<fieldset id="finder-filters" class="mt-6 flex flex-wrap gap-2">
+				<legend class="mb-2 text-sm font-medium text-[color:var(--text)]">Тема сообщества</legend>
+				<button
+					type="button"
+					data-filter="all"
+					data-active="true"
+					aria-pressed="true"
+					class="finder-filter badge text-sm transition-all"
+				>
+					Все ({prepared.length})
+				</button>
+				{availableFilters.map((filter) => (
 					<button
 						type="button"
 						data-filter={filter.id}
 						data-active="false"
+						aria-pressed="false"
 						title={filter.hint}
-						class="finder-filter border-b border-[color:var(--border)] bg-transparent px-0 py-1.5 text-sm text-[color:var(--muted)]"
+						class="finder-filter badge badge-muted text-sm transition-all hover:bg-[color:var(--accent-soft)] hover:text-[color:var(--accent)]"
 					>
-						{filter.label} ({filter.count})
+						<Icon name={filter.icon} class="h-4 w-4" />
+						<span>{filter.label}</span>
+						<span class="opacity-60">({filter.count})</span>
 					</button>
-				))
-			}
-		</div>
-		<p class="mt-3 text-sm text-[color:var(--muted)]">
-			Найдено сообществ: <span id="finder-count" class="font-semibold text-[color:var(--text)]">{prepared.length}</span>
-		</p>
-	</section>
+				))}
+			</fieldset>
 
-	<section id="community-list" class="mt-8 grid grid-cols-1 gap-x-8 md:grid-cols-2 lg:grid-cols-3">
-		{
-			prepared.map((item) => (
+			<p class="mt-4 text-sm text-[color:var(--muted)]" aria-live="polite">
+				Найдено: <span id="finder-count" class="font-semibold text-[color:var(--text)]">{prepared.length}</span> сообществ
+			</p>
+		</section>
+
+		<!-- Community Grid -->
+		<section id="community-list" class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+			{prepared.map((item) => (
 				<article
 					data-facets={item.facets.join(",")}
 					data-search={item.searchText}
-					class="flex h-full flex-col border-t-[3px] border-[color:var(--text)] py-5 transition-colors hover:border-[color:var(--accent)]"
+					class="card card-interactive group flex flex-col"
 				>
-					<div class="p-5">
-						<div class="mb-2 flex flex-wrap gap-2">
-							<span class="border-b border-[color:var(--border)] pb-1 text-xs text-[color:var(--muted)]">
-								{item.category}
-							</span>
-							{
-								item.facets.slice(0, 2).map((facetId) => {
-									const facet = availableFilters.find((x) => x.id === facetId)
-									return facet ? (
-										<span class="border-b border-[color:var(--border)] pb-1 text-xs text-[color:var(--muted)]">
-											{facet.label}
-										</span>
-									) : null
-								})
-							}
-						</div>
-						<h3 class="text-lg font-semibold leading-tight text-[color:var(--text)]">{item.title}</h3>
-						<p class="mt-2 line-clamp-3 text-sm text-[color:var(--muted)]">{item.description}</p>
+					<div class="mb-3 flex flex-wrap gap-1.5">
+						{item.facets.slice(0, 2).map((facetId) => {
+							const facet = availableFilters.find((x) => x.id === facetId)
+							return facet ? (
+								<span class="badge badge-muted text-[0.65rem]">
+									<Icon name={facet.icon} class="h-3 w-3" />
+									<span>{facet.label}</span>
+								</span>
+							) : null
+						})}
 					</div>
 
-					<div class="mt-auto border-t border-[color:var(--border)] pt-4">
-						<div class="mb-3 flex items-center justify-between text-sm">
-							<span>
-								Информация:{" "}
-								<b class={item.find ? "text-emerald-600" : "text-red-600"}>{item.find ? "Есть" : "Нет"}</b>
-							</span>
-							<span>
-								Основан:{" "}
-								<b class={item.since ? "text-emerald-600" : "text-red-600"}>{item.since || "Неизвестно"}</b>
-							</span>
-						</div>
+					<h3 class="text-lg font-bold leading-snug transition-colors group-hover:text-[color:var(--accent)]">
+						{item.title}
+					</h3>
+					<p class="mt-2 flex-1 text-sm leading-relaxed text-[color:var(--muted)] line-clamp-3">
+						{item.description}
+					</p>
 
-						<div class="flex gap-2 md:flex-nowrap flex-wrap justify-between">
-							{
-								item.wikipedia ? (
-									<a
-										href={item.wikipedia}
-										aria-label={item.title}
-										target="_blank"
-										class="md:w-auto w-full inline-flex items-center justify-center gap-1 text-sm font-semibold text-[color:var(--text)] transition hover:text-[color:var(--accent)]"
-									>
-										<Icon name="mdi:book-open-page-variant" />
-										<span>Wikipedia</span>
-									</a>
-								) : (
-									<span class="md:w-auto w-full inline-flex items-center justify-center border-b border-[color:var(--border)] px-1 py-2 text-sm text-[color:var(--muted)]">
-										Wikipedia нет
-									</span>
-								)
-							}
-						</div>
-						<div class="mt-3 grid grid-cols-2 gap-2">
-							{
-								[
-									["Google", item.searchUrls.google],
-									["Яндекс", item.searchUrls.yandex],
-									["Bing", item.searchUrls.bing],
-									["DuckDuckGo", item.searchUrls.duckDuckGo],
-								].map(([label, href]) => (
-									<a
-										href={href}
-										target="_blank"
-										rel="noreferrer"
-										class="inline-flex items-center justify-center border-b border-[color:var(--border)] px-2 py-2 text-xs font-medium text-[color:var(--text)] transition hover:border-[color:var(--accent)]"
-									>
-										{label}
-									</a>
-								))
-							}
-						</div>
+					<div class="mt-4 flex items-center justify-between gap-3 border-t border-[color:var(--border)] pt-4 text-xs">
+						<span class="flex items-center gap-1.5">
+							<span class={`h-2 w-2 rounded-full ${item.find ? "bg-emerald-500" : "bg-red-400"}`}></span>
+							<span class="text-[color:var(--muted)]">{item.find ? "Есть инфо" : "Нет инфо"}</span>
+						</span>
+						{item.since && <span class="text-[color:var(--muted)]">с {item.since}</span>}
+					</div>
+
+					<div class="mt-4 flex gap-2">
+						{item.wikipedia ? (
+							<a
+								href={item.wikipedia}
+								target="_blank"
+								rel="noopener noreferrer"
+								class="btn btn-secondary flex-1 !py-2 text-xs"
+							>
+								<Icon name="mdi:wikipedia" class="h-4 w-4" />
+								<span>Wikipedia</span>
+							</a>
+						) : null}
+						<a
+							href={item.searchUrls.google}
+							target="_blank"
+							rel="noopener noreferrer"
+							class="btn btn-ghost flex-1 !py-2 text-xs"
+						>
+							<Icon name="mdi:magnify" class="h-4 w-4" />
+							<span>Google</span>
+						</a>
 					</div>
 				</article>
-			))
-		}
-	</section>
+			))}
+		</section>
 
-	<div id="finder-empty" class="mt-6 hidden border-t border-[color:var(--border)] py-5 text-center text-[color:var(--muted)]">
-		Ничего не найдено. Попробуйте убрать фильтр или изменить поисковый запрос.
-	</div>
+		<!-- Empty State -->
+		<div id="finder-empty" class="card mt-8 hidden text-center" role="status">
+			<Icon name="mdi:magnify-close" class="mx-auto h-12 w-12 text-[color:var(--muted)]" />
+			<p class="mt-4 text-[color:var(--muted)]">
+				Ничего не найдено. Попробуйте убрать фильтр или изменить запрос.
+			</p>
+		</div>
 	</main>
 
 	<script>
 		document.addEventListener("DOMContentLoaded", () => {
 			const filters = document.querySelectorAll(".finder-filter")
 			const cards = document.querySelectorAll("#community-list article")
-			const searchInput = document.getElementById("finder-search")
+			const searchInput = document.getElementById("finder-search") as HTMLInputElement
 			const resetButton = document.getElementById("finder-reset")
 			const counter = document.getElementById("finder-count")
 			const emptyState = document.getElementById("finder-empty")
@@ -242,12 +246,13 @@ const availableFilters = filterDefinitions
 				let visibleCount = 0
 
 				cards.forEach((card) => {
-					const facets = (card.dataset.facets || "").split(",").map((x) => x.trim())
-					const searchable = card.dataset.search || ""
+					const el = card as HTMLElement
+					const facets = (el.dataset.facets || "").split(",").map((x) => x.trim())
+					const searchable = el.dataset.search || ""
 					const categoryMatch = activeFilter === "all" || facets.includes(activeFilter)
 					const queryMatch = !query || searchable.includes(query)
 					const visible = categoryMatch && queryMatch
-					card.classList.toggle("hidden", !visible)
+					el.classList.toggle("hidden", !visible)
 					if (visible) visibleCount += 1
 				})
 
@@ -257,14 +262,14 @@ const availableFilters = filterDefinitions
 
 			filters.forEach((button) => {
 				button.addEventListener("click", () => {
-					activeFilter = button.dataset.filter || "all"
+					const el = button as HTMLElement
+					activeFilter = el.dataset.filter || "all"
 					filters.forEach((btn) => {
-						const active = (btn.dataset.filter || "all") === activeFilter
-						btn.dataset.active = active ? "true" : "false"
-						btn.classList.toggle("border-[color:var(--text)]", active)
-						btn.classList.toggle("font-semibold", active)
-						btn.classList.toggle("text-[color:var(--text)]", active)
-						btn.classList.toggle("text-[color:var(--muted)]", !active)
+						const b = btn as HTMLElement
+						const active = (b.dataset.filter || "all") === activeFilter
+						b.dataset.active = active ? "true" : "false"
+						b.setAttribute("aria-pressed", String(active))
+						b.classList.toggle("badge-muted", !active)
 					})
 					applyFilters()
 				})
@@ -276,12 +281,11 @@ const availableFilters = filterDefinitions
 				activeFilter = "all"
 				if (searchInput) searchInput.value = ""
 				filters.forEach((btn) => {
-					const active = (btn.dataset.filter || "all") === "all"
-					btn.dataset.active = active ? "true" : "false"
-					btn.classList.toggle("border-[color:var(--text)]", active)
-					btn.classList.toggle("font-semibold", active)
-					btn.classList.toggle("text-[color:var(--text)]", active)
-					btn.classList.toggle("text-[color:var(--muted)]", !active)
+					const b = btn as HTMLElement
+					const active = (b.dataset.filter || "all") === "all"
+						b.dataset.active = active ? "true" : "false"
+						b.setAttribute("aria-pressed", String(active))
+					b.classList.toggle("badge-muted", !active)
 				})
 				applyFilters()
 			})

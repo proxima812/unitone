@@ -40,8 +40,12 @@ function initCookieBanner() {
 		showCookieBanner();
 	}
 
-	cookieOpenSettings?.addEventListener("click", () => cookieSettings?.classList.toggle("hidden"));
-	cookieCloseSettings?.addEventListener("click", () => cookieSettings?.classList.add("hidden"));
+	const setCookieSettingsOpen = (open: boolean) => {
+		cookieSettings?.classList.toggle("hidden", !open);
+		cookieOpenSettings?.setAttribute("aria-expanded", String(open));
+	};
+	cookieOpenSettings?.addEventListener("click", () => setCookieSettingsOpen(cookieSettings?.classList.contains("hidden") ?? true));
+	cookieCloseSettings?.addEventListener("click", () => setCookieSettingsOpen(false));
 	cookieAcceptAll?.addEventListener("click", () => {
 		saveCookieConsent({ essential: true, analytics: true, ads: true, updatedAt: Date.now() });
 	});

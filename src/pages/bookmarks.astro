@@ -1,16 +1,60 @@
 ---
 import BookmarksList from "@/components/BookmarksList.astro"
 import Layout from "@/layouts/Layout.astro"
+import { Icon } from "astro-icon/components"
 ---
 
 <Layout
 	title="Закладки"
 	description="Сохраненные статьи из раздела статей 12 шагов."
+	hidePageHeader
+	indexRobots={false}
 >
-	<section class="space-y-4 border-t-[3px] border-[color:var(--text)] pt-5">
-		<p class="text-[color:var(--muted)]">
-			Здесь отображаются статьи, которые вы сохранили. Закладки хранятся в вашем браузере.
-		</p>
-		<BookmarksList />
-	</section>
+	<main class="mx-auto w-full max-w-4xl">
+		<!-- Hero -->
+		<header class="pb-12 pt-6">
+			<span class="badge mb-5">Личное</span>
+			<h1 class="text-[clamp(2.5rem,7vw,4rem)] font-black leading-[0.92] tracking-[-0.04em]">
+				Закладки
+			</h1>
+			<p class="mt-5 max-w-2xl text-lg leading-relaxed text-[color:var(--text-secondary)]">
+				Статьи и материалы, которые вы сохранили для быстрого доступа.
+			</p>
+		</header>
+
+		<!-- Info Card -->
+		<section class="card mb-8">
+			<div class="flex items-start gap-4">
+				<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[color:var(--accent-soft)]">
+					<Icon name="mdi:information-outline" class="h-5 w-5 text-[color:var(--accent)]" />
+				</div>
+				<div>
+					<h2 class="font-semibold">Локальное хранение</h2>
+					<p class="mt-1 text-sm text-[color:var(--muted)]">
+						Закладки сохраняются в вашем браузере и доступны только на этом устройстве. При очистке данных браузера они будут удалены.
+					</p>
+				</div>
+			</div>
+		</section>
+
+		<!-- Bookmarks List -->
+		<section class="border-t border-[color:var(--border)] pt-8">
+			<BookmarksList />
+		</section>
+
+		<!-- Empty State Hint -->
+		<section class="mt-12 border-t border-[color:var(--border)] pt-10">
+			<div class="card bg-[color:var(--accent-soft)] text-center">
+				<Icon name="mdi:bookmark-plus-outline" class="mx-auto h-10 w-10 text-[color:var(--accent)]" />
+				<h3 class="mt-4 text-xl font-bold">Как добавить закладку</h3>
+				<p class="mx-auto mt-2 max-w-md text-sm text-[color:var(--text-secondary)]">
+					Откройте любую статью и нажмите кнопку "В закладки" — материал появится здесь.
+				</p>
+				<a href="/archive/" class="btn btn-primary mx-auto mt-5">
+					<span>К статьям</span>
+					<Icon name="mdi:arrow-right" class="h-4 w-4" />
+				</a>
+			</div>
+		</section>
+	</main>
 </Layout>

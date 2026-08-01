@@ -113,5 +113,5 @@ export function buildPageGraph({
 		)
 	}
 
-	return assembleGraph(pieces)
+	return assembleGraph(pieces as unknown as Parameters<typeof assembleGraph>[0])
 }

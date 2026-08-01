@@ -5,6 +5,7 @@ import MorePostsByAuthor from "@/components/MorePostsByAuthor.astro";
 import QuoteCopyEnhancer from "@/components/QuoteCopyEnhancer.astro";
 import RelatedPosts from "@/components/RelatedPosts.astro";
 import { filterPublishedArchiveEntries } from "@/lib/archivePublish.mjs";
+import { getArchiveSlug } from "@/lib/archiveSlug";
 import { formatTag } from "@/lib/tags";
 import { Icon } from "astro-icon/components";
 import { getCollection, render } from "astro:content";
@@ -14,17 +15,18 @@ type ArchivePost = Awaited<ReturnType<typeof getCollection<"archive">>>[number];
 const archive = filterPublishedArchiveEntries(await getCollection("archive"));
 
 export async function getStaticPaths() {
-	const posts = filterPublishedArchiveEntries(await getCollection("archive"));
+	const posts = filterPublishedArchiveEntries(await getCollection("archive")) as ArchivePost[];
 	return posts.map((post) => ({
-		params: { slug: post.id },
+		params: { slug: getArchiveSlug(post.id) },
 		props: { post },
 	}));
 }
 
 const { post } = Astro.props as { post: ArchivePost };
+const postSlug = getArchiveSlug(post.id);
 const { Content } = await render(post);
 
-const canonicalURL = new URL(`/archive/${post.id}/`, Astro.site);
+const canonicalURL = new URL(`/archive/${postSlug}/`, Astro.site);
 const encodedURL = encodeURIComponent(canonicalURL.href);
 const encodedTitle = encodeURIComponent(post.data.title);
 const encodedText = encodeURIComponent(
@@ -54,6 +56,11 @@ const shareLinks = [
 		icon: "mdi:whatsapp",
 		href: `https://api.whatsapp.com/send?text=${encodedText}%20${encodedURL}`,
 	},
+	{
+		label: "Telegram",
+		icon: "mdi:send",
+		href: `https://t.me/share/url?url=${encodedURL}&text=${encodedText}`,
+	},
 ];
 ---
 
@@ -62,18 +69,52 @@ const shareLinks = [
 	description={post.data.description || ""}
 	keywords={post.data.keywords}
 	datePublished={publishedAtISO}
+	author={authorName}
+	ogImage={post.data.ogImage}
+	type="article"
 	hidePageHeader
 	breadcrumbCurrentLabel={post.data.title}
 >
 	<main class="mx-auto w-full max-w-6xl">
-		<article class="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1fr)_12rem] lg:gap-16">
+		<article class="grid grid-cols-1 gap-12 lg:grid-cols-[minmax(0,1fr)_14rem] lg:gap-16">
+			<!-- Sidebar -->
 			<aside class="order-2 lg:order-1 lg:sticky lg:top-28 lg:h-fit">
-				<div class="grid gap-6 border-t border-[color:var(--border)] pt-4 lg:gap-8">
+				<div class="card space-y-6">
+					<!-- Author -->
 					<section>
 						<p class="editorial-label">Автор</p>
-						<div class="mt-3 flex items-center gap-3"><p class="text-sm font-semibold text-[color:var(--text)]">{authorName}</p><span class="text-xs text-[color:var(--muted)]">AI-автор</span></div>
+						<div class="mt-3 flex items-center gap-3">
+							<div class="flex h-10 w-10 items-center justify-center rounded-full bg-[color:var(--accent-soft)]">
+								<Icon name="mdi:account" class="h-5 w-5 text-[color:var(--accent)]" />
+							</div>
+							<div>
+								<p class="text-sm font-semibold text-[color:var(--text)]">{authorName}</p>
+								<span class="text-xs text-[color:var(--muted)]">AI-автор</span>
+							</div>
+						</div>
 					</section>
 
+					<div class="h-px bg-[color:var(--border)]"></div>
+
+					<!-- Reading Info -->
+					<section class="flex items-center gap-4 text-sm">
+						<div class="flex items-center gap-2 text-[color:var(--muted)]">
+							<Icon name="mdi:clock-outline" class="h-4 w-4" />
+							<span>{readingMinutes} мин</span>
+						</div>
+						{publishedAtISO && (
+							<time datetime={publishedAtISO} class="text-[color:var(--muted)]">
+								{new Date(publishedAtISO).toLocaleDateString("ru-RU", {
+									day: "numeric",
+									month: "short",
+								})}
+							</time>
+						)}
+					</section>
+
+					<div class="h-px bg-[color:var(--border)]"></div>
+
+					<!-- Share -->
 					<section>
 						<p class="editorial-label">Поделиться</p>
 						<div class="mt-3 flex flex-wrap gap-2">
@@ -84,71 +125,82 @@ const shareLinks = [
 									rel="noopener noreferrer"
 									aria-label={`Поделиться в ${share.label}`}
 									title={`Поделиться в ${share.label}`}
-									class="inline-flex h-8 w-8 items-center justify-center border border-[color:var(--border)] bg-transparent text-[color:var(--muted)] hover:border-[color:var(--accent)] hover:text-[color:var(--accent)]"
+									class="icon-btn"
 								>
 									<Icon name={share.icon} class="h-4 w-4" />
 								</a>
 							))}
 						</div>
 					</section>
-				</div>
-			</aside>
 
-			<div class="order-1 min-w-0 lg:order-2">
-				<header class="border-t-[3px] border-[color:var(--text)] pb-7 pt-4">
-					<div class="mb-5 flex flex-wrap items-center gap-x-3 gap-y-1 text-[0.68rem] font-bold uppercase tracking-[0.08em] text-[color:var(--muted)]">
-						{
-							publishedAtISO && (
-								<time datetime={publishedAtISO}>
-									{new Date(publishedAtISO).toLocaleDateString("ru-RU", {
-										year: "numeric",
-										month: "long",
-										day: "numeric",
-									})}
-								</time>
-							)
-						}
-						<span>
-							{readingMinutes} мин чтения
-						</span>
-					</div>
+					<div class="h-px bg-[color:var(--border)]"></div>
 
-					<h1 class="max-w-4xl font-[var(--font-reading)] text-5xl font-medium leading-[0.96] tracking-[-0.055em] md:text-7xl">{post.data.title}</h1>
-					{post.data.description && <p class="mt-5 max-w-2xl text-base leading-relaxed text-[color:var(--muted)] md:text-lg">{post.data.description}</p>}
-					{currentTags.length > 0 && (
-						<div class="mt-5 flex flex-wrap gap-x-4 gap-y-2 text-xs text-[color:var(--muted)]">
-							{currentTags.map((tag) => (
-								<span class="border-b border-[color:var(--border)] pb-1">
-									{formatTag(tag)}
-								</span>
-							))}
-						</div>
-					)}
-					<div class="mt-4">
+					<!-- Bookmark -->
+					<section>
 						<BookmarkToggle
 							id={`archive-${post.id}`}
 							title={post.data.title}
 							description={post.data.description || ""}
 							date={publishedAtISO || ""}
-							href={`/archive/${post.id}/`}
+							href={`/archive/${postSlug}/`}
 							variant="article"
 						/>
-					</div>
+					</section>
+				</div>
+			</aside>
+
+			<!-- Main Content -->
+			<div class="order-1 min-w-0 lg:order-2">
+				<!-- Back Link -->
+				<a href="/archive/" class="btn btn-ghost mb-6 inline-flex gap-2 !px-0 text-sm">
+					<Icon name="mdi:arrow-left" class="h-4 w-4" />
+					<span>Все статьи</span>
+				</a>
+
+				<!-- Header -->
+				<header class="mb-10">
+					<!-- Tags -->
+					{currentTags.length > 0 && (
+						<div class="mb-5 flex flex-wrap gap-2">
+							{currentTags.map((tag) => (
+								<span class="badge text-xs">{formatTag(tag)}</span>
+							))}
+						</div>
+					)}
+
+					<h1 class="max-w-4xl text-3xl font-bold leading-tight tracking-tight md:text-5xl lg:text-6xl">
+						{post.data.title}
+					</h1>
+
+					{post.data.description && (
+						<p class="mt-5 max-w-3xl text-lg leading-relaxed text-[color:var(--text-secondary)] md:text-xl">
+							{post.data.description}
+						</p>
+					)}
 				</header>
 
-				<section class="my-prose article-rich-content !mx-0 !mt-3 !p-0 md:!mt-5">
+				<!-- Article Content -->
+				<section class="my-prose article-rich-content !mx-0 !mt-0 !p-0">
 					<Content />
 				</section>
 
-				<aside class="archive-ad mt-8 border-t border-[color:var(--border)] py-5">
-					<p class="archive-ad-label editorial-label">Реклама</p>
-					<h2 class="mt-3 text-xl font-semibold tracking-[-0.035em] text-[color:var(--text)]">Здесь может быть ваш полезный проект</h2>
-					<p class="mt-2 max-w-2xl text-sm leading-relaxed text-[color:var(--muted)]">
-						Хотите разместить рекламу или рассказать о тематическом сервисе? Напишите на{" "}
-						<a class="font-medium underline hover:text-[color:var(--text)]" href="mailto:ads@unityone.space">
-							ads@unityone.space
-						</a>, чтобы обсудить формат размещения.
-					</p>
+				<!-- Ad Section -->
+				<aside class="archive-ad mt-12 rounded-xl border border-emerald-200 bg-emerald-50 p-6 dark:border-emerald-800 dark:bg-emerald-950/30">
+					<div class="flex items-start gap-4">
+						<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-emerald-100 dark:bg-emerald-900/50">
+							<Icon name="mdi:bullhorn-outline" class="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+						</div>
+						<div>
+							<p class="text-xs font-semibold uppercase tracking-wider text-emerald-700 dark:text-emerald-400">Реклама</p>
+							<h2 class="mt-1 text-lg font-semibold text-emerald-900 dark:text-emerald-100">Здесь может быть ваш полезный проект</h2>
+							<p class="mt-2 text-sm leading-relaxed text-emerald-700 dark:text-emerald-300">
+								Хотите разместить рекламу или рассказать о тематическом сервисе? Напишите на{" "}
+								<a class="font-medium underline hover:text-emerald-900 dark:hover:text-white" href="mailto:ads@unityone.space">
+									ads@unityone.space
+								</a>, чтобы обсудить формат размещения.
+							</p>
+						</div>
+					</div>
 				</aside>
 			</div>
 		</article>
@@ -173,14 +225,3 @@ const shareLinks = [
 	/>
 	<QuoteCopyEnhancer />
 </Layout>
-
-<style>
-	:global(:root[data-theme="dark"]) .archive-ad {
-		border-color: #047857;
-		background-color: #132b25;
-	}
-
-	:global(:root[data-theme="dark"]) .archive-ad-label {
-		color: #6ee7b7;
-	}
-</style>

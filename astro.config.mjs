@@ -11,6 +11,7 @@ import seoGraph from "@jdevalk/astro-seo-graph/integration";
 import astroNoEmail from "astro-noemail";
 import { defineConfig } from "astro/config";
 import { isArchiveEntryPublished } from "./src/lib/archivePublish.mjs";
+import { getArchiveSlug } from "./src/lib/archiveSlug";
 
 const enableIndexNow = process.env.INDEXNOW_ENABLED === "true";
 
@@ -96,7 +97,7 @@ export default defineConfig({
 					collection: "archive",
 					filter: isArchiveEntryPublished,
 					resolveItem: ({ entry, siteUrl }) => ({
-						link: new URL(`/archive/${entry.id}/`, siteUrl).toString(),
+						link: new URL(`/archive/${getArchiveSlug(entry.id)}/`, siteUrl).toString(),
 					}),
 				},
 			],

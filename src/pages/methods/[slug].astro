@@ -18,42 +18,95 @@ const { item } = Astro.props;
 <Layout
 	title={item.title}
 	description={item.description || "Подробная информация о методе прохождения шагов."}
+	hidePageHeader
 >
-	<a
-		href="/methods"
-		class="editorial-link inline-flex items-center gap-1 text-sm font-semibold text-[color:var(--text)]"
-	>
-		<Icon name="mdi:arrow-left" />
-		<span>Назад к методам</span>
-	</a>
-	<!-- <div class="mt-3">
-		<BookmarkToggle
-			id={`method-${item.slug}`}
+	<main class="mx-auto w-full max-w-4xl">
+		<!-- Back Link -->
+		<a href="/methods/" class="btn btn-ghost mb-6 inline-flex gap-2 !px-0 text-sm">
+			<Icon name="mdi:arrow-left" class="h-4 w-4" />
+			<span>Все методы</span>
+		</a>
+
+		<!-- Header -->
+		<header class="mb-10">
+			<span class="badge mb-4">Метод</span>
+			<h1 class="text-3xl font-bold leading-tight tracking-tight md:text-5xl">
+				{item.title}
+			</h1>
+			{item.description && (
+				<p class="mt-4 max-w-2xl text-lg leading-relaxed text-[color:var(--text-secondary)]">
+					{item.description}
+				</p>
+			)}
+		</header>
+
+		<!-- Method Details -->
+		<MethodFacts
 			title={item.title}
 			description={item.description || ""}
-			date=""
-			href={`/methods/${item.slug}/`}
-			variant="article"
+			communities={item.community || []}
 		/>
-	</div> -->
 
-	<MethodFacts
-		title={item.title}
-		description={item.description || ""}
-		communities={item.community || []}
-	/>
+		<!-- Communities -->
+		{item.community && item.community.length > 0 && (
+			<section class="mt-8">
+				<div class="card">
+					<h3 class="flex items-center gap-2 text-lg font-bold">
+						<Icon name="mdi:account-group" class="h-5 w-5 text-[color:var(--accent)]" />
+						<span>Связанные сообщества</span>
+					</h3>
+					<div class="mt-4 flex flex-wrap gap-2">
+						{item.community.map((c) => (
+							<span class="badge">{c}</span>
+						))}
+					</div>
+				</div>
+			</section>
+		)}
 
-	<section class="mt-6 max-w-3xl border-t-[3px] border-[color:var(--text)] p-5 md:p-6">
-		<h3 class="text-xl font-semibold text-[color:var(--text)]">Что дальше</h3>
-		<p class="mt-2 text-[color:var(--muted)]">
-			Если метод вам откликается, зафиксируйте план на первую неделю и добавьте поддержку: группа,
-			наставник или рабочая пара.
-		</p>
-		<a
-			href="/communities"
-			class="editorial-link mt-4 inline-flex items-center text-sm font-semibold text-[color:var(--text)] hover:text-[color:var(--accent)]"
-		>
-			Перейти к сообществам
-		</a>
-	</section>
+		<!-- Next Steps -->
+		<section class="mt-8">
+			<div class="card bg-[color:var(--accent-soft)]">
+				<div class="flex items-start gap-4">
+					<div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[color:var(--surface)]">
+						<Icon name="mdi:compass-outline" class="h-6 w-6 text-[color:var(--accent)]" />
+					</div>
+					<div>
+						<h3 class="text-xl font-bold">Что дальше</h3>
+						<p class="mt-2 text-[color:var(--text-secondary)]">
+							Если метод вам откликается, зафиксируйте план на первую неделю и добавьте поддержку: группа, наставник или рабочая пара.
+						</p>
+						<div class="mt-5 flex flex-wrap gap-3">
+							<a href="/communities/" class="btn btn-primary">
+								<span>К сообществам</span>
+								<Icon name="mdi:arrow-right" class="h-4 w-4" />
+							</a>
+							<a href="/finder/" class="btn btn-secondary">
+								<span>Подбор групп</span>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Related Methods -->
+		<section class="mt-12 border-t border-[color:var(--border)] pt-10">
+			<h3 class="mb-6 text-lg font-bold">Другие методы</h3>
+			<div class="grid gap-4 md:grid-cols-2">
+				{methods.filter(m => m.slug !== item.slug).slice(0, 4).map((method) => (
+					<a href={`/methods/${method.slug}/`} class="card card-interactive group">
+						<h4 class="font-bold transition-colors group-hover:text-[color:var(--accent)]">
+							{method.title}
+						</h4>
+						{method.description && (
+							<p class="mt-1 text-sm text-[color:var(--muted)] line-clamp-2">
+								{method.description}
+							</p>
+						)}
+					</a>
+				))}
+			</div>
+		</section>
+	</main>
 </Layout>

@@ -8,25 +8,25 @@ const releaseMeta = getReleaseMeta()
 const primaryLinks = links.filter((item) => ["/communities", "/methods", "/archive", "/finder"].includes(item.href))
 ---
 
-<footer class="mt-16 border-t border-[color:var(--border)] bg-[color:var(--surface)]">
+<footer class="mt-auto border-t border-[color:var(--border)] bg-[color:var(--surface)]">
 	<Container>
-		<div class="grid gap-12 py-14 lg:grid-cols-[1.1fr_1.9fr]">
+		<div class="grid gap-12 py-12 lg:grid-cols-[1.1fr_1.9fr] lg:py-16">
 			<div class="max-w-sm">
 				<Logo />
 				<p class="mt-5 text-sm leading-relaxed text-[color:var(--muted)]">
 					Единое пространство о программе 12 шагов: сообщества, методы, статьи и ориентиры для начала пути.
 				</p>
-				<p class="mt-4 text-xs uppercase tracking-[0.08em] text-[color:var(--muted)]">
-					Реклама: <a class="underline hover:text-[color:var(--accent)]" href="mailto:ads@unityone.space">ads@unityone.space</a>
+				<p class="mt-5 text-xs text-[color:var(--muted)]">
+					Реклама: <a class="font-medium text-[color:var(--text-secondary)] transition-colors hover:text-[color:var(--accent)]" href="mailto:ads@unityone.space">ads@unityone.space</a>
 				</p>
 			</div>
 
-			<div class="grid grid-cols-2 gap-10 sm:grid-cols-3">
+			<div class="grid grid-cols-2 gap-8 sm:grid-cols-3 sm:gap-10">
 				<div class="flex flex-col gap-3">
-					<span class="editorial-label">Разделы</span>
+					<span class="editorial-label mb-1">Разделы</span>
 					{
 						primaryLinks.map((item) => (
-							<a class="text-sm text-[color:var(--muted)] hover:text-[color:var(--accent)]" href={item.href}>
+							<a class="text-sm text-[color:var(--text-secondary)] transition-colors hover:text-[color:var(--accent)]" href={item.href}>
 								{item.label}
 							</a>
 						))
@@ -34,16 +34,16 @@ const primaryLinks = links.filter((item) => ["/communities", "/methods", "/archi
 				</div>
 
 				<div class="flex flex-col gap-3">
-					<span class="editorial-label">Информация</span>
-					<a class="text-sm text-[color:var(--muted)] hover:text-[color:var(--accent)]" href="/about">О проекте</a>
-					<a class="text-sm text-[color:var(--muted)] hover:text-[color:var(--accent)]" href="/privacy">Конфиденциальность</a>
-					<a class="text-sm text-[color:var(--muted)] hover:text-[color:var(--accent)]" href="/terms">Условия использования</a>
-					<a class="text-sm text-[color:var(--muted)] hover:text-[color:var(--accent)]" href="/disclaimer">Дисклеймер</a>
-					<a class="text-sm text-[color:var(--muted)] hover:text-[color:var(--accent)]" href="/editorial-policy">Ред. политика</a>
+					<span class="editorial-label mb-1">Информация</span>
+					<a class="text-sm text-[color:var(--text-secondary)] transition-colors hover:text-[color:var(--accent)]" href="/about">О проекте</a>
+					<a class="text-sm text-[color:var(--text-secondary)] transition-colors hover:text-[color:var(--accent)]" href="/privacy">Конфиденциальность</a>
+					<a class="text-sm text-[color:var(--text-secondary)] transition-colors hover:text-[color:var(--accent)]" href="/terms">Условия</a>
+					<a class="text-sm text-[color:var(--text-secondary)] transition-colors hover:text-[color:var(--accent)]" href="/disclaimer">Дисклеймер</a>
+					<a class="text-sm text-[color:var(--text-secondary)] transition-colors hover:text-[color:var(--accent)]" href="/editorial-policy">Ред. политика</a>
 				</div>
 
-				<div class="hidden flex-col gap-3 sm:flex">
-					<span class="editorial-label">Ориентир</span>
+				<div class="col-span-2 flex flex-col gap-3 sm:col-span-1">
+					<span class="editorial-label mb-1">Ориентир</span>
 					<p class="max-w-[16rem] text-sm leading-relaxed text-[color:var(--muted)]">
 						Читайте в своём темпе. Возвращайтесь к материалам, когда это нужно.
 					</p>
@@ -51,9 +51,9 @@ const primaryLinks = links.filter((item) => ["/communities", "/methods", "/archi
 			</div>
 		</div>
 
-		<div class="flex flex-col gap-2 border-t border-[color:var(--border)] py-5 text-xs text-[color:var(--muted)] sm:flex-row sm:items-center sm:justify-between">
+		<div class="flex flex-col gap-3 border-t border-[color:var(--border)] py-5 text-xs text-[color:var(--muted)] sm:flex-row sm:items-center sm:justify-between sm:gap-2">
 			<p>&copy; {new Date().getFullYear()} Unity One</p>
-			<p>Версия {releaseMeta.version} · {releaseMeta.stamp}</p>
+			<p class="opacity-60">v{releaseMeta.version} · {releaseMeta.stamp}</p>
 		</div>
 	</Container>
 </footer>

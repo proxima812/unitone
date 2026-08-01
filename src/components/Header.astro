@@ -10,27 +10,80 @@ const releaseMeta = getReleaseMeta();
 
 <header
 	id="header"
-	class="sticky top-0 z-50 w-full border-b border-[color:var(--border)] bg-[color:var(--bg)]/94 py-4 backdrop-blur-xl transition-transform duration-300 will-change-transform"
+	class="sticky top-0 z-50 w-full border-b border-[color:var(--border)] bg-[color:var(--bg)]/95 py-3 backdrop-blur-xl transition-all duration-300 will-change-transform"
 >
-	<Container class="flex items-center justify-between gap-5">
+	<Container class="flex items-center justify-between gap-4">
 		<div class="flex min-w-0 items-center gap-3">
 			<Logo />
-			<span class="hidden border-l border-[color:var(--border)] pl-3 text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-[color:var(--muted)] sm:inline">
+			<span class="hidden text-[0.65rem] font-medium tracking-wide text-[color:var(--muted)] opacity-60 sm:inline">
 				v{releaseMeta.version}
 			</span>
 		</div>
-		<div class="flex items-center gap-2">
-			<button
-				type="button"
-				data-theme-toggle
-				aria-label="Тема: системная"
-				title="Тема: системная"
-				class="inline-flex h-9 w-9 items-center justify-center rounded-[var(--radius-card)] border border-[color:var(--border)] bg-transparent text-[color:var(--muted)] hover:border-[color:var(--accent)] hover:text-[color:var(--accent)]"
-			>
-				<Icon data-theme-icon-system name="mdi:monitor" class="h-5 w-5" />
-				<Icon data-theme-icon-light name="mdi:white-balance-sunny" class="hidden h-5 w-5" />
-				<Icon data-theme-icon-dark name="mdi:weather-night" class="hidden h-5 w-5" />
-			</button>
+
+		<div class="flex items-center gap-1.5">
+			<!-- Theme & Palette Dropdown -->
+			<div class="dropdown relative" id="theme-dropdown">
+				<button
+					type="button"
+					id="theme-dropdown-trigger"
+					aria-label="Настройки темы"
+					aria-expanded="false"
+					aria-controls="theme-dropdown-menu"
+					title="Настройки темы"
+					class="icon-btn"
+				>
+					<Icon data-theme-icon-system name="mdi:monitor" class="h-4.5 w-4.5" />
+					<Icon data-theme-icon-light name="mdi:white-balance-sunny" class="hidden h-4.5 w-4.5" />
+					<Icon data-theme-icon-dark name="mdi:weather-night" class="hidden h-4.5 w-4.5" />
+				</button>
+
+				<div class="dropdown-menu w-56" id="theme-dropdown-menu" role="group" aria-label="Настройки оформления">
+					<div class="dropdown-label">Режим</div>
+					<button type="button" class="dropdown-item" data-theme-mode="system">
+						<Icon name="mdi:monitor" class="h-4 w-4" />
+						<span>Системная</span>
+						<span class="ml-auto text-[color:var(--accent)] opacity-0" data-check><Icon name="mdi:check" class="h-4 w-4" /></span>
+					</button>
+					<button type="button" class="dropdown-item" data-theme-mode="light">
+						<Icon name="mdi:white-balance-sunny" class="h-4 w-4" />
+						<span>Светлая</span>
+						<span class="ml-auto text-[color:var(--accent)] opacity-0" data-check><Icon name="mdi:check" class="h-4 w-4" /></span>
+					</button>
+					<button type="button" class="dropdown-item" data-theme-mode="dark">
+						<Icon name="mdi:weather-night" class="h-4 w-4" />
+						<span>Тёмная</span>
+						<span class="ml-auto text-[color:var(--accent)] opacity-0" data-check><Icon name="mdi:check" class="h-4 w-4" /></span>
+					</button>
+
+					<div class="dropdown-divider"></div>
+
+					<div class="dropdown-label">Палитра</div>
+					<div class="flex items-center gap-2 px-3 py-2">
+						<button
+							type="button"
+							class="palette-dot palette-dot-neutral"
+							data-palette="neutral"
+							aria-label="Нейтральная палитра"
+							title="Нейтральная"
+						></button>
+						<button
+							type="button"
+							class="palette-dot palette-dot-warm"
+							data-palette="warm"
+							aria-label="Тёплая палитра"
+							title="Тёплая"
+						></button>
+						<button
+							type="button"
+							class="palette-dot palette-dot-ocean"
+							data-palette="ocean"
+							aria-label="Океан палитра"
+							title="Океан"
+						></button>
+					</div>
+				</div>
+			</div>
+
 			<Menu />
 		</div>
 	</Container>
@@ -38,42 +91,114 @@ const releaseMeta = getReleaseMeta();
 
 <script>
 	const THEME_STORAGE_KEY = "unityone_theme";
-	const themeToggle = document.querySelector("[data-theme-toggle]");
-	const themePreferences = ["system", "light", "dark"];
-	const themeLabels = {
+	const PALETTE_STORAGE_KEY = "unityone_palette";
+
+	const themeDropdown = document.getElementById("theme-dropdown");
+	const themeDropdownTrigger = document.getElementById("theme-dropdown-trigger");
+	const themeModeButtons = document.querySelectorAll("[data-theme-mode]");
+	const paletteButtons = document.querySelectorAll("[data-palette]");
+
+	const themeLabels: Record<string, string> = {
 		system: "системная",
 		light: "светлая",
-		dark: "темная",
+		dark: "тёмная",
 	};
-	const getResolvedTheme = (preference) =>
+
+	const getResolvedTheme = (preference: string) =>
 		preference === "system"
 			? window.matchMedia("(prefers-color-scheme: dark)").matches
 				? "dark"
 				: "light"
 			: preference;
-	const renderTheme = (preference) => {
+
+	const renderTheme = (preference: string) => {
 		const resolvedTheme = getResolvedTheme(preference);
 		document.documentElement.dataset.theme = resolvedTheme;
 		document.documentElement.dataset.themePreference = preference;
-		themeToggle?.querySelectorAll("[data-theme-icon-system], [data-theme-icon-light], [data-theme-icon-dark]").forEach((icon) => {
+
+		// Update trigger icon
+		const icons = themeDropdownTrigger?.querySelectorAll("[data-theme-icon-system], [data-theme-icon-light], [data-theme-icon-dark]");
+		icons?.forEach((icon) => {
 			icon.classList.toggle("hidden", !icon.hasAttribute(`data-theme-icon-${preference}`));
 		});
+
+		// Update dropdown checkmarks
+		themeModeButtons.forEach((btn) => {
+			const check = btn.querySelector("[data-check]");
+			const isActive = btn.getAttribute("data-theme-mode") === preference;
+			check?.classList.toggle("opacity-0", !isActive);
+			check?.classList.toggle("opacity-100", isActive);
+			btn.classList.toggle("active", isActive);
+		});
+
 		const label = `Тема: ${themeLabels[preference]}`;
-		themeToggle?.setAttribute("aria-label", label);
-		themeToggle?.setAttribute("title", label);
+		themeDropdownTrigger?.setAttribute("aria-label", label);
+		themeDropdownTrigger?.setAttribute("title", label);
 	};
+
+	const renderPalette = (palette: string) => {
+		document.documentElement.dataset.palette = palette;
+
+		paletteButtons.forEach((btn) => {
+			const isActive = btn.getAttribute("data-palette") === palette;
+			btn.classList.toggle("active", isActive);
+		});
+	};
+
+	// Initialize
 	const initialTheme = localStorage.getItem(THEME_STORAGE_KEY) || "system";
-	renderTheme(themePreferences.includes(initialTheme) ? initialTheme : "system");
-	themeToggle?.addEventListener("click", () => {
-		const currentTheme = document.documentElement.dataset.themePreference || "system";
-		const nextTheme = themePreferences[(themePreferences.indexOf(currentTheme) + 1) % themePreferences.length];
-		localStorage.setItem(THEME_STORAGE_KEY, nextTheme);
-		renderTheme(nextTheme);
-	});
-	window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
-		if ((document.documentElement.dataset.themePreference || "system") === "system") renderTheme("system");
+	const initialPalette = localStorage.getItem(PALETTE_STORAGE_KEY) || "neutral";
+	renderTheme(initialTheme);
+	renderPalette(initialPalette);
+
+	// Toggle dropdown
+	themeDropdownTrigger?.addEventListener("click", (e) => {
+		e.stopPropagation();
+		const open = themeDropdown?.classList.toggle("open") ?? false;
+		themeDropdownTrigger?.setAttribute("aria-expanded", String(open));
 	});
 
+	// Close dropdown on outside click
+	document.addEventListener("click", (e) => {
+		if (!themeDropdown?.contains(e.target as Node)) {
+			themeDropdown?.classList.remove("open");
+			themeDropdownTrigger?.setAttribute("aria-expanded", "false");
+		}
+	});
+
+	document.addEventListener("keydown", (event) => {
+		if (event.key === "Escape") {
+			themeDropdown?.classList.remove("open");
+			themeDropdownTrigger?.setAttribute("aria-expanded", "false");
+		}
+	});
+
+	// Theme mode buttons
+	themeModeButtons.forEach((btn) => {
+		btn.addEventListener("click", () => {
+			const mode = btn.getAttribute("data-theme-mode") || "system";
+			localStorage.setItem(THEME_STORAGE_KEY, mode);
+			renderTheme(mode);
+		});
+	});
+
+	// Palette buttons
+	paletteButtons.forEach((btn) => {
+		btn.addEventListener("click", () => {
+			const palette = btn.getAttribute("data-palette") || "neutral";
+			localStorage.setItem(PALETTE_STORAGE_KEY, palette);
+			renderPalette(palette);
+		});
+	});
+
+	// System preference change
+	window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
+		if ((document.documentElement.dataset.themePreference || "system") === "system") {
+			renderTheme("system");
+		}
+	});
+
+	// Header hide/show on scroll
 	const header = document.getElementById("header");
 	let lastY = window.scrollY;
 	let ticking = false;
