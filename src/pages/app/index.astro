@@ -1,0 +1,40 @@
+---
+import { getCollection } from "astro:content";
+import CatalogExplorer from "@/components/catalog/CatalogExplorer.astro";
+import PersonalShelf from "@/components/catalog/PersonalShelf.astro";
+import AppLayout from "@/layouts/AppLayout.astro";
+import { buildCatalogIndex, getTopicFilters } from "@/lib/catalog/catalog";
+import { appSeo, buildCanonical, buildJsonLd } from "@/lib/catalog/seo";
+
+const [communityEntries, methodEntries] = await Promise.all([
+	getCollection("communities"),
+	getCollection("methods"),
+]);
+const index = buildCatalogIndex({
+	communities: communityEntries.map((entry) => ({ ...entry.data, id: entry.id })),
+	methods: methodEntries.map((entry) => ({ ...entry.data, id: entry.id })),
+});
+---
+
+<AppLayout
+	title={appSeo.home.title}
+	description={appSeo.home.description}
+	canonical={buildCanonical("/app/")}
+	keywords={appSeo.home.keywords}
+	jsonLd={buildJsonLd("/app/", appSeo.home.title, appSeo.home.description)}
+>
+	<header class="px-2 pt-4 pb-6">
+		<p class="text-sm font-semibold tracking-[0.01em] text-blue-600 dark:text-blue-400">Unity One</p>
+		<h1 class="mt-1 text-[2rem] leading-tight font-bold tracking-[-0.025em]">Материалы</h1>
+		<p class="mt-3 text-[1.0625rem] leading-relaxed text-zinc-600 dark:text-zinc-400">Найдите сообщество или способ работы по названию либо жизненной ситуации.</p>
+	</header>
+
+	<CatalogExplorer id="global-catalog" mode="global" items={index.items} filters={getTopicFilters(index.items)} filterParam="topic" sessionPath="/app/" placeholder="Название или ситуация…" initialGroupLimit={5} />
+
+	<nav aria-label="Полные каталоги" class="mt-4 flex flex-wrap gap-2 px-1">
+		<a href="/app/communities/" data-catalog-reset-path="/app/communities/" class="inline-flex min-h-11 items-center rounded-xl px-3 text-sm font-semibold text-blue-600 outline-none transition-[transform,opacity] active:scale-[0.97] active:opacity-70 focus-visible:ring-2 focus-visible:ring-blue-500 dark:text-blue-400 dark:focus-visible:ring-blue-400">Все сообщества ({index.communities.length})</a>
+		<a href="/app/methods/" data-catalog-reset-path="/app/methods/" class="inline-flex min-h-11 items-center rounded-xl px-3 text-sm font-semibold text-blue-600 outline-none transition-[transform,opacity] active:scale-[0.97] active:opacity-70 focus-visible:ring-2 focus-visible:ring-blue-500 dark:text-blue-400 dark:focus-visible:ring-blue-400">Все методы ({index.methods.length})</a>
+	</nav>
+
+	<PersonalShelf items={index.items} />
+</AppLayout>

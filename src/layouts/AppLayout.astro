@@ -1,0 +1,63 @@
+---
+import "@/styles/tailwind.css";
+
+interface Props {
+	title: string;
+	description?: string;
+	canonical?: string;
+	keywords?: string[];
+	jsonLd?: Record<string, unknown>;
+	backHref?: string;
+	backLabel?: string;
+}
+
+const {
+	title,
+	description = "Каталог Unity One",
+	canonical,
+	keywords = [],
+	jsonLd,
+	backHref,
+	backLabel = "Назад",
+} = Astro.props;
+
+const pageTitle = `${title} — Unity One`;
+---
+
+<!doctype html>
+<html lang="ru">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+		<meta name="color-scheme" content="light dark" />
+		<meta name="theme-color" content="#f5f5f7" media="(prefers-color-scheme: light)" />
+		<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
+		<meta name="description" content={description} />
+		{keywords.length > 0 && <meta name="keywords" content={keywords.join(", ")} />}
+		{canonical && <link rel="canonical" href={canonical} />}
+		<meta property="og:type" content="website" />
+		<meta property="og:site_name" content="Unity One" />
+		<meta property="og:title" content={pageTitle} />
+		<meta property="og:description" content={description} />
+		{canonical && <meta property="og:url" content={canonical} />}
+		<meta name="twitter:card" content="summary" />
+		<meta name="twitter:title" content={pageTitle} />
+		<meta name="twitter:description" content={description} />
+		{jsonLd && <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+		<title>{pageTitle}</title>
+	</head>
+	<body>
+		<main class="mx-auto min-h-svh w-full max-w-2xl px-4 pt-[max(1rem,env(safe-area-inset-top))] pb-[max(2rem,env(safe-area-inset-bottom))] sm:px-6">
+			{backHref && (
+				<a
+					href={backHref}
+					class="mb-5 inline-flex min-h-11 items-center gap-1 rounded-xl px-2 text-[1.0625rem] font-medium text-blue-600 transition-[transform,opacity] duration-100 active:scale-[0.97] active:opacity-70 dark:text-blue-400"
+				>
+					<span aria-hidden="true">←</span>
+					{backLabel}
+				</a>
+			)}
+			<slot />
+		</main>
+	</body>
+</html>

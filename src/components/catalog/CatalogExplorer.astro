@@ -1,0 +1,218 @@
+---
+import FavoriteButton from "@/components/catalog/FavoriteButton.astro";
+import type { CatalogFilter, CatalogItem } from "@/lib/catalog/types";
+
+interface Props {
+	id: string;
+	mode: "communities" | "methods" | "global";
+	items: CatalogItem[];
+	filters: CatalogFilter[];
+	filterParam: "topic" | "audience";
+	topicFilters?: CatalogFilter[];
+	sessionPath: string;
+	placeholder: string;
+	initialGroupLimit?: number;
+}
+
+const {
+	id,
+	mode,
+	items,
+	filters,
+	filterParam,
+	topicFilters = [],
+	sessionPath,
+	placeholder,
+	initialGroupLimit,
+} = Astro.props;
+
+const visibleFilters = filters.filter((filter) => filter.count > 0);
+const visibleTopicFilters = topicFilters.filter((filter) => filter.count > 0);
+const groupPreviewLimit = typeof initialGroupLimit === "number" && Number.isFinite(initialGroupLimit) && initialGroupLimit > 0
+	? Math.min(5, Math.floor(initialGroupLimit))
+	: 5;
+const groups = mode === "global"
+	? [
+		{ kind: "community" as const, title: "Сообщества", href: "/app/communities/" },
+		{ kind: "method" as const, title: "Методы", href: "/app/methods/" },
+	]
+	: [{
+		kind: mode === "communities" ? "community" as const : "method" as const,
+		title: mode === "communities" ? "Сообщества" : "Методы",
+		href: mode === "communities" ? "/app/communities/" : "/app/methods/",
+	}];
+const data = JSON.stringify({
+	mode,
+	items,
+	filters: visibleFilters,
+	filterParam,
+	topicFilters: visibleTopicFilters,
+	sessionPath,
+	initialGroupLimit: groupPreviewLimit,
+}).replace(/</gu, "\\u003c");
+---
+
+<section
+	id={id}
+	data-catalog-explorer
+	data-catalog-mode={mode}
+	class="space-y-4"
+>
+	<div class="relative">
+		<label for={`${id}-search`} class="sr-only">Поиск по каталогу</label>
+		<input
+			id={`${id}-search`}
+			data-catalog-search
+			type="search"
+			autocomplete="off"
+			enterkeyhint="search"
+			placeholder={placeholder}
+			class="min-h-12 w-full appearance-none rounded-2xl bg-white/80 py-3 pr-12 pl-4 text-base shadow-[0_0.5px_0_rgba(0,0,0,0.12)] outline-none transition-[box-shadow,background-color] placeholder:text-zinc-500 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-100 dark:bg-zinc-900/80 dark:shadow-[0_0.5px_0_rgba(255,255,255,0.18)] dark:placeholder:text-zinc-400 dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-black contrast-more:ring-1 contrast-more:ring-current"
+		/>
+		<button
+			type="button"
+			data-catalog-clear-query
+			hidden
+			class="absolute inset-y-0 right-0 flex min-h-11 min-w-11 items-center justify-center rounded-xl text-xl text-zinc-500 outline-none transition-[transform,color] active:scale-95 focus-visible:ring-2 focus-visible:ring-blue-500 dark:text-zinc-400 dark:focus-visible:ring-blue-400"
+			aria-label="Очистить поиск"
+		>
+			<span aria-hidden="true">×</span>
+		</button>
+	</div>
+
+	<div
+		data-catalog-filters
+		role="group"
+		aria-label={filterParam === "topic" ? "Темы" : "Сообщества"}
+		class="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:-mx-6 sm:px-6"
+	>
+		<button
+			type="button"
+			data-catalog-filter=""
+			aria-pressed="true"
+			class="inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-full bg-white/70 px-4 text-sm font-semibold text-zinc-700 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.08)] outline-none transition-[transform,background-color,color] aria-pressed:bg-blue-600 aria-pressed:text-white aria-pressed:shadow-none active:scale-[0.97] focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-100 dark:bg-zinc-900/70 dark:text-zinc-200 dark:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.13)] dark:aria-pressed:bg-blue-500 dark:aria-pressed:text-white dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-black"
+		>
+			<span data-catalog-filter-check aria-hidden="true">✓</span>
+			<span data-catalog-filter-state class="sr-only">Выбрано: </span>
+			Все
+		</button>
+		{visibleFilters.map((filter) => (
+			<button
+				type="button"
+				data-catalog-filter={filter.id}
+				aria-pressed="false"
+				class="inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-full bg-white/70 px-4 text-sm font-semibold text-zinc-700 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.08)] outline-none transition-[transform,background-color,color] aria-pressed:bg-blue-600 aria-pressed:text-white aria-pressed:shadow-none active:scale-[0.97] focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-100 dark:bg-zinc-900/70 dark:text-zinc-200 dark:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.13)] dark:aria-pressed:bg-blue-500 dark:aria-pressed:text-white dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-black"
+			>
+				<span data-catalog-filter-check aria-hidden="true" hidden>✓</span>
+				<span data-catalog-filter-state class="sr-only" hidden>Выбрано: </span>
+				{filter.label}
+				<span class="font-normal opacity-70">{filter.count}</span>
+			</button>
+		))}
+	</div>
+
+	{visibleTopicFilters.length > 0 && (
+		<p
+			data-catalog-topic-context
+			hidden
+			class="flex min-h-11 items-center gap-2 rounded-xl bg-blue-50 px-3 text-sm text-blue-900 dark:bg-blue-950/50 dark:text-blue-100"
+		>
+			<span class="min-w-0 flex-1">Тема: <strong data-catalog-topic-label></strong></span>
+			<button
+				type="button"
+				data-catalog-clear-topic
+				class="inline-flex min-h-11 shrink-0 items-center rounded-lg px-2 font-semibold text-blue-700 outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:text-blue-300 dark:focus-visible:ring-blue-400"
+			>
+				Убрать
+			</button>
+		</p>
+	)}
+
+	<p data-catalog-count aria-live="polite" aria-atomic="true" class="min-h-5 px-1 text-sm text-zinc-600 dark:text-zinc-400">
+		{mode === "global" ? "Введите запрос или выберите тему" : `Найдено: ${items.length}`}
+	</p>
+	<p data-personal-status role="status" aria-live="polite" hidden class="px-1 text-sm text-red-700 dark:text-red-300"></p>
+
+	<noscript>
+		<p class="rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-950 dark:bg-amber-950/40 dark:text-amber-100">
+			Динамический поиск требует JavaScript. Полный каталог доступен ниже.
+		</p>
+	</noscript>
+
+	<div data-catalog-results class="space-y-5">
+		{groups.map((group) => {
+			const groupItems = items.filter((item) => item.kind === group.kind);
+
+			return (
+				<section data-catalog-group={group.kind} hidden={mode === "global"} class="space-y-2">
+					{mode === "global" && (
+						<div class="flex min-h-11 items-center justify-between gap-3 px-2">
+							<h2 class="text-lg font-bold tracking-[-0.015em]">{group.title}</h2>
+							<span data-catalog-group-count class="text-sm text-zinc-500 dark:text-zinc-400">{groupItems.length}</span>
+						</div>
+					)}
+					<div
+						data-catalog-list
+						class="divide-y divide-zinc-200/80 overflow-hidden rounded-2xl bg-white/80 shadow-[0_0.5px_0_rgba(0,0,0,0.12)] backdrop-blur-xl motion-reduce:backdrop-blur-none dark:divide-zinc-700/80 dark:bg-zinc-900/80 dark:shadow-[0_0.5px_0_rgba(255,255,255,0.18)] contrast-more:ring-1 contrast-more:ring-current"
+					>
+						{groupItems.map((item) => (
+							<div data-catalog-item={item.key} class="flex min-h-16 items-center gap-2">
+								<a
+									href={item.href}
+									data-catalog-result-link
+									class="group flex min-h-16 min-w-0 flex-1 items-center gap-3 rounded-xl px-5 py-4 outline-none transition-[transform,background-color] duration-100 active:scale-[0.99] active:bg-zinc-100 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500 dark:active:bg-zinc-800 dark:focus-visible:ring-blue-400"
+								>
+									<span class="min-w-0 flex-1">
+										<strong class="block text-[1.0625rem] leading-snug font-semibold tracking-[-0.01em]">{item.title}</strong>
+										<span class="mt-1 line-clamp-2 block text-sm leading-snug text-zinc-600 dark:text-zinc-400">{item.description}</span>
+									</span>
+									<span aria-hidden="true" class="text-xl text-zinc-400 transition-transform group-active:translate-x-0.5 dark:text-zinc-500">›</span>
+								</a>
+								<FavoriteButton itemKey={item.key} label={item.title} />
+							</div>
+						))}
+					</div>
+					{mode === "global" && (
+						<a
+							href={group.href}
+							data-catalog-show-all-link
+							data-session-path={group.href}
+							class="inline-flex min-h-11 items-center rounded-xl px-3 font-semibold text-blue-600 outline-none transition-[transform,opacity] active:scale-[0.97] active:opacity-70 focus-visible:ring-2 focus-visible:ring-blue-500 dark:text-blue-400 dark:focus-visible:ring-blue-400"
+						>
+							Показать все
+						</a>
+					)}
+				</section>
+			);
+		})}
+	</div>
+
+	<div data-catalog-empty hidden class="rounded-2xl bg-white/80 px-5 py-6 shadow-[0_0.5px_0_rgba(0,0,0,0.12)] dark:bg-zinc-900/80 dark:shadow-[0_0.5px_0_rgba(255,255,255,0.18)]">
+		<p class="text-lg font-bold tracking-[-0.015em]">Ничего не найдено</p>
+		<div data-catalog-suggestions hidden class="mt-4">
+			<p class="text-sm font-semibold text-zinc-600 dark:text-zinc-400">Возможно, вы искали</p>
+			<ul data-catalog-suggestion-list class="mt-2 divide-y divide-zinc-200/80 dark:divide-zinc-700/80"></ul>
+		</div>
+		<div class="mt-4 flex flex-wrap gap-2">
+			<button
+				type="button"
+				data-catalog-empty-clear
+				class="inline-flex min-h-11 items-center rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white outline-none transition-[transform,opacity] active:scale-[0.97] active:opacity-80 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:bg-blue-500 dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-zinc-900"
+			>
+				Очистить поиск
+			</button>
+			<button
+				type="button"
+				data-catalog-empty-show-all
+				class="inline-flex min-h-11 items-center rounded-xl px-4 text-sm font-semibold text-blue-600 outline-none transition-[transform,background-color] active:scale-[0.97] active:bg-blue-50 focus-visible:ring-2 focus-visible:ring-blue-500 dark:text-blue-400 dark:active:bg-blue-950/50 dark:focus-visible:ring-blue-400"
+			>
+				Показать все
+			</button>
+		</div>
+	</div>
+</section>
+<script is:inline type="application/json" data-catalog-data set:html={data}></script>
+
+<script>
+	import "@/scripts/catalog-explorer";
+</script>

@@ -1,5 +1,6 @@
 import { glob } from "astro/loaders";
-import { defineCollection, z } from "astro:content";
+import { defineCollection } from "astro:content";
+import { z } from "astro/zod";
 
 const archive = defineCollection({
 	loader: glob({ pattern: "**/*.(md|mdx)", base: "./src/content/archive/" }),
@@ -11,9 +12,8 @@ const archive = defineCollection({
 			pubDate: z.union([z.string(), z.date()]),
 			author: z.array(z.string()).optional(),
 			relatedPosts: z.array(z.string()).optional(),
-			ogImage: z.any().optional(),
+			ogImage: z.string().optional(),
 			tags: z.array(z.string()).optional(),
-			// viewMainPage: z.boolean().default(false).optional(),
 		})
 		.transform((data) => ({
 			...data,
@@ -22,4 +22,35 @@ const archive = defineCollection({
 		})),
 });
 
-export const collections = { archive };
+const authors = defineCollection({
+	loader: glob({ pattern: "**/*.mdx", base: "./src/content/authors/" }),
+	schema: z.object({
+		name: z.string(),
+		avatarUrl: z.string(),
+	}),
+});
+
+const communities = defineCollection({
+	loader: glob({ pattern: "**/*.mdx", base: "./src/content/communities/" }),
+	schema: z.object({
+		id: z.string(),
+		title: z.string(),
+		description: z.string(),
+		since: z.string(),
+		wikipedia: z.string(),
+		find: z.boolean(),
+		category: z.string(),
+	}),
+});
+
+const methods = defineCollection({
+	loader: glob({ pattern: "**/*.mdx", base: "./src/content/methods/" }),
+	schema: z.object({
+		slug: z.string(),
+		title: z.string(),
+		description: z.string(),
+		community: z.array(z.string()),
+	}),
+});
+
+export const collections = { archive, authors, communities, methods };

@@ -1,0 +1,41 @@
+---
+import { getCollection } from "astro:content";
+import CatalogExplorer from "@/components/catalog/CatalogExplorer.astro";
+import AppLayout from "@/layouts/AppLayout.astro";
+import { buildCatalogIndex, getTopicFilters } from "@/lib/catalog/catalog";
+import { appSeo, buildCanonical, buildJsonLd } from "@/lib/catalog/seo";
+
+const [communityEntries, methodEntries] = await Promise.all([
+	getCollection("communities"),
+	getCollection("methods"),
+]);
+const index = buildCatalogIndex({
+	communities: communityEntries.map((entry) => ({ ...entry.data, id: entry.id })),
+	methods: methodEntries.map((entry) => ({ ...entry.data, id: entry.id })),
+});
+---
+
+<AppLayout
+	title={appSeo.communities.title}
+	description={appSeo.communities.description}
+	canonical={buildCanonical("/app/communities/")}
+	keywords={appSeo.communities.keywords}
+	jsonLd={buildJsonLd("/app/communities/", appSeo.communities.title, appSeo.communities.description)}
+	backHref="/app/"
+	backLabel="Материалы"
+>
+	<header class="px-2 pb-6">
+		<h1 class="text-[2rem] leading-tight font-bold tracking-[-0.025em]">Сообщества</h1>
+		<p class="mt-2 text-[1.0625rem] leading-relaxed text-zinc-600 dark:text-zinc-400">Группы взаимопомощи и сообщества восстановления.</p>
+	</header>
+
+	<CatalogExplorer
+		id="communities-catalog"
+		mode="communities"
+		items={index.communities}
+		filters={getTopicFilters(index.communities)}
+		filterParam="topic"
+		sessionPath="/app/communities/"
+		placeholder="Название или ситуация: долги, никотин, семья…"
+	/>
+</AppLayout>

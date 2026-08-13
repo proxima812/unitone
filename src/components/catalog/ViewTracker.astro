@@ -1,0 +1,15 @@
+---
+import type { CatalogKey } from "@/lib/catalog/types";
+
+interface Props {
+	itemKey: CatalogKey;
+}
+
+const { itemKey } = Astro.props;
+---
+
+<span data-view-tracker={itemKey} hidden aria-hidden="true"></span>
+
+<script>
+	import "@/scripts/catalog-personal";
+</script>

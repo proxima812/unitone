@@ -1,0 +1,42 @@
+---
+import { getCollection } from "astro:content";
+import CatalogExplorer from "@/components/catalog/CatalogExplorer.astro";
+import AppLayout from "@/layouts/AppLayout.astro";
+import { buildCatalogIndex, getTopicFilters } from "@/lib/catalog/catalog";
+import { appSeo, buildCanonical, buildJsonLd } from "@/lib/catalog/seo";
+
+const [communityEntries, methodEntries] = await Promise.all([
+	getCollection("communities"),
+	getCollection("methods"),
+]);
+const index = buildCatalogIndex({
+	communities: communityEntries.map((entry) => ({ ...entry.data, id: entry.id })),
+	methods: methodEntries.map((entry) => ({ ...entry.data, id: entry.id })),
+});
+---
+
+<AppLayout
+	title={appSeo.methods.title}
+	description={appSeo.methods.description}
+	canonical={buildCanonical("/app/methods/")}
+	keywords={appSeo.methods.keywords}
+	jsonLd={buildJsonLd("/app/methods/", appSeo.methods.title, appSeo.methods.description)}
+	backHref="/app/"
+	backLabel="Материалы"
+>
+	<header class="px-2 pb-6">
+		<h1 class="text-[2rem] leading-tight font-bold tracking-[-0.025em]">Методы</h1>
+		<p class="mt-2 text-[1.0625rem] leading-relaxed text-zinc-600 dark:text-zinc-400">Практические форматы и материалы для работы по шагам.</p>
+	</header>
+
+	<CatalogExplorer
+		id="methods-catalog"
+		mode="methods"
+		items={index.methods}
+		filters={index.methodFilters}
+		filterParam="audience"
+		topicFilters={getTopicFilters(index.methods)}
+		sessionPath="/app/methods/"
+		placeholder="Название или направление: АА, АН, дневник…"
+	/>
+</AppLayout>

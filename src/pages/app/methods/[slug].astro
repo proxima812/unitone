@@ -1,0 +1,63 @@
+---
+import { getCollection, render, type CollectionEntry } from "astro:content";
+import FavoriteButton from "@/components/catalog/FavoriteButton.astro";
+import RelatedItems from "@/components/catalog/RelatedItems.astro";
+import ViewTracker from "@/components/catalog/ViewTracker.astro";
+import AppLayout from "@/layouts/AppLayout.astro";
+import { buildCatalogIndex, getRelatedItems } from "@/lib/catalog/catalog";
+import { buildCanonical, buildItemDescription, buildItemKeywords, buildJsonLd } from "@/lib/catalog/seo";
+
+export async function getStaticPaths() {
+	const entries = await getCollection("methods");
+	return entries.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+interface Props {
+	entry: CollectionEntry<"methods">;
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const [communityEntries, methodEntries] = await Promise.all([
+	getCollection("communities"),
+	getCollection("methods"),
+]);
+const index = buildCatalogIndex({
+	communities: communityEntries.map((community) => ({ ...community.data, id: community.id })),
+	methods: methodEntries.map((method) => ({ ...method.data, id: method.id })),
+});
+const item = index.byKey[`method:${entry.id}`];
+if (!item) throw new Error(`Missing catalog method: ${entry.id}`);
+const seoDescription = buildItemDescription(item);
+const canonical = buildCanonical(item.href);
+const relatedCommunities = getRelatedItems(index, item.key);
+const moreHref = relatedCommunities.length > 6 && item.topicIds[0]
+	? `/app/communities/?topic=${encodeURIComponent(item.topicIds[0])}`
+	: undefined;
+---
+
+<AppLayout
+	title={entry.data.title}
+	description={seoDescription}
+	canonical={canonical}
+	keywords={buildItemKeywords(item)}
+	jsonLd={buildJsonLd(item.href, entry.data.title, seoDescription)}
+	backHref="/app/methods/"
+	backLabel="Методы"
+>
+	<article class="px-2 pb-8">
+		<div class="flex flex-wrap gap-2">
+			{item.audienceLabels.map((label) => <span class="rounded-full bg-blue-50 px-3 py-1 text-sm font-medium text-blue-700 dark:bg-blue-950 dark:text-blue-300">{label}</span>)}
+		</div>
+		<div class="mt-3 flex items-start justify-between gap-3">
+			<h1 class="text-[2rem] leading-[1.12] font-bold tracking-[-0.025em] text-balance">{entry.data.title}</h1>
+			<FavoriteButton itemKey={item.key} label={item.title} variant="button" />
+		</div>
+		<p class="mt-5 text-[1.0625rem] leading-relaxed text-zinc-700 dark:text-zinc-300">{entry.data.description}</p>
+		<div class="app-prose mt-8 border-t border-zinc-200/80 pt-7 dark:border-zinc-700/80">
+			<Content />
+		</div>
+		<RelatedItems title="Связанные сообщества" items={relatedCommunities} moreHref={moreHref} />
+	</article>
+	<ViewTracker itemKey={item.key} />
+</AppLayout>
