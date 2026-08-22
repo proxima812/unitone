@@ -1,0 +1,47 @@
+---
+import PublicationForm from "@/components/publications/PublicationForm.astro";
+import AppLayout from "@/layouts/AppLayout.astro";
+import { buildCanonical, buildJsonLd } from "@/lib/catalog/seo";
+import { publicationTypes, type PublicationType } from "@/lib/publications/types";
+
+export const prerender = false;
+
+const rawType = Astro.params.type ?? "";
+const type = publicationTypes.includes(rawType as PublicationType) ? rawType as PublicationType : null;
+if (!type) Astro.response.status = 404;
+
+const labels: Record<PublicationType, string> = {
+	material: "материал",
+	post: "пост",
+	tool: "инструмент",
+	experience: "личный опыт",
+};
+const publicationId = Astro.url.searchParams.get("id")?.trim() ?? "";
+const label = type ? labels[type] : "публикация";
+const pageTitle = publicationId ? `Редактировать ${label}` : `Новый ${label}`;
+const path = type ? `/app/create/${type}/` : "/app/create/";
+---
+
+<AppLayout
+	title={pageTitle}
+	description={`${pageTitle} в приложении 12 шагов.`}
+	canonical={buildCanonical(path)}
+	jsonLd={buildJsonLd(path, pageTitle, `${pageTitle} в приложении 12 шагов.`)}
+	backHref="/app/create/"
+	backLabel="Тип публикации"
+>
+	{type ? (
+		<section class="px-1 pb-8">
+			<header class="pb-5">
+				<p class="text-sm font-semibold text-blue-600 dark:text-blue-400">{publicationId ? "Черновик или доработка" : "Новая публикация"}</p>
+				<h1 class="mt-1 text-[1.75rem] leading-tight font-bold tracking-[-0.025em]">{pageTitle}</h1>
+			</header>
+			<PublicationForm type={type} publicationId={publicationId} />
+		</section>
+	) : (
+		<section class="px-1 py-10 text-center">
+			<h1 class="text-xl font-bold">Тип публикации не найден</h1>
+			<a href="/app/create/" class="mt-4 inline-flex min-h-11 items-center text-base font-semibold text-blue-600 outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:text-blue-400 dark:focus-visible:ring-blue-400">Выбрать тип</a>
+		</section>
+	)}
+</AppLayout>

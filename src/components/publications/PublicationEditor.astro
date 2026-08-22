@@ -1,0 +1,31 @@
+<div data-publication-editor>
+	<div class="flex flex-wrap items-center gap-1 border-y border-zinc-200 py-2 dark:border-zinc-800" role="toolbar" aria-label="Форматирование текста">
+		<button type="button" data-format="h2" title="Заголовок 2" aria-label="Заголовок второго уровня" class="inline-flex min-h-10 min-w-10 items-center justify-center rounded-lg px-2 text-sm font-semibold text-zinc-700 outline-none active:bg-zinc-200 focus-visible:ring-2 focus-visible:ring-blue-500 dark:text-zinc-200 dark:active:bg-zinc-800 dark:focus-visible:ring-blue-400">H2</button>
+		<button type="button" data-format="h3" title="Заголовок 3" aria-label="Заголовок третьего уровня" class="inline-flex min-h-10 min-w-10 items-center justify-center rounded-lg px-2 text-sm font-semibold text-zinc-700 outline-none active:bg-zinc-200 focus-visible:ring-2 focus-visible:ring-blue-500 dark:text-zinc-200 dark:active:bg-zinc-800 dark:focus-visible:ring-blue-400">H3</button>
+		<span class="mx-0.5 h-6 w-px bg-zinc-200 dark:bg-zinc-800" aria-hidden="true"></span>
+		<button type="button" data-format="bold" title="Жирный" aria-label="Жирный текст" class="inline-flex size-10 items-center justify-center rounded-lg text-base font-bold text-zinc-700 outline-none active:bg-zinc-200 focus-visible:ring-2 focus-visible:ring-blue-500 dark:text-zinc-200 dark:active:bg-zinc-800 dark:focus-visible:ring-blue-400">B</button>
+		<button type="button" data-format="italic" title="Курсив" aria-label="Курсив" class="inline-flex size-10 items-center justify-center rounded-lg text-base italic text-zinc-700 outline-none active:bg-zinc-200 focus-visible:ring-2 focus-visible:ring-blue-500 dark:text-zinc-200 dark:active:bg-zinc-800 dark:focus-visible:ring-blue-400">I</button>
+		<button type="button" data-format="unordered-list" title="Маркированный список" aria-label="Маркированный список" class="inline-flex size-10 items-center justify-center rounded-lg text-lg text-zinc-700 outline-none active:bg-zinc-200 focus-visible:ring-2 focus-visible:ring-blue-500 dark:text-zinc-200 dark:active:bg-zinc-800 dark:focus-visible:ring-blue-400">•≡</button>
+		<button type="button" data-format="ordered-list" title="Нумерованный список" aria-label="Нумерованный список" class="inline-flex size-10 items-center justify-center rounded-lg text-sm font-semibold text-zinc-700 outline-none active:bg-zinc-200 focus-visible:ring-2 focus-visible:ring-blue-500 dark:text-zinc-200 dark:active:bg-zinc-800 dark:focus-visible:ring-blue-400">1.</button>
+		<div class="flex min-w-48 flex-1 items-center gap-1 pl-1">
+			<label class="sr-only" for="publication-link-url">Адрес ссылки</label>
+			<input id="publication-link-url" data-link-url type="url" inputmode="url" autocomplete="url" placeholder="https://…" class="min-h-10 min-w-0 flex-1 rounded-lg bg-zinc-100 px-3 text-sm text-zinc-900 outline-none placeholder:text-zinc-500 focus-visible:ring-2 focus-visible:ring-blue-500 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-400 dark:focus-visible:ring-blue-400" />
+			<button type="button" data-format="link" class="inline-flex min-h-10 items-center justify-center rounded-lg px-3 text-sm font-semibold text-blue-600 outline-none active:bg-blue-50 focus-visible:ring-2 focus-visible:ring-blue-500 dark:text-blue-400 dark:active:bg-blue-950/40 dark:focus-visible:ring-blue-400">Ссылка</button>
+		</div>
+	</div>
+	<textarea
+		data-editor-content
+		name="content"
+		required
+		maxlength="30000"
+		rows="16"
+		spellcheck="true"
+		placeholder="Напишите текс публикации…"
+		class="mt-2 w-full resize-y rounded-xl bg-white px-3 py-3 font-mono text-[0.9375rem] leading-relaxed text-zinc-950 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.14)] outline-none placeholder:text-zinc-500 focus-visible:ring-2 focus-visible:ring-blue-500 dark:bg-zinc-950 dark:text-zinc-50 dark:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.18)] dark:placeholder:text-zinc-400 dark:focus-visible:ring-blue-400"
+	></textarea>
+	<p class="mt-2 text-xs leading-relaxed text-zinc-500 dark:text-zinc-400">Доступны только заголовки, выделение, ссылки и списки.</p>
+</div>
+
+<script>
+	import "@/scripts/publication-editor";
+</script>
