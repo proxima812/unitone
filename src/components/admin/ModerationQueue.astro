@@ -1,0 +1,33 @@
+---
+import ModerationCard from "./ModerationCard.astro";
+---
+
+<section data-moderation-queue aria-labelledby="moderation-title" class="px-1 pb-8">
+	<header class="pb-5">
+		<p class="text-sm font-semibold text-blue-600 dark:text-blue-400">Администрирование</p>
+		<div class="mt-1 flex items-end justify-between gap-4">
+			<h1 id="moderation-title" class="text-[1.75rem] leading-tight font-bold tracking-[-0.025em]">Модерация</h1>
+			<span data-queue-count hidden class="min-w-8 rounded-full bg-zinc-200 px-2 py-1 text-center text-xs font-bold text-zinc-700 dark:bg-zinc-800 dark:text-zinc-200"></span>
+		</div>
+	</header>
+
+	<div data-authorization-state aria-live="polite" aria-busy="true" class="rounded-2xl bg-white px-4 py-5 text-[0.9375rem] text-zinc-600 shadow-[0_0.5px_0_rgba(0,0,0,0.12)] dark:bg-zinc-900 dark:text-zinc-400 dark:shadow-[0_0.5px_0_rgba(255,255,255,0.18)]">
+		Проверяем доступ…
+	</div>
+
+	<div data-access-denied hidden role="alert" class="rounded-2xl bg-white px-4 py-5 shadow-[0_0.5px_0_rgba(0,0,0,0.12)] dark:bg-zinc-900 dark:shadow-[0_0.5px_0_rgba(255,255,255,0.18)]">
+		<h2 class="font-semibold text-zinc-950 dark:text-zinc-50">Нет доступа</h2>
+		<p class="mt-1 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">Очередь доступна только администраторам приложения.</p>
+	</div>
+
+	<div data-queue-error hidden role="alert" class="rounded-2xl bg-red-50 px-4 py-4 text-sm leading-relaxed text-red-700 dark:bg-red-950/40 dark:text-red-200"></div>
+
+	<div data-queue-content hidden>
+		<p data-queue-empty hidden class="rounded-2xl bg-white px-4 py-5 text-[0.9375rem] leading-relaxed text-zinc-600 shadow-[0_0.5px_0_rgba(0,0,0,0.12)] dark:bg-zinc-900 dark:text-zinc-400 dark:shadow-[0_0.5px_0_rgba(255,255,255,0.18)]">
+			Очередь пуста. Новых публикаций на проверке нет.
+		</p>
+		<ul data-queue-list aria-label="Публикации на модерации" class="space-y-4"></ul>
+	</div>
+
+	<ModerationCard />
+</section>

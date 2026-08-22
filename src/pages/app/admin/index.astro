@@ -1,0 +1,19 @@
+---
+import ModerationQueue from "@/components/admin/ModerationQueue.astro";
+import AppLayout from "@/layouts/AppLayout.astro";
+
+export const prerender = false;
+---
+
+<AppLayout
+	title="Модерация"
+	description="Закрытая очередь публикаций на модерации."
+	backHref="/app/profile/"
+	backLabel="Профиль"
+>
+	<ModerationQueue />
+</AppLayout>
+
+<script>
+	import "@/scripts/moderation-queue";
+</script>
