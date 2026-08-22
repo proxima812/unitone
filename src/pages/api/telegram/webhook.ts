@@ -9,6 +9,8 @@ type TelegramUpdate = {
 	};
 };
 
+export const prerender = false;
+
 function env(name: string): string | undefined {
 	const value = import.meta.env[name] ?? process.env[name];
 	return typeof value === "string" && value.trim() ? value.trim() : undefined;

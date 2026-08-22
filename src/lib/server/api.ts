@@ -21,6 +21,7 @@ import {
 } from "./publications";
 import {
 	isTelegramAdmin,
+	notifyAdminsAboutPublication,
 	TelegramAuthError,
 	telegramProfileData,
 	verifyTelegramInitData,
@@ -53,6 +54,7 @@ export interface PublicationApiServices {
 	authenticateBody: AuthenticateBody;
 	authenticateHeader: AuthenticateHeader;
 	isAdmin(telegramId: string): boolean;
+	notifySubmission?(publication: PublicationRecord): Promise<void>;
 }
 
 export function jsonResponse(
@@ -175,4 +177,5 @@ export const publicationApiServices: PublicationApiServices = {
 	authenticateBody: verifiedRequestProfile,
 	authenticateHeader: verifiedAuthorizationProfile,
 	isAdmin: isTelegramAdmin,
+	notifySubmission: notifyAdminsAboutPublication,
 };

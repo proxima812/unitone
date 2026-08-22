@@ -27,17 +27,68 @@ function env(name: string): string | undefined {
 }
 
 export function isTelegramAdmin(telegramId: string): boolean {
+	return adminTelegramIds().includes(telegramId);
+}
+
+function adminTelegramIds(): string[] {
 	return (env("ADMIN_TELEGRAM_IDS") ?? "")
 		.split(",")
 		.map((value) => value.trim())
-		.filter((value) => /^\d+$/.test(value))
-		.includes(telegramId);
+		.filter((value) => /^\d+$/.test(value));
 }
 
 function botToken(): string {
 	const token = env("TELEGRAM_BOT_TOKEN") ?? env("BOT_TOKEN") ?? env("TELEGRAM_TOKEN");
 	if (!token) throw new TelegramAuthError("Не задан TELEGRAM_BOT_TOKEN.");
 	return token;
+}
+
+export async function notifyAdminsAboutPublication(publication: {
+	id: string;
+	type: string;
+	title: string;
+	authorName: string;
+	authorUsername: string;
+}): Promise<void> {
+	const adminIds = adminTelegramIds();
+	if (!adminIds.length) return;
+
+	const typeLabels: Record<string, string> = {
+		material: "Материал",
+		post: "Пост",
+		tool: "Инструмент",
+		experience: "Опыт",
+	};
+	const author = publication.authorUsername
+		? `${publication.authorName || "Без имени"} (@${publication.authorUsername})`
+		: publication.authorName || "Без имени";
+	const text = [
+		"Новая публикация на проверке",
+		"",
+		`${typeLabels[publication.type] ?? "Публикация"}: ${publication.title}`,
+		`Автор: ${author}`,
+	].join("\n");
+
+	const results = await Promise.allSettled(adminIds.map(async (chatId) => {
+		const response = await fetch(`https://api.telegram.org/bot${botToken()}/sendMessage`, {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({
+				chat_id: chatId,
+				text,
+				reply_markup: {
+					inline_keyboard: [[{
+						text: "Открыть модерацию",
+						web_app: { url: "https://unityone.appwrite.network/app/admin/" },
+					}]],
+				},
+			}),
+		});
+		if (!response.ok) throw new Error(`Telegram API returned ${response.status}`);
+	}));
+
+	const failed = results.filter((result) => result.status === "rejected");
+	if (failed.length) throw new Error(`Не удалось отправить ${failed.length} уведомлений администраторам.`);
 }
 
 function maxAgeSeconds(): number {
