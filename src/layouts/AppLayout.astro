@@ -49,7 +49,7 @@ const pageTitle = `${title} — 12 шагов`;
 		<title>{pageTitle}</title>
 	</head>
 	<body>
-		<main class="mx-auto min-h-svh w-full max-w-2xl px-4 pt-[calc(env(safe-area-inset-top)+3rem)] pb-[calc(7rem+env(safe-area-inset-bottom))] sm:px-6">
+		<main class="mx-auto min-h-svh w-full max-w-2xl px-4 pt-[calc(var(--tg-safe-area-inset-top,env(safe-area-inset-top))+var(--tg-content-safe-area-inset-top,0px)+1rem)] pb-[calc(7rem+env(safe-area-inset-bottom))] sm:px-6">
 			{backHref && (
 				<a
 					href={backHref}
