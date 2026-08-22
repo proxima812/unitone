@@ -1,0 +1,33 @@
+---
+import PostFilters from "@/components/publications/PostFilters.astro";
+import PublicationList from "@/components/publications/PublicationList.astro";
+import AppLayout from "@/layouts/AppLayout.astro";
+import { buildCanonical, buildJsonLd } from "@/lib/catalog/seo";
+import { buildPostFacets } from "@/lib/publications/catalog";
+import { listPublishedPublications } from "@/lib/server/publications";
+
+export const prerender = false;
+
+const title = "Посты";
+const description = "Опыт, наблюдения и практики участников сообществ 12 шагов.";
+const path = "/app/posts/";
+const publications = await listPublishedPublications({ type: "post" });
+const facets = buildPostFacets(publications);
+---
+
+<AppLayout
+	title={title}
+	description={description}
+	canonical={buildCanonical(path)}
+	keywords={["12 шагов", "опыт восстановления", "группы взаимопомощи"]}
+	jsonLd={buildJsonLd(path, title, description)}
+	backHref="/app/"
+	backLabel="Главная"
+>
+	<header class="px-2 pb-6">
+		<h1 class="text-[2rem] leading-tight font-bold tracking-[-0.025em]">{title}</h1>
+		<p class="mt-2 text-[1.0625rem] leading-relaxed text-zinc-600 dark:text-zinc-400">{description}</p>
+	</header>
+	{publications.length > 0 && <PostFilters targetId="posts-catalog" categories={facets.categories} tags={facets.tags} />}
+	<PublicationList id="posts-catalog" publications={publications} basePath={path} emptyText="Пока нет опубликованных постов." />
+</AppLayout>

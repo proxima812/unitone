@@ -1,0 +1,29 @@
+---
+import PublicationList from "@/components/publications/PublicationList.astro";
+import AppLayout from "@/layouts/AppLayout.astro";
+import { buildCanonical, buildJsonLd } from "@/lib/catalog/seo";
+import { listPublishedPublications } from "@/lib/server/publications";
+
+export const prerender = false;
+
+const title = "Материалы";
+const description = "Опубликованные тексты и руководства для работы по программе 12 шагов.";
+const path = "/app/materials/";
+const publications = await listPublishedPublications({ type: "material" });
+---
+
+<AppLayout
+	title={title}
+	description={description}
+	canonical={buildCanonical(path)}
+	keywords={["12 шагов", "материалы 12 шагов", "группы взаимопомощи"]}
+	jsonLd={buildJsonLd(path, title, description)}
+	backHref="/app/"
+	backLabel="Главная"
+>
+	<header class="px-2 pb-6">
+		<h1 class="text-[2rem] leading-tight font-bold tracking-[-0.025em]">{title}</h1>
+		<p class="mt-2 text-[1.0625rem] leading-relaxed text-zinc-600 dark:text-zinc-400">{description}</p>
+	</header>
+	<PublicationList id="materials-catalog" publications={publications} basePath={path} emptyText="Пока нет опубликованных материалов." />
+</AppLayout>

@@ -1,0 +1,35 @@
+---
+import PublicationCard from "@/components/publications/PublicationCard.astro";
+import type { PublicPublication } from "@/lib/publications/types";
+
+interface Props {
+	id: string;
+	publications: PublicPublication[];
+	basePath: string;
+	emptyText: string;
+}
+
+const { id, publications, basePath, emptyText } = Astro.props;
+---
+
+<div id={id} data-publication-list>
+	<ul class="space-y-3" aria-label="Публикации">
+		{publications.map((publication) => (
+			<li
+				data-publication-card
+				data-category={publication.category.trim()}
+				data-tags={JSON.stringify(publication.tags.map((tag) => tag.trim()).filter(Boolean))}
+			>
+				<PublicationCard publication={publication} href={`${basePath}${encodeURIComponent(publication.id)}/`} />
+			</li>
+		))}
+	</ul>
+	{publications.length === 0 && (
+		<p class="rounded-2xl bg-white px-4 py-5 text-[0.9375rem] leading-relaxed text-zinc-600 shadow-[0_0.5px_0_rgba(0,0,0,0.12)] dark:bg-zinc-900 dark:text-zinc-400 dark:shadow-[0_0.5px_0_rgba(255,255,255,0.18)]">
+			{emptyText}
+		</p>
+	)}
+	<p data-filter-empty hidden class="rounded-2xl bg-white px-4 py-5 text-[0.9375rem] leading-relaxed text-zinc-600 shadow-[0_0.5px_0_rgba(0,0,0,0.12)] dark:bg-zinc-900 dark:text-zinc-400 dark:shadow-[0_0.5px_0_rgba(255,255,255,0.18)]">
+		По выбранным фильтрам публикаций нет.
+	</p>
+</div>

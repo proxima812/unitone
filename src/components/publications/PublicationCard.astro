@@ -1,0 +1,31 @@
+---
+import type { PublicPublication } from "@/lib/publications/types";
+
+interface Props {
+	publication: PublicPublication;
+	href: string;
+}
+
+const { publication, href } = Astro.props;
+const authorName = publication.authorName.trim() || "Участник сообщества";
+const publishedDate = new Intl.DateTimeFormat("ru-RU", {
+	day: "numeric",
+	month: "long",
+	year: "numeric",
+}).format(new Date(publication.publishedAt));
+---
+
+<article class="h-full">
+	<a
+		href={href}
+		class="block h-full rounded-2xl bg-white px-4 py-4 shadow-[0_0.5px_0_rgba(0,0,0,0.12)] outline-none transition-[transform,background-color] duration-100 active:scale-[0.99] active:bg-zinc-50 focus-visible:ring-2 focus-visible:ring-blue-500 dark:bg-zinc-900 dark:shadow-[0_0.5px_0_rgba(255,255,255,0.18)] dark:active:bg-zinc-800 dark:focus-visible:ring-blue-400"
+	>
+		<h2 class="text-lg leading-snug font-semibold tracking-[-0.012em] text-zinc-950 dark:text-zinc-50">{publication.title}</h2>
+		<p class="mt-2 text-[0.9375rem] leading-relaxed text-zinc-600 dark:text-zinc-400">{publication.summary}</p>
+		<p class="mt-4 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs leading-relaxed text-zinc-500 dark:text-zinc-500">
+			<span>{authorName}</span>
+			<span aria-hidden="true">·</span>
+			<time datetime={publication.publishedAt}>{publishedDate}</time>
+		</p>
+	</a>
+</article>
