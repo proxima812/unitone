@@ -1,21 +1,21 @@
 // @ts-nocheck
 import { createHmac } from "node:crypto";
 import { afterEach, beforeEach, describe, expect, test } from "bun:test";
-import type { PublicationRecord } from "../../../lib/publications/types";
-import { verifiedAuthorizationProfile, verifiedRequestProfile } from "../../../lib/server/api";
+import type { PublicationRecord } from "../publications/types";
+import { verifiedAuthorizationProfile, verifiedRequestProfile } from "./api";
 import {
 	createPublicationRepository,
 	type PublicationRepository,
 	type PublicationTransport,
-} from "../../../lib/server/publications";
-import { createAdminAuthorHandlers } from "../admin/authors/[telegramId]";
-import { createAdminPublicationHandlers } from "../admin/publications/index";
-import { createPublishHandlers } from "../admin/publications/[id]/publish";
-import { createRejectHandlers } from "../admin/publications/[id]/reject";
-import { createProfilePublicationHandlers } from "../profile/publications";
-import { createPublicationDetailHandlers } from "./[id]";
-import { createSubmitHandlers } from "./[id]/submit";
-import { createPublicationIndexHandlers } from "./index";
+} from "./publications";
+import { createAdminAuthorHandlers } from "../../pages/api/admin/authors/[telegramId]";
+import { createAdminPublicationHandlers } from "../../pages/api/admin/publications/index";
+import { createPublishHandlers } from "../../pages/api/admin/publications/[id]/publish";
+import { createRejectHandlers } from "../../pages/api/admin/publications/[id]/reject";
+import { createProfilePublicationHandlers } from "../../pages/api/profile/publications";
+import { createPublicationDetailHandlers } from "../../pages/api/publications/[id]";
+import { createSubmitHandlers } from "../../pages/api/publications/[id]/submit";
+import { createPublicationIndexHandlers } from "../../pages/api/publications/index";
 
 class InMemoryPublicationTransport implements PublicationTransport {
 	readonly records = new Map<string, PublicationRecord>();
