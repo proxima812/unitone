@@ -17,7 +17,7 @@ interface Props {
 }
 
 const { entry } = Astro.props;
-const { title, description, since, wikipedia } = entry.data;
+const { title, description, since, wikipedia, sources } = entry.data;
 const [communityEntries, methodEntries] = await Promise.all([
 	getCollection("communities"),
 	getCollection("methods"),
@@ -50,11 +50,23 @@ const moreHref = relatedMethods.length > 6 && item.audienceIds[0]
 		<ul aria-label="Темы" class="flex flex-wrap gap-2">
 			{topicLabels.map((label) => <li class="rounded-full bg-blue-50 px-3 py-1 text-sm font-medium text-blue-700 dark:bg-blue-950 dark:text-blue-300">{label}</li>)}
 		</ul>
-		<div class="mt-3 flex items-start justify-between gap-3">
+		<div class="mt-3 flex flex-col items-start gap-3 sm:flex-row sm:justify-between">
 			<h1 class="text-[2rem] leading-[1.12] font-bold tracking-[-0.025em] text-balance">{title}</h1>
 			<FavoriteButton itemKey={item.key} label={item.title} variant="button" />
 		</div>
 		<p class="mt-5 text-[1.0625rem] leading-relaxed text-zinc-700 dark:text-zinc-300">{description}</p>
+		<section aria-labelledby="community-sources" class="mt-7 rounded-2xl bg-zinc-50 px-4 py-4 dark:bg-zinc-900">
+			<h2 id="community-sources" class="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Источники</h2>
+			<ul class="mt-2 space-y-2">
+				{sources.map((source) => (
+					<li>
+						<a class="inline-flex min-h-11 items-center text-[0.9375rem] font-medium text-blue-600 underline decoration-blue-600/30 underline-offset-2 active:opacity-60 dark:text-blue-400" href={source.url} target="_blank" rel="noreferrer">
+							{source.title}<span aria-hidden="true">&nbsp;↗</span>
+						</a>
+					</li>
+				))}
+			</ul>
+		</section>
 
 		{(since || wikipedia) && (
 			<dl class="mt-8 divide-y divide-zinc-200/80 border-y border-zinc-200/80 text-[1.0625rem] dark:divide-zinc-700/80 dark:border-zinc-700/80">

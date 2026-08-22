@@ -12,6 +12,7 @@ const communities = [
 		since: "1935",
 		wikipedia: "",
 		find: true,
+		sources: [{ title: "Источник", url: "https://example.com/aa" }],
 	},
 	{
 		id: "al-anon",
@@ -21,6 +22,7 @@ const communities = [
 		since: "1951",
 		wikipedia: "",
 		find: true,
+		sources: [{ title: "Источник", url: "https://example.com/al-anon" }],
 	},
 	{
 		id: "anonimnye-igroki",
@@ -30,6 +32,7 @@ const communities = [
 		since: "1957",
 		wikipedia: "",
 		find: true,
+		sources: [{ title: "Источник", url: "https://example.com/ga" }],
 	},
 	{
 		id: "anonimnye-kompyuternye-igroki",
@@ -39,6 +42,7 @@ const communities = [
 		since: "",
 		wikipedia: "",
 		find: true,
+		sources: [{ title: "Источник", url: "https://example.com/gaa" }],
 	},
 ];
 
@@ -78,6 +82,7 @@ describe("buildCatalogIndex", () => {
 					since: "1953",
 					wikipedia: "",
 					find: true,
+					sources: [{ title: "Источник", url: "https://example.com/na" }],
 				},
 			],
 			methods,

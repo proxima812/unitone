@@ -29,6 +29,12 @@ export interface RawCommunity {
 	since: string;
 	wikipedia: string;
 	find: boolean;
+	sources: CommunitySource[];
+}
+
+export interface CommunitySource {
+	title: string;
+	url: string;
 }
 
 export interface RawMethod {

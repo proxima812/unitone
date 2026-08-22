@@ -40,6 +40,10 @@ const communities = defineCollection({
 		wikipedia: z.string(),
 		find: z.boolean(),
 		category: z.string(),
+		sources: z.array(z.object({
+			title: z.string(),
+			url: z.url(),
+		})).min(1),
 	}),
 });
 
