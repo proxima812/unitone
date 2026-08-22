@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
-import { AppwriteConfigError, AppwriteRequestError, createCommunityProposal, upsertTelegramProfile } from "@/lib/server/appwrite";
-import { TelegramAuthError, telegramProfileData, verifyTelegramInitData } from "@/lib/server/telegram";
+import { AppwriteConfigError, AppwriteRequestError, createCommunityProposal, setCommunityProposalChannelMessage, upsertTelegramProfile } from "@/lib/server/appwrite";
+import { notifyChannelAboutCommunity, TelegramAuthError, telegramProfileData, verifyTelegramInitData } from "@/lib/server/telegram";
 
 const maxLength = {
 	title: 120,
@@ -73,6 +73,18 @@ export const POST: APIRoute = async ({ request }) => {
 		const profile = telegramProfileData(verified.user);
 		await upsertTelegramProfile(profile);
 		const proposalId = await createCommunityProposal(profile, proposal);
+		try {
+			const authorName = [profile.firstName, profile.lastName].filter(Boolean).join(" ").trim();
+			const messageId = await notifyChannelAboutCommunity({
+				title: proposal.title,
+				category: proposal.category,
+				authorName,
+				authorUsername: profile.username,
+			});
+			if (messageId) await setCommunityProposalChannelMessage(proposalId, messageId);
+		} catch (error) {
+			console.error("Failed to notify Telegram channel about community proposal.", error);
+		}
 		return json({ ok: true, proposalId });
 	} catch (error) {
 		if (error instanceof TelegramAuthError) return json({ ok: false, error: error.message }, 401);

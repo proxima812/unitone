@@ -18,6 +18,12 @@ export function createPublishHandlers(services: PublicationApiServices) {
 			const profile = await services.authenticateBody(request, body);
 			if (!services.isAdmin(profile.telegramId)) throw new ApiRequestError(403, "Нет доступа.");
 			const publication = await services.repository.moderatePublication(params.id, "published", "");
+			try {
+				const messageId = await services.notifyChannel?.(publication);
+				if (messageId) await services.repository.setChannelMessage(publication.id, messageId);
+			} catch (error) {
+				console.error("Failed to notify Telegram channel about publication.", error);
+			}
 			return jsonResponse({ ok: true, publication }, 200, true);
 		} catch (error) {
 			return apiErrorResponse(error, true);

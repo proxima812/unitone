@@ -91,6 +91,95 @@ export async function notifyAdminsAboutPublication(publication: {
 	if (failed.length) throw new Error(`Не удалось отправить ${failed.length} уведомлений администраторам.`);
 }
 
+function channelId(): string | undefined {
+	return env("TELEGRAM_CHANNEL_ID");
+}
+
+async function sendChannelMessage(text: string, url?: string): Promise<string | undefined> {
+	const chatId = channelId();
+	if (!chatId) return undefined;
+
+	const response = await fetch(`https://api.telegram.org/bot${botToken()}/sendMessage`, {
+		method: "POST",
+		headers: { "Content-Type": "application/json" },
+		body: JSON.stringify({
+			chat_id: chatId,
+			text,
+			...(url ? { reply_markup: { inline_keyboard: [[{ text: "Открыть", url }]] } } : {}),
+		}),
+	});
+	if (!response.ok) throw new Error(`Telegram API returned ${response.status}`);
+
+	const payload = await response.json() as { result?: { message_id?: number } };
+	return payload.result?.message_id != null ? String(payload.result.message_id) : undefined;
+}
+
+export async function deleteChannelMessage(messageId: string): Promise<void> {
+	const chatId = channelId();
+	if (!chatId || !messageId.trim()) return;
+
+	const response = await fetch(`https://api.telegram.org/bot${botToken()}/deleteMessage`, {
+		method: "POST",
+		headers: { "Content-Type": "application/json" },
+		body: JSON.stringify({ chat_id: chatId, message_id: Number(messageId) }),
+	});
+	if (!response.ok) throw new Error(`Telegram API returned ${response.status}`);
+}
+
+const publicationTypeLabels: Record<string, string> = {
+	material: "материал",
+	post: "пост",
+	experience: "опыт",
+};
+
+const publicationTypePaths: Record<string, string> = {
+	material: "materials",
+	post: "posts",
+	experience: "experience",
+};
+
+const siteBaseUrl = "https://unityone.appwrite.network";
+
+export async function notifyChannelAboutPublication(publication: {
+	id: string;
+	type: string;
+	title: string;
+	authorName: string;
+	authorUsername: string;
+}): Promise<string | undefined> {
+	const label = publicationTypeLabels[publication.type];
+	if (!label) return undefined;
+
+	const author = publication.authorUsername
+		? `${publication.authorName || "Без имени"} (@${publication.authorUsername})`
+		: publication.authorName || "Без имени";
+	const text = [
+		`Новый ${label}: ${publication.title}`,
+		`Автор: ${author}`,
+	].join("\n");
+	const path = publicationTypePaths[publication.type] ?? "posts";
+
+	return sendChannelMessage(text, `${siteBaseUrl}/app/${path}/${publication.id}/`);
+}
+
+export async function notifyChannelAboutCommunity(proposal: {
+	title: string;
+	category: string;
+	authorName: string;
+	authorUsername: string;
+}): Promise<string | undefined> {
+	const author = proposal.authorUsername
+		? `${proposal.authorName || "Без имени"} (@${proposal.authorUsername})`
+		: proposal.authorName || "Без имени";
+	const text = [
+		`Новое сообщество: ${proposal.title}`,
+		proposal.category ? `Категория: ${proposal.category}` : "",
+		`Предложил: ${author}`,
+	].filter(Boolean).join("\n");
+
+	return sendChannelMessage(text);
+}
+
 function maxAgeSeconds(): number {
 	const raw = env("TELEGRAM_AUTH_MAX_AGE_SECONDS");
 	if (!raw) return 60 * 60 * 24;

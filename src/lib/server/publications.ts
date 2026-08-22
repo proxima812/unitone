@@ -12,6 +12,7 @@ export interface PublicationTransport {
 	create(data: Omit<PublicationRecord, "id">): Promise<PublicationRecord>;
 	get(id: string): Promise<PublicationRecord | null>;
 	update(id: string, data: Partial<PublicationRecord>): Promise<PublicationRecord>;
+	remove(id: string): Promise<void>;
 	list(queries: string[]): Promise<PublicationRecord[]>;
 }
 
@@ -45,6 +46,8 @@ export interface PublicationRepository {
 	updatePublication(id: string, telegramId: string, input: PublicationInput): Promise<PublicationRecord>;
 	submitPublication(id: string, telegramId: string): Promise<PublicationRecord>;
 	moderatePublication(id: string, action: "published" | "rejected", note: string): Promise<PublicationRecord>;
+	deletePublication(id: string, telegramId: string): Promise<PublicationRecord>;
+	setChannelMessage(id: string, messageId: string): Promise<PublicationRecord>;
 	listPublishedPublications(filters?: PublishedPublicationFilters): Promise<PublicPublication[]>;
 	getPublicationForViewer(id: string, telegramId?: string): Promise<PublicPublication | null>;
 	listAuthorPublications(telegramId: string): Promise<PublicationRecord[]>;
@@ -106,6 +109,7 @@ export function createPublicationRepository(transport: PublicationTransport): Pu
 				authorUsername: profile.username,
 				authorPhotoUrl: profile.photoUrl,
 				moderationNote: "",
+				telegramChannelMessageId: "",
 				createdAt: now,
 				updatedAt: now,
 				submittedAt: "",
@@ -162,6 +166,17 @@ export function createPublicationRepository(transport: PublicationTransport): Pu
 				publishedAt: action === "published" ? now : "",
 				updatedAt: now,
 			});
+		},
+
+		async deletePublication(id, telegramId) {
+			const current = await requiredPublication(transport, id);
+			requireOwner(current, telegramId);
+			await transport.remove(id);
+			return current;
+		},
+
+		async setChannelMessage(id, messageId) {
+			return transport.update(id, { telegramChannelMessageId: messageId });
 		},
 
 		async listPublishedPublications(filters = {}) {
@@ -234,6 +249,14 @@ export function submitPublication(id: string, telegramId: string) {
 
 export function moderatePublication(id: string, action: "published" | "rejected", note: string) {
 	return configuredRepository().moderatePublication(id, action, note);
+}
+
+export function deletePublication(id: string, telegramId: string) {
+	return configuredRepository().deletePublication(id, telegramId);
+}
+
+export function setChannelMessage(id: string, messageId: string) {
+	return configuredRepository().setChannelMessage(id, messageId);
 }
 
 export function listPublishedPublications(filters: PublishedPublicationFilters = {}) {

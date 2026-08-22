@@ -155,6 +155,7 @@ async function appwriteFetch<T>(config: AppwriteBaseConfig, path: string, init: 
 		throw new AppwriteRequestError(message, response.status, code);
 	}
 
+	if (response.status === 204) return undefined as T;
 	return response.json() as Promise<T>;
 }
 
@@ -195,12 +196,43 @@ export async function upsertTelegramProfile(profile: TelegramProfileData): Promi
 	}
 }
 
+export interface CommunityProposalDocument extends CommunityProposalData {
+	id: string;
+	telegramId: string;
+	telegramUsername: string;
+	telegramFirstName: string;
+	telegramLastName: string;
+	telegramChannelMessageId: string;
+}
+
+function communityProposalsDocumentsPath(config: CommunityProposalConfig): string {
+	return `/databases/${encodeURIComponent(config.databaseId)}/collections/${encodeURIComponent(config.communityProposalsCollectionId)}/documents`;
+}
+
+function communityProposalFromDocument(document: Record<string, unknown> & { $id: string }): CommunityProposalDocument {
+	return {
+		id: document.$id,
+		title: String(document.title ?? ""),
+		description: String(document.description ?? ""),
+		category: String(document.category ?? ""),
+		since: String(document.since ?? ""),
+		website: String(document.website ?? ""),
+		finderUrl: String(document.finderUrl ?? ""),
+		notes: String(document.notes ?? ""),
+		telegramId: String(document.telegramId ?? ""),
+		telegramUsername: String(document.telegramUsername ?? ""),
+		telegramFirstName: String(document.telegramFirstName ?? ""),
+		telegramLastName: String(document.telegramLastName ?? ""),
+		telegramChannelMessageId: String(document.telegramChannelMessageId ?? ""),
+	};
+}
+
 export async function createCommunityProposal(profile: TelegramProfileData, proposal: CommunityProposalData): Promise<string> {
 	const config = readCommunityProposalConfig();
 	const documentId = randomUUID();
 	const now = new Date().toISOString();
 
-	await appwriteFetch(config, `/databases/${encodeURIComponent(config.databaseId)}/collections/${encodeURIComponent(config.communityProposalsCollectionId)}/documents`, {
+	await appwriteFetch(config, communityProposalsDocumentsPath(config), {
 		method: "POST",
 		body: JSON.stringify({
 			documentId,
@@ -228,6 +260,35 @@ export async function createCommunityProposal(profile: TelegramProfileData, prop
 	return documentId;
 }
 
+export async function getCommunityProposal(id: string): Promise<CommunityProposalDocument | null> {
+	const config = readCommunityProposalConfig();
+	try {
+		const document = await appwriteFetch<Record<string, unknown> & { $id: string }>(
+			config,
+			`${communityProposalsDocumentsPath(config)}/${encodeURIComponent(id)}`,
+		);
+		return communityProposalFromDocument(document);
+	} catch (error) {
+		if (error instanceof AppwriteRequestError && error.status === 404) return null;
+		throw error;
+	}
+}
+
+export async function setCommunityProposalChannelMessage(id: string, messageId: string): Promise<void> {
+	const config = readCommunityProposalConfig();
+	await appwriteFetch(config, `${communityProposalsDocumentsPath(config)}/${encodeURIComponent(id)}`, {
+		method: "PATCH",
+		body: JSON.stringify({ data: { telegramChannelMessageId: messageId } }),
+	});
+}
+
+export async function deleteCommunityProposal(id: string): Promise<void> {
+	const config = readCommunityProposalConfig();
+	await appwriteFetch(config, `${communityProposalsDocumentsPath(config)}/${encodeURIComponent(id)}`, {
+		method: "DELETE",
+	});
+}
+
 type AppwritePublicationDocument = Omit<PublicationRecord, "id"> & {
 	$id: string;
 };
@@ -249,6 +310,7 @@ function publicationFromDocument(document: AppwritePublicationDocument): Publica
 		authorUsername: document.authorUsername,
 		authorPhotoUrl: document.authorPhotoUrl,
 		moderationNote: document.moderationNote,
+		telegramChannelMessageId: document.telegramChannelMessageId ?? "",
 		createdAt: document.createdAt,
 		updatedAt: document.updatedAt,
 		submittedAt: document.submittedAt,
@@ -285,6 +347,10 @@ export function createAppwritePublicationTransport(): PublicationTransport {
 				body: JSON.stringify({ data }),
 			});
 			return publicationFromDocument(document);
+		},
+
+		async remove(id) {
+			await appwriteFetch<void>(config, `${documentsPath}/${encodeURIComponent(id)}`, { method: "DELETE" });
 		},
 
 		async list(queries) {

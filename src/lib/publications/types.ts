@@ -22,6 +22,7 @@ export interface PublicationRecord extends PublicationInput {
 	authorUsername: string;
 	authorPhotoUrl: string;
 	moderationNote: string;
+	telegramChannelMessageId: string;
 	createdAt: string;
 	updatedAt: string;
 	submittedAt: string;

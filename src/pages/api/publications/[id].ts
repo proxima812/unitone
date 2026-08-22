@@ -46,7 +46,26 @@ export function createPublicationDetailHandlers(services: PublicationApiServices
 		}
 	};
 
-	return { GET, PATCH };
+	const DELETE: APIRoute = async ({ request, params }) => {
+		try {
+			const id = requiredId(params.id);
+			const body = await readJsonObject(request);
+			const profile = await services.authenticateBody(request, body);
+			const publication = await services.repository.deletePublication(id, profile.telegramId);
+			try {
+				if (publication.telegramChannelMessageId) {
+					await services.deleteChannelMessage?.(publication.telegramChannelMessageId);
+				}
+			} catch (error) {
+				console.error("Failed to delete Telegram channel message.", error);
+			}
+			return jsonResponse({ ok: true }, 200, true);
+		} catch (error) {
+			return apiErrorResponse(error, true);
+		}
+	};
+
+	return { GET, PATCH, DELETE };
 }
 
-export const { GET, PATCH } = createPublicationDetailHandlers(publicationApiServices);
+export const { GET, PATCH, DELETE } = createPublicationDetailHandlers(publicationApiServices);

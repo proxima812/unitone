@@ -8,6 +8,7 @@ import {
 } from "./appwrite";
 import {
 	createPublication,
+	deletePublication,
 	getAdminAuthorOverview,
 	getPublicationForViewer,
 	listAuthorPublications,
@@ -16,12 +17,15 @@ import {
 	moderatePublication,
 	PublicationRepositoryError,
 	type PublicationRepository,
+	setChannelMessage,
 	submitPublication,
 	updatePublication,
 } from "./publications";
 import {
+	deleteChannelMessage,
 	isTelegramAdmin,
 	notifyAdminsAboutPublication,
+	notifyChannelAboutPublication,
 	TelegramAuthError,
 	telegramProfileData,
 	verifyTelegramInitData,
@@ -55,6 +59,8 @@ export interface PublicationApiServices {
 	authenticateHeader: AuthenticateHeader;
 	isAdmin(telegramId: string): boolean;
 	notifySubmission?(publication: PublicationRecord): Promise<void>;
+	notifyChannel?(publication: PublicationRecord): Promise<string | undefined>;
+	deleteChannelMessage?(messageId: string): Promise<void>;
 }
 
 export function jsonResponse(
@@ -165,6 +171,8 @@ const repository: PublicationRepository = {
 	updatePublication,
 	submitPublication,
 	moderatePublication,
+	deletePublication,
+	setChannelMessage,
 	listPublishedPublications,
 	getPublicationForViewer,
 	listAuthorPublications,
@@ -178,4 +186,6 @@ export const publicationApiServices: PublicationApiServices = {
 	authenticateHeader: verifiedAuthorizationProfile,
 	isAdmin: isTelegramAdmin,
 	notifySubmission: notifyAdminsAboutPublication,
+	notifyChannel: notifyChannelAboutPublication,
+	deleteChannelMessage,
 };
