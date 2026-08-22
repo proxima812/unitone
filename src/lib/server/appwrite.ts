@@ -226,6 +226,8 @@ type AppwritePublicationDocument = Omit<PublicationRecord, "id"> & {
 	$id: string;
 };
 
+const publicationPageSize = 25;
+
 function publicationFromDocument(document: AppwritePublicationDocument): PublicationRecord {
 	return {
 		id: document.$id,
@@ -280,11 +282,36 @@ export function createAppwritePublicationTransport(): PublicationTransport {
 		},
 
 		async list(queries) {
-			const params = new URLSearchParams();
-			for (const query of queries) params.append("queries[]", query);
-			const suffix = params.size > 0 ? `?${params.toString()}` : "";
-			const result = await appwriteFetch<{ documents: AppwritePublicationDocument[] }>(config, `${documentsPath}${suffix}`);
-			return result.documents.map(publicationFromDocument);
+			const documents: AppwritePublicationDocument[] = [];
+			const documentIds = new Set<string>();
+			let cursor: string | undefined;
+
+			while (true) {
+				const params = new URLSearchParams();
+				for (const query of queries) params.append("queries[]", query);
+				params.append("queries[]", `limit(${publicationPageSize})`);
+				if (cursor) params.append("queries[]", `cursorAfter(${JSON.stringify(cursor)})`);
+
+				const result = await appwriteFetch<{ total: number; documents: AppwritePublicationDocument[] }>(
+					config,
+					`${documentsPath}?${params.toString()}`,
+				);
+				for (const document of result.documents) {
+					if (!documentIds.has(document.$id)) {
+						documentIds.add(document.$id);
+						documents.push(document);
+					}
+				}
+
+				if (result.documents.length < publicationPageSize || documents.length >= result.total) break;
+				const nextCursor = result.documents.at(-1)?.$id;
+				if (!nextCursor || nextCursor === cursor) {
+					throw new AppwriteRequestError("Appwrite pagination cursor did not advance.", 502, "pagination_cursor_stalled");
+				}
+				cursor = nextCursor;
+			}
+
+			return documents.map(publicationFromDocument);
 		},
 	};
 }

@@ -79,7 +79,7 @@ describe("publication repository policy", () => {
 		const { repository } = setup();
 		const publication = await repository.createPublication(alice, input);
 
-		expect(repository.updatePublication(publication.id, bob.telegramId, { ...input, title: "Чужая правка" }))
+		await expect(repository.updatePublication(publication.id, bob.telegramId, { ...input, title: "Чужая правка" }))
 			.rejects.toMatchObject({ code: "forbidden" });
 	});
 
@@ -88,7 +88,7 @@ describe("publication repository policy", () => {
 		const publication = await repository.createPublication(alice, input);
 		await repository.submitPublication(publication.id, alice.telegramId);
 
-		expect(repository.updatePublication(publication.id, alice.telegramId, { ...input, title: "Поздняя правка" }))
+		await expect(repository.updatePublication(publication.id, alice.telegramId, { ...input, title: "Поздняя правка" }))
 			.rejects.toMatchObject({ code: "conflict" });
 	});
 
@@ -111,7 +111,7 @@ describe("publication repository policy", () => {
 		const publication = await repository.createPublication(alice, input);
 		await repository.submitPublication(publication.id, alice.telegramId);
 
-		expect(repository.moderatePublication(publication.id, "rejected", "   "))
+		await expect(repository.moderatePublication(publication.id, "rejected", "   "))
 			.rejects.toMatchObject({ code: "validation" });
 	});
 });
