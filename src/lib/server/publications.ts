@@ -7,6 +7,12 @@ import type {
 } from "../publications/types";
 import { validatePublicationInput, validateStatusTransition } from "../publications/validation";
 import { createAppwritePublicationTransport, type TelegramProfileData } from "./appwrite";
+import { cached, invalidateCache } from "./cache";
+
+const PUBLISHED_LIST_TTL_MS = 60_000;
+const AUTHOR_LIST_TTL_MS = 30_000;
+const REVIEW_QUEUE_TTL_MS = 20_000;
+const CACHE_PREFIX = "publications:";
 
 export interface PublicationTransport {
 	create(data: Omit<PublicationRecord, "id">): Promise<PublicationRecord>;
@@ -101,7 +107,7 @@ export function createPublicationRepository(transport: PublicationTransport): Pu
 		async createPublication(profile, input) {
 			const publication = normalizedInput(input);
 			const now = new Date().toISOString();
-			return transport.create({
+			const created = await transport.create({
 				...publication,
 				status: "draft",
 				authorTelegramId: profile.telegramId,
@@ -115,6 +121,8 @@ export function createPublicationRepository(transport: PublicationTransport): Pu
 				submittedAt: "",
 				publishedAt: "",
 			});
+			invalidateCache(CACHE_PREFIX);
+			return created;
 		},
 
 		async updatePublication(id, telegramId, input) {
@@ -124,11 +132,13 @@ export function createPublicationRepository(transport: PublicationTransport): Pu
 				return repositoryError("conflict", "Отправленную или опубликованную запись нельзя редактировать.");
 			}
 
-			return transport.update(id, {
+			const updated = await transport.update(id, {
 				...normalizedInput(input),
 				status: "draft",
 				updatedAt: new Date().toISOString(),
 			});
+			invalidateCache(CACHE_PREFIX);
+			return updated;
 		},
 
 		async submitPublication(id, telegramId) {
@@ -138,12 +148,14 @@ export function createPublicationRepository(transport: PublicationTransport): Pu
 			requireTransition("author", current.status, "review");
 
 			const now = new Date().toISOString();
-			return transport.update(id, {
+			const updated = await transport.update(id, {
 				status: "review",
 				moderationNote: "",
 				submittedAt: now,
 				updatedAt: now,
 			});
+			invalidateCache(CACHE_PREFIX);
+			return updated;
 		},
 
 		async moderatePublication(id, action, note) {
@@ -160,36 +172,44 @@ export function createPublicationRepository(transport: PublicationTransport): Pu
 			}
 
 			const now = new Date().toISOString();
-			return transport.update(id, {
+			const updated = await transport.update(id, {
 				status: action,
 				moderationNote: action === "rejected" ? moderationNote : "",
 				publishedAt: action === "published" ? now : "",
 				updatedAt: now,
 			});
+			invalidateCache(CACHE_PREFIX);
+			return updated;
 		},
 
 		async deletePublication(id, telegramId) {
 			const current = await requiredPublication(transport, id);
 			requireOwner(current, telegramId);
 			await transport.remove(id);
+			invalidateCache(CACHE_PREFIX);
 			return current;
 		},
 
 		async setChannelMessage(id, messageId) {
-			return transport.update(id, { telegramChannelMessageId: messageId });
+			const updated = await transport.update(id, { telegramChannelMessageId: messageId });
+			invalidateCache(CACHE_PREFIX);
+			return updated;
 		},
 
 		async listPublishedPublications(filters = {}) {
-			const queries = [queryEqual("status", "published")];
-			if (filters.type) queries.push(queryEqual("type", filters.type));
-			if (filters.category?.trim()) queries.push(queryEqual("category", filters.category.trim()));
-			if (filters.tag?.trim()) queries.push(queryEqual("tags", filters.tag.trim()));
-			queries.push(queryOrder("Desc", "publishedAt"));
+			const cacheKey = `${CACHE_PREFIX}published:${filters.type ?? ""}:${filters.category?.trim() ?? ""}:${filters.tag?.trim() ?? ""}`;
+			return cached(cacheKey, PUBLISHED_LIST_TTL_MS, async () => {
+				const queries = [queryEqual("status", "published")];
+				if (filters.type) queries.push(queryEqual("type", filters.type));
+				if (filters.category?.trim()) queries.push(queryEqual("category", filters.category.trim()));
+				if (filters.tag?.trim()) queries.push(queryEqual("tags", filters.tag.trim()));
+				queries.push(queryOrder("Desc", "publishedAt"));
 
-			const publications = await transport.list(queries);
-			return publications
-				.filter((publication) => publication.status === "published")
-				.map(publicPublication);
+				const publications = await transport.list(queries);
+				return publications
+					.filter((publication) => publication.status === "published")
+					.map(publicPublication);
+			});
 		},
 
 		async getPublicationForViewer(id, telegramId) {
@@ -200,17 +220,17 @@ export function createPublicationRepository(transport: PublicationTransport): Pu
 		},
 
 		async listAuthorPublications(telegramId) {
-			return transport.list([
+			return cached(`${CACHE_PREFIX}author:${telegramId}`, AUTHOR_LIST_TTL_MS, () => transport.list([
 				queryEqual("authorTelegramId", telegramId),
 				queryOrder("Desc", "updatedAt"),
-			]);
+			]));
 		},
 
 		async getAdminAuthorOverview(telegramId) {
-			const publications = await transport.list([
+			const publications = await cached(`${CACHE_PREFIX}author:${telegramId}`, AUTHOR_LIST_TTL_MS, () => transport.list([
 				queryEqual("authorTelegramId", telegramId),
 				queryOrder("Desc", "updatedAt"),
-			]);
+			]));
 			const latest = publications[0];
 			if (!latest) return null;
 			return {
@@ -223,10 +243,10 @@ export function createPublicationRepository(transport: PublicationTransport): Pu
 		},
 
 		async listReviewQueue() {
-			return transport.list([
+			return cached(`${CACHE_PREFIX}review-queue`, REVIEW_QUEUE_TTL_MS, () => transport.list([
 				queryEqual("status", "review"),
 				queryOrder("Asc", "submittedAt"),
-			]);
+			]));
 		},
 	};
 }
