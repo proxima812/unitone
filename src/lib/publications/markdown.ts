@@ -41,13 +41,15 @@ function renderInline(value: string): string {
 		.replace(/\*([^*]+)\*/g, "<em>$1</em>");
 }
 
+type ListBlock = { tag: "ul" | "ol"; items: string[] };
+
 export function renderPublicationMarkdown(source: string): string {
 	validateSource(source);
 
 	const blocks: string[] = [];
 	const lines = source.replaceAll("\r\n", "\n").split("\n");
 	let paragraph: string[] = [];
-	let list: { tag: "ul" | "ol"; items: string[] } | null = null;
+	let list: ListBlock | null = null;
 
 	const flushParagraph = () => {
 		if (paragraph.length) {
@@ -73,11 +75,13 @@ export function renderPublicationMarkdown(source: string): string {
 		} else if (unordered || ordered) {
 			flushParagraph();
 			const tag = unordered ? "ul" : "ol";
-			if (list?.tag !== tag) {
+			let nextList = list as ListBlock | null;
+			if (nextList?.tag !== tag) {
 				flushList();
-				list = { tag, items: [] };
+				nextList = { tag, items: [] };
+				list = nextList;
 			}
-			list.items.push((unordered ?? ordered)![1]);
+			nextList.items.push((unordered ?? ordered)![1]);
 		} else if (!line.trim()) {
 			flushParagraph();
 			flushList();
