@@ -1,11 +1,7 @@
 export const markdownFormats = [
-	"h2",
-	"h3",
 	"bold",
 	"italic",
 	"link",
-	"unordered-list",
-	"ordered-list",
 ] as const;
 
 export type MarkdownFormat = (typeof markdownFormats)[number];
@@ -50,22 +46,9 @@ export function formatSelection(
 		return replaceSelection(value, selectionStart, selectionEnd, `${marker}${selected}${marker}`, marker.length, selected.length);
 	}
 
-	if (action === "link") {
-		const url = linkUrl.trim();
-		if (!url) return { value, selectionStart, selectionEnd };
-		return replaceSelection(value, selectionStart, selectionEnd, `[${selected}](${url})`, 1, selected.length);
-	}
-
-	const lines = selected.split("\n");
-	const prefix = action === "h2"
-		? () => "## "
-		: action === "h3"
-			? () => "### "
-			: action === "unordered-list"
-				? () => "- "
-				: () => "1. ";
-	const replacement = lines.map((line) => `${prefix()}${line}`).join("\n");
-	return replaceSelection(value, selectionStart, selectionEnd, replacement);
+	const url = linkUrl.trim();
+	if (!url) return { value, selectionStart, selectionEnd };
+	return replaceSelection(value, selectionStart, selectionEnd, `[${selected}](${url})`, 1, selected.length);
 }
 
 export function applyMarkdownFormat(
@@ -90,14 +73,71 @@ export function applyMarkdownFormat(
 if (typeof document !== "undefined") {
 	document.querySelectorAll<HTMLElement>("[data-publication-editor]").forEach((editor) => {
 		const textarea = editor.querySelector<HTMLTextAreaElement>("textarea[data-editor-content]");
+		const toolbar = editor.querySelector<HTMLElement>("[data-selection-toolbar]");
+		const defaultActions = editor.querySelector<HTMLElement>("[data-default-actions]");
+		const linkPanel = editor.querySelector<HTMLElement>("[data-link-panel]");
 		const linkInput = editor.querySelector<HTMLInputElement>("[data-link-url]");
-		if (!textarea) return;
+		const openLinkButton = editor.querySelector<HTMLButtonElement>("[data-open-link]");
+		const applyLinkButton = editor.querySelector<HTMLButtonElement>("[data-apply-link]");
+		if (!textarea || !toolbar || !defaultActions || !linkPanel) return;
 
-		editor.querySelectorAll<HTMLButtonElement>("button[data-format]").forEach((button) => {
+		function showDefaultActions(): void {
+			toolbar!.hidden = false;
+			defaultActions!.hidden = false;
+			linkPanel!.hidden = true;
+		}
+
+		function hideToolbar(): void {
+			toolbar!.hidden = true;
+			defaultActions!.hidden = false;
+			linkPanel!.hidden = true;
+			if (linkInput) linkInput.value = "";
+		}
+
+		function syncToolbarToSelection(): void {
+			if (!linkPanel!.hidden) return;
+			if (textarea!.selectionStart === textarea!.selectionEnd) {
+				hideToolbar();
+				return;
+			}
+			showDefaultActions();
+		}
+
+		textarea.addEventListener("select", syncToolbarToSelection);
+		textarea.addEventListener("keyup", syncToolbarToSelection);
+		textarea.addEventListener("mouseup", syncToolbarToSelection);
+		textarea.addEventListener("touchend", syncToolbarToSelection);
+		textarea.addEventListener("blur", () => {
+			window.setTimeout(() => {
+				if (!editor.contains(document.activeElement)) hideToolbar();
+			}, 0);
+		});
+
+		defaultActions.querySelectorAll<HTMLButtonElement>("button[data-format]").forEach((button) => {
 			button.addEventListener("click", () => {
-				applyMarkdownFormat(textarea, button.dataset.format ?? "", linkInput?.value ?? "");
-				if (button.dataset.format === "link" && linkInput) linkInput.value = "";
+				applyMarkdownFormat(textarea, button.dataset.format ?? "");
+				// The formatted text stays selected, so keep the popup open on the default actions.
+				showDefaultActions();
 			});
+		});
+
+		openLinkButton?.addEventListener("click", () => {
+			defaultActions.hidden = true;
+			linkPanel!.hidden = false;
+			linkInput?.focus();
+		});
+
+		applyLinkButton?.addEventListener("click", () => {
+			applyMarkdownFormat(textarea, "link", linkInput?.value ?? "");
+			if (linkInput) linkInput.value = "";
+			showDefaultActions();
+		});
+
+		linkInput?.addEventListener("keydown", (event) => {
+			if (event.key === "Enter") {
+				event.preventDefault();
+				applyLinkButton?.click();
+			}
 		});
 	});
 }
