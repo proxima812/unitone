@@ -45,6 +45,7 @@ const pageTitle = `${title} — 12 шагов`;
 		<meta name="twitter:title" content={pageTitle} />
 		<meta name="twitter:description" content={description} />
 		{jsonLd && <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+		<script is:inline src="https://telegram.org/js/telegram-web-app.js"></script>
 		<title>{pageTitle}</title>
 	</head>
 	<body>
@@ -61,5 +62,8 @@ const pageTitle = `${title} — 12 шагов`;
 			<slot />
 		</main>
 		<AppBottomNav />
+		<script>
+			import "@/scripts/telegram-profile";
+		</script>
 	</body>
 </html>

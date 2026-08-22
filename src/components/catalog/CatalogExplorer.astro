@@ -80,35 +80,38 @@ const data = JSON.stringify({
 		</button>
 	</div>
 
-	<div
-		data-catalog-filters
-		role="group"
-		aria-label={filterParam === "topic" ? "Темы" : "Сообщества"}
-		class="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:-mx-6 sm:px-6"
-	>
-		<button
-			type="button"
-			data-catalog-filter=""
-			aria-pressed="true"
-			class="inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-full bg-white/70 px-4 text-sm font-semibold text-zinc-700 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.08)] outline-none transition-[transform,background-color,color] aria-pressed:bg-blue-600 aria-pressed:text-white aria-pressed:shadow-none active:scale-[0.97] focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-100 dark:bg-zinc-900/70 dark:text-zinc-200 dark:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.13)] dark:aria-pressed:bg-blue-500 dark:aria-pressed:text-white dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-black"
+	<div class="space-y-2">
+		<p class="px-1 text-sm font-semibold text-zinc-700 dark:text-zinc-300">Категории</p>
+		<div
+			data-catalog-filters
+			role="group"
+			aria-label={filterParam === "topic" ? "Темы" : "Сообщества"}
+			class="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:-mx-6 sm:px-6"
 		>
-			<span data-catalog-filter-check aria-hidden="true">✓</span>
-			<span data-catalog-filter-state class="sr-only">Выбрано: </span>
-			Все
-		</button>
-		{visibleFilters.map((filter) => (
 			<button
 				type="button"
-				data-catalog-filter={filter.id}
-				aria-pressed="false"
-				class="inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-full bg-white/70 px-4 text-sm font-semibold text-zinc-700 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.08)] outline-none transition-[transform,background-color,color] aria-pressed:bg-blue-600 aria-pressed:text-white aria-pressed:shadow-none active:scale-[0.97] focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-100 dark:bg-zinc-900/70 dark:text-zinc-200 dark:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.13)] dark:aria-pressed:bg-blue-500 dark:aria-pressed:text-white dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-black"
+				data-catalog-filter=""
+				aria-pressed="true"
+				class="inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-full bg-white px-4 text-sm font-semibold text-zinc-700 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.12)] outline-none transition-[transform,background-color,color] aria-pressed:bg-blue-600 aria-pressed:text-white aria-pressed:shadow-none active:scale-[0.97] focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-100 dark:bg-zinc-900 dark:text-zinc-200 dark:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.18)] dark:aria-pressed:bg-blue-500 dark:aria-pressed:text-white dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-black"
 			>
-				<span data-catalog-filter-check aria-hidden="true" hidden>✓</span>
-				<span data-catalog-filter-state class="sr-only" hidden>Выбрано: </span>
-				{filter.label}
-				<span class="font-normal opacity-70">{filter.count}</span>
+				<span data-catalog-filter-check aria-hidden="true">✓</span>
+				<span data-catalog-filter-state class="sr-only">Выбрано: </span>
+				Все
 			</button>
-		))}
+			{visibleFilters.map((filter) => (
+				<button
+					type="button"
+					data-catalog-filter={filter.id}
+					aria-pressed="false"
+					class="group inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-full bg-white px-4 text-sm font-semibold text-zinc-700 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.12)] outline-none transition-[transform,background-color,color] aria-pressed:bg-blue-600 aria-pressed:text-white aria-pressed:shadow-none active:scale-[0.97] focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-100 dark:bg-zinc-900 dark:text-zinc-200 dark:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.18)] dark:aria-pressed:bg-blue-500 dark:aria-pressed:text-white dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-black"
+				>
+					<span data-catalog-filter-check aria-hidden="true" hidden>✓</span>
+					<span data-catalog-filter-state class="sr-only" hidden>Выбрано: </span>
+					{filter.label}
+					<span class="rounded-full bg-zinc-100 px-1.5 py-0.5 text-xs leading-none font-medium text-zinc-500 group-aria-pressed:bg-white/20 group-aria-pressed:text-white dark:bg-zinc-800 dark:text-zinc-400 dark:group-aria-pressed:bg-white/20 dark:group-aria-pressed:text-white">{filter.count}</span>
+				</button>
+			))}
+		</div>
 	</div>
 
 	{visibleTopicFilters.length > 0 && (
@@ -156,11 +159,11 @@ const data = JSON.stringify({
 						class="divide-y divide-zinc-200/80 overflow-hidden rounded-2xl bg-white/80 shadow-[0_0.5px_0_rgba(0,0,0,0.12)] backdrop-blur-xl motion-reduce:backdrop-blur-none dark:divide-zinc-700/80 dark:bg-zinc-900/80 dark:shadow-[0_0.5px_0_rgba(255,255,255,0.18)] contrast-more:ring-1 contrast-more:ring-current"
 					>
 						{groupItems.map((item) => (
-							<div data-catalog-item={item.key} class="flex min-h-16 items-center gap-2">
+							<div data-catalog-item={item.key} class="flex min-h-16 items-center gap-0">
 								<a
 									href={item.href}
 									data-catalog-result-link
-									class="group flex min-h-16 min-w-0 flex-1 items-center gap-3 rounded-xl px-5 py-4 outline-none transition-[transform,background-color] duration-100 active:scale-[0.99] active:bg-zinc-100 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500 dark:active:bg-zinc-800 dark:focus-visible:ring-blue-400"
+									class="group flex min-h-16 min-w-0 flex-1 items-center gap-2 rounded-xl py-3.5 pr-1 pl-4 outline-none transition-[transform,background-color] duration-100 active:scale-[0.99] active:bg-zinc-100 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500 dark:active:bg-zinc-800 dark:focus-visible:ring-blue-400"
 								>
 									<span class="min-w-0 flex-1">
 										<strong class="block text-[1.0625rem] leading-snug font-semibold tracking-[-0.01em]">{item.title}</strong>

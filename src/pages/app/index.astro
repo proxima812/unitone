@@ -40,6 +40,7 @@ const index = buildCatalogIndex({
 	<nav aria-label="Полные каталоги" class="mt-4 flex flex-wrap gap-2 px-1">
 		<a href="/app/communities/" data-catalog-reset-path="/app/communities/" class="inline-flex min-h-11 items-center rounded-xl px-3 text-sm font-semibold text-blue-600 outline-none transition-[transform,opacity] active:scale-[0.97] active:opacity-70 focus-visible:ring-2 focus-visible:ring-blue-500 dark:text-blue-400 dark:focus-visible:ring-blue-400">Все сообщества ({index.communities.length})</a>
 		<a href="/app/methods/" data-catalog-reset-path="/app/methods/" class="inline-flex min-h-11 items-center rounded-xl px-3 text-sm font-semibold text-blue-600 outline-none transition-[transform,opacity] active:scale-[0.97] active:opacity-70 focus-visible:ring-2 focus-visible:ring-blue-500 dark:text-blue-400 dark:focus-visible:ring-blue-400">Все методы ({index.methods.length})</a>
+		<a href="/app/new-community/" class="inline-flex min-h-11 items-center rounded-xl px-3 text-sm font-semibold text-blue-600 outline-none transition-[transform,opacity] active:scale-[0.97] active:opacity-70 focus-visible:ring-2 focus-visible:ring-blue-500 dark:text-blue-400 dark:focus-visible:ring-blue-400">Добавить сообщество</a>
 	</nav>
 
 	<PersonalShelf items={index.items} />

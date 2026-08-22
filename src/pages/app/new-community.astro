@@ -1,0 +1,83 @@
+---
+import AppLayout from "@/layouts/AppLayout.astro";
+import { buildCanonical, buildJsonLd } from "@/lib/catalog/seo";
+---
+
+<AppLayout
+	title="Новое сообщество"
+	description="Форма предложения нового сообщества для каталога Unity One."
+	canonical={buildCanonical("/app/new-community/")}
+	jsonLd={buildJsonLd("/app/new-community/", "Новое сообщество", "Форма предложения нового сообщества для каталога Unity One.")}
+	backHref="/app/"
+	backLabel="Материалы"
+>
+	<section class="px-2 pb-8">
+		<header class="pb-6">
+			<p class="text-sm font-semibold tracking-[0.01em] text-blue-600 dark:text-blue-400">Предложить карточку</p>
+			<h1 class="mt-1 text-[2rem] leading-tight font-bold tracking-[-0.025em]">Новое сообщество</h1>
+			<p class="mt-3 text-[1.0625rem] leading-relaxed text-zinc-600 dark:text-zinc-400">Заполните простую форму. Профиль Telegram прикрепится автоматически.</p>
+		</header>
+
+		<div
+			data-telegram-profile
+			class="mb-4 rounded-2xl bg-white/80 px-4 py-3 text-sm font-medium text-zinc-700 shadow-[0_0.5px_0_rgba(0,0,0,0.12)] data-[state=blocked]:text-red-700 dark:bg-zinc-900/80 dark:text-zinc-200 dark:shadow-[0_0.5px_0_rgba(255,255,255,0.18)] dark:data-[state=blocked]:text-red-300"
+		>
+			Проверяем Telegram…
+		</div>
+
+		<form data-community-proposal-form class="space-y-4">
+			<label class="block">
+				<span class="mb-1.5 block text-sm font-semibold text-zinc-700 dark:text-zinc-200">Название</span>
+				<input name="title" required maxlength="120" autocomplete="off" class="min-h-12 w-full rounded-2xl bg-white/80 px-4 py-3 text-base shadow-[0_0.5px_0_rgba(0,0,0,0.12)] outline-none placeholder:text-zinc-500 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-100 dark:bg-zinc-900/80 dark:shadow-[0_0.5px_0_rgba(255,255,255,0.18)] dark:placeholder:text-zinc-400 dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-black" />
+			</label>
+
+			<label class="block">
+				<span class="mb-1.5 block text-sm font-semibold text-zinc-700 dark:text-zinc-200">Короткое описание</span>
+				<textarea name="description" required maxlength="600" rows="4" class="w-full resize-y rounded-2xl bg-white/80 px-4 py-3 text-base shadow-[0_0.5px_0_rgba(0,0,0,0.12)] outline-none placeholder:text-zinc-500 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-100 dark:bg-zinc-900/80 dark:shadow-[0_0.5px_0_rgba(255,255,255,0.18)] dark:placeholder:text-zinc-400 dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-black"></textarea>
+			</label>
+
+			<div class="grid gap-4 sm:grid-cols-2">
+				<label class="block">
+					<span class="mb-1.5 block text-sm font-semibold text-zinc-700 dark:text-zinc-200">Тема</span>
+					<input name="category" maxlength="120" autocomplete="off" placeholder="Например: зависимости, семья" class="min-h-12 w-full rounded-2xl bg-white/80 px-4 py-3 text-base shadow-[0_0.5px_0_rgba(0,0,0,0.12)] outline-none placeholder:text-zinc-500 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-100 dark:bg-zinc-900/80 dark:shadow-[0_0.5px_0_rgba(255,255,255,0.18)] dark:placeholder:text-zinc-400 dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-black" />
+				</label>
+
+				<label class="block">
+					<span class="mb-1.5 block text-sm font-semibold text-zinc-700 dark:text-zinc-200">С какого года</span>
+					<input name="since" maxlength="80" inputmode="numeric" autocomplete="off" placeholder="Если известно" class="min-h-12 w-full rounded-2xl bg-white/80 px-4 py-3 text-base shadow-[0_0.5px_0_rgba(0,0,0,0.12)] outline-none placeholder:text-zinc-500 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-100 dark:bg-zinc-900/80 dark:shadow-[0_0.5px_0_rgba(255,255,255,0.18)] dark:placeholder:text-zinc-400 dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-black" />
+				</label>
+			</div>
+
+			<label class="block">
+				<span class="mb-1.5 block text-sm font-semibold text-zinc-700 dark:text-zinc-200">Официальная ссылка</span>
+				<input name="website" maxlength="240" inputmode="url" autocomplete="url" placeholder="https://…" class="min-h-12 w-full rounded-2xl bg-white/80 px-4 py-3 text-base shadow-[0_0.5px_0_rgba(0,0,0,0.12)] outline-none placeholder:text-zinc-500 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-100 dark:bg-zinc-900/80 dark:shadow-[0_0.5px_0_rgba(255,255,255,0.18)] dark:placeholder:text-zinc-400 dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-black" />
+			</label>
+
+			<label class="block">
+				<span class="mb-1.5 block text-sm font-semibold text-zinc-700 dark:text-zinc-200">Где искать встречи</span>
+				<input name="finderUrl" maxlength="240" inputmode="url" autocomplete="url" placeholder="https://…" class="min-h-12 w-full rounded-2xl bg-white/80 px-4 py-3 text-base shadow-[0_0.5px_0_rgba(0,0,0,0.12)] outline-none placeholder:text-zinc-500 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-100 dark:bg-zinc-900/80 dark:shadow-[0_0.5px_0_rgba(255,255,255,0.18)] dark:placeholder:text-zinc-400 dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-black" />
+			</label>
+
+			<label class="block">
+				<span class="mb-1.5 block text-sm font-semibold text-zinc-700 dark:text-zinc-200">Комментарий</span>
+				<textarea name="notes" maxlength="1000" rows="4" placeholder="Что важно проверить перед публикацией" class="w-full resize-y rounded-2xl bg-white/80 px-4 py-3 text-base shadow-[0_0.5px_0_rgba(0,0,0,0.12)] outline-none placeholder:text-zinc-500 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-100 dark:bg-zinc-900/80 dark:shadow-[0_0.5px_0_rgba(255,255,255,0.18)] dark:placeholder:text-zinc-400 dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-black"></textarea>
+			</label>
+
+			<p
+				data-community-proposal-status
+				role="status"
+				aria-live="polite"
+				hidden
+				class="rounded-xl bg-zinc-100 px-4 py-3 text-sm text-zinc-700 data-[tone=error]:bg-red-50 data-[tone=error]:text-red-700 data-[tone=success]:bg-emerald-50 data-[tone=success]:text-emerald-800 dark:bg-zinc-900 dark:text-zinc-300 dark:data-[tone=error]:bg-red-950/40 dark:data-[tone=error]:text-red-200 dark:data-[tone=success]:bg-emerald-950/40 dark:data-[tone=success]:text-emerald-200"
+			></p>
+
+			<button type="submit" class="inline-flex min-h-12 w-full items-center justify-center rounded-2xl bg-blue-600 px-5 text-base font-semibold text-white outline-none transition-[transform,opacity] active:scale-[0.98] active:opacity-80 disabled:pointer-events-none disabled:opacity-50 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:bg-blue-500 dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-black sm:w-auto">
+				Отправить на проверку
+			</button>
+		</form>
+	</section>
+</AppLayout>
+
+<script>
+	import "@/scripts/telegram-community-form";
+</script>
