@@ -14,7 +14,7 @@ interface Props {
 
 const {
 	title,
-	description = "Каталог Unity One",
+	description = "12 шагов",
 	canonical,
 	keywords = [],
 	jsonLd,
@@ -22,7 +22,7 @@ const {
 	backLabel = "Назад",
 } = Astro.props;
 
-const pageTitle = `${title} — Unity One`;
+const pageTitle = `${title} — 12 шагов`;
 ---
 
 <!doctype html>
@@ -37,7 +37,7 @@ const pageTitle = `${title} — Unity One`;
 		{keywords.length > 0 && <meta name="keywords" content={keywords.join(", ")} />}
 		{canonical && <link rel="canonical" href={canonical} />}
 		<meta property="og:type" content="website" />
-		<meta property="og:site_name" content="Unity One" />
+		<meta property="og:site_name" content="12 шагов" />
 		<meta property="og:title" content={pageTitle} />
 		<meta property="og:description" content={description} />
 		{canonical && <meta property="og:url" content={canonical} />}
