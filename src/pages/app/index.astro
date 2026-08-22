@@ -37,9 +37,14 @@ const counts = {
 	keywords={appSeo.home.keywords}
 	jsonLd={buildJsonLd("/app/", appSeo.home.title, appSeo.home.description)}
 >
-	<header class="px-2 pt-4 pb-5">
-		<h1 class="text-[2rem] leading-tight font-bold tracking-[-0.025em]">12 шагов</h1>
-		<p class="mt-2 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">материалы · посты · полезные инструменты · опыт · и прочее</p>
+	<header data-home-greeting class="flex items-center justify-between gap-3 px-2 pt-4 pb-5">
+		<h1 class="min-w-0 truncate text-[2rem] leading-tight font-bold tracking-[-0.025em]">
+			<span data-greeting-hello>Привет</span><span data-greeting-name-wrap hidden>, <span data-greeting-name class="text-zinc-400 dark:text-zinc-500"></span></span>
+		</h1>
+		<a href="/app/profile/" aria-label="Профиль" data-greeting-avatar-wrap hidden class="relative size-14 shrink-0 overflow-hidden rounded-full bg-zinc-200 text-zinc-700 outline-none transition-[transform,opacity] duration-100 active:scale-[0.96] active:opacity-80 focus-visible:ring-2 focus-visible:ring-blue-500 dark:bg-zinc-800 dark:text-zinc-200 dark:focus-visible:ring-blue-400">
+			<img data-greeting-avatar hidden alt="" referrerpolicy="no-referrer" class="size-full object-cover" />
+			<div data-greeting-initials aria-hidden="true" class="grid size-full place-items-center text-base font-bold"></div>
+		</a>
 	</header>
 
 	<nav aria-label="Разделы" class="mb-6 grid grid-cols-2 gap-2">
@@ -57,3 +62,7 @@ const counts = {
 
 	<PersonalShelf items={index.items} />
 </AppLayout>
+
+<script>
+	import "@/scripts/home-greeting";
+</script>
