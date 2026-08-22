@@ -1,0 +1,26 @@
+<section aria-labelledby="profile-name" class="border-b border-zinc-200 pb-6 dark:border-zinc-800">
+	<div class="flex items-center gap-4">
+		<div class="relative size-20 shrink-0 overflow-hidden rounded-full bg-zinc-200 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-200">
+			<img data-profile-avatar hidden alt="" class="size-full object-cover" referrerpolicy="no-referrer" />
+			<div data-profile-initials aria-hidden="true" class="grid size-full place-items-center text-xl font-bold"></div>
+		</div>
+		<div class="min-w-0 flex-1">
+			<div class="flex flex-wrap items-center gap-2">
+				<h2 id="profile-name" data-profile-name class="truncate text-xl font-bold tracking-[-0.02em]"></h2>
+				<span data-profile-admin hidden class="rounded-full bg-blue-100 px-2 py-0.5 text-xs font-semibold text-blue-700 dark:bg-blue-950 dark:text-blue-300">Администратор</span>
+			</div>
+			<p data-profile-username hidden class="mt-0.5 truncate text-sm text-zinc-500 dark:text-zinc-400"></p>
+		</div>
+	</div>
+
+	<dl class="mt-5 grid grid-cols-2 gap-x-4 gap-y-1 border-t border-zinc-200 pt-4 dark:border-zinc-800">
+		<div>
+			<dt class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Регистрация</dt>
+			<dd data-profile-created class="mt-1 text-sm font-semibold text-zinc-900 dark:text-zinc-100"></dd>
+		</div>
+		<div>
+			<dt class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Последний вход</dt>
+			<dd data-profile-updated class="mt-1 text-sm font-semibold text-zinc-900 dark:text-zinc-100"></dd>
+		</div>
+	</dl>
+</section>

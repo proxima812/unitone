@@ -31,6 +31,12 @@ export interface TelegramProfileData {
 	isPremium: boolean;
 }
 
+export interface TelegramProfileDocument extends TelegramProfileData {
+	createdAt: string;
+	updatedAt: string;
+	source: string;
+}
+
 export interface CommunityProposalData {
 	title: string;
 	description: string;
@@ -152,7 +158,7 @@ async function appwriteFetch<T>(config: AppwriteBaseConfig, path: string, init: 
 	return response.json() as Promise<T>;
 }
 
-export async function upsertTelegramProfile(profile: TelegramProfileData): Promise<void> {
+export async function upsertTelegramProfile(profile: TelegramProfileData): Promise<TelegramProfileDocument> {
 	const config = readProfileConfig();
 	const documentId = profileDocumentId(profile.telegramId);
 	const data = {
@@ -170,13 +176,13 @@ export async function upsertTelegramProfile(profile: TelegramProfileData): Promi
 	const documentPath = `${path}/${encodeURIComponent(documentId)}`;
 
 	try {
-		await appwriteFetch(config, documentPath, {
+		return await appwriteFetch<TelegramProfileDocument>(config, documentPath, {
 			method: "PATCH",
 			body: JSON.stringify({ data }),
 		});
 	} catch (error) {
 		if (!(error instanceof AppwriteRequestError) || error.status !== 404) throw error;
-		await appwriteFetch(config, path, {
+		return appwriteFetch<TelegramProfileDocument>(config, path, {
 			method: "POST",
 			body: JSON.stringify({
 				documentId,

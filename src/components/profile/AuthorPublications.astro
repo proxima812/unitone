@@ -1,0 +1,27 @@
+---
+const groups = [
+	{ status: "draft", label: "Черновики" },
+	{ status: "review", label: "На проверке" },
+	{ status: "published", label: "Опубликовано" },
+	{ status: "rejected", label: "На доработке" },
+] as const;
+---
+
+<section aria-labelledby="author-publications-title" class="pt-7">
+	<div class="flex items-baseline justify-between gap-4">
+		<h2 id="author-publications-title" class="text-xl font-bold tracking-[-0.02em]">Мои публикации</h2>
+		<a href="/app/create/" class="shrink-0 text-sm font-semibold text-blue-600 outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:text-blue-400">Создать</a>
+	</div>
+
+	<div class="mt-5 space-y-7">
+		{groups.map(({ status, label }) => (
+			<section data-status-group={status} aria-labelledby={`profile-status-${status}`}>
+				<div class="flex items-center gap-2 border-b border-zinc-200 pb-2 dark:border-zinc-800">
+					<h3 id={`profile-status-${status}`} class="text-sm font-bold uppercase tracking-[0.08em] text-zinc-600 dark:text-zinc-300">{label}</h3>
+					<span data-status-count class="min-w-6 rounded-full bg-zinc-100 px-1.5 py-0.5 text-center text-xs font-semibold text-zinc-600 dark:bg-zinc-900 dark:text-zinc-300">0</span>
+				</div>
+				<div data-status-content class="pt-2"></div>
+			</section>
+		))}
+	</div>
+</section>

@@ -1,0 +1,53 @@
+---
+import AuthorPublications from "@/components/profile/AuthorPublications.astro";
+import TelegramProfileCard from "@/components/profile/TelegramProfileCard.astro";
+import AppLayout from "@/layouts/AppLayout.astro";
+import { buildCanonical, buildJsonLd } from "@/lib/catalog/seo";
+
+export const prerender = false;
+
+const path = "/app/profile/";
+const title = "Профиль";
+const description = "Профиль Telegram и публикации автора в приложении 12 шагов.";
+---
+
+<AppLayout
+	title={title}
+	description={description}
+	canonical={buildCanonical(path)}
+	jsonLd={buildJsonLd(path, title, description)}
+>
+	<section data-profile-dashboard aria-labelledby="profile-page-title" class="px-1 pb-8">
+		<header class="pb-5">
+			<p class="text-sm font-semibold text-blue-600 dark:text-blue-400">Telegram</p>
+			<h1 id="profile-page-title" class="mt-1 text-[1.75rem] leading-tight font-bold tracking-[-0.025em]">Профиль</h1>
+		</header>
+
+		<div data-profile-loading aria-live="polite" aria-busy="true" class="animate-pulse space-y-7">
+			<span class="sr-only">Загружаем профиль</span>
+			<div class="flex items-center gap-4 border-b border-zinc-200 pb-6 dark:border-zinc-800">
+				<div class="size-20 shrink-0 rounded-full bg-zinc-200 dark:bg-zinc-800"></div>
+				<div class="flex-1 space-y-2">
+					<div class="h-6 w-2/3 rounded bg-zinc-200 dark:bg-zinc-800"></div>
+					<div class="h-4 w-1/3 rounded bg-zinc-100 dark:bg-zinc-900"></div>
+				</div>
+			</div>
+			<div class="space-y-4">
+				<div class="h-6 w-1/2 rounded bg-zinc-200 dark:bg-zinc-800"></div>
+				<div class="h-16 rounded-xl bg-zinc-100 dark:bg-zinc-900"></div>
+				<div class="h-16 rounded-xl bg-zinc-100 dark:bg-zinc-900"></div>
+			</div>
+		</div>
+
+		<div data-profile-error hidden role="alert" class="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-200"></div>
+
+		<div data-profile-content hidden>
+			<TelegramProfileCard />
+			<AuthorPublications />
+		</div>
+	</section>
+</AppLayout>
+
+<script>
+	import "@/scripts/profile-dashboard";
+</script>
