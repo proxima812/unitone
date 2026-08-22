@@ -295,8 +295,8 @@ export function createAppwritePublicationTransport(): PublicationTransport {
 			while (true) {
 				const params = new URLSearchParams();
 				for (const query of queries) params.append("queries[]", query);
-				params.append("queries[]", `limit(${publicationPageSize})`);
-				if (cursor) params.append("queries[]", `cursorAfter(${JSON.stringify(cursor)})`);
+				params.append("queries[]", JSON.stringify({ method: "limit", values: [publicationPageSize] }));
+				if (cursor) params.append("queries[]", JSON.stringify({ method: "cursorAfter", values: [cursor] }));
 
 				const result = await appwriteFetch<{ total: number; documents: AppwritePublicationDocument[] }>(
 					config,

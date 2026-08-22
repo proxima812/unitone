@@ -57,11 +57,11 @@ function repositoryError(code: PublicationRepositoryErrorCode, message: string):
 }
 
 function queryEqual(attribute: string, value: string): string {
-	return `equal(${JSON.stringify(attribute)},${JSON.stringify([value])})`;
+	return JSON.stringify({ method: "equal", attribute, values: [value] });
 }
 
 function queryOrder(direction: "Asc" | "Desc", attribute: string): string {
-	return `order${direction}(${JSON.stringify(attribute)})`;
+	return JSON.stringify({ method: `order${direction}`, attribute });
 }
 
 function publicPublication(record: PublicationRecord): PublicPublication {
