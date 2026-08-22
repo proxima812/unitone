@@ -23,6 +23,19 @@ interface EditablePublication {
 	moderationNote: string;
 }
 
+interface PublicationTelegramWebApp {
+	initData?: string;
+	HapticFeedback?: {
+		notificationOccurred?: (type: "success" | "error") => void;
+	};
+}
+
+interface PublicationTelegramWindow {
+	Telegram?: {
+		WebApp?: PublicationTelegramWebApp;
+	};
+}
+
 const publicationTypes = ["material", "post", "tool", "experience"] as const;
 
 function isPublicationType(value: string): value is PublicationType {
@@ -79,7 +92,7 @@ document.querySelectorAll<HTMLFormElement>("[data-publication-form]").forEach((f
 	const readySummaryInput = summaryInput;
 	const readyContentInput = contentInput;
 
-	const telegram = window.Telegram?.WebApp;
+	const telegram = (window as unknown as PublicationTelegramWindow).Telegram?.WebApp;
 	const sessionKey = () => `twelve-steps.publication-draft:${type}:${publicationId || "new"}`;
 
 	function setStatus(message: string, tone: "neutral" | "error" | "success" = "neutral"): void {

@@ -63,8 +63,8 @@ export function formatSelection(
 			? () => "### "
 			: action === "unordered-list"
 				? () => "- "
-				: (index: number) => `${index + 1}. `;
-	const replacement = lines.map((line, index) => `${prefix(index)}${line}`).join("\n");
+				: () => "1. ";
+	const replacement = lines.map((line) => `${prefix()}${line}`).join("\n");
 	return replaceSelection(value, selectionStart, selectionEnd, replacement);
 }
 
