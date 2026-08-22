@@ -42,6 +42,11 @@ export const appSeo = {
 			"вопросы по 12 шагам",
 		],
 	},
+	about: {
+		title: "О проекте",
+		description: "Unity One — открытый исходный код проекта, автор и технологии, на которых он построен.",
+		keywords: ["unity one", "open source", "исходный код", "автор проекта"],
+	},
 };
 
 export function buildCanonical(path: string): string {
